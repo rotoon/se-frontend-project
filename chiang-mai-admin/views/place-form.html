@@ -1,12 +1,1544 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ฟอร์มสถานที่ - Chiang Mai Admin</title>
-    <!-- Placeholder - will be implemented in later tasks -->
-</head>
-<body>
-    <h1>หน้าฟอร์มเพิ่ม/แก้ไขสถานที่ - Placeholder</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ฟอร์มสถานที่ - ระบบจัดการสถานที่ท่องเที่ยวเชียงใหม่</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts - Sarabun -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">
+          <i class="fas fa-map-marked-alt me-2"></i>
+          เชียงใหม่ Admin
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard">
+                <i class="fas fa-tachometer-alt me-1"></i>
+                แดชบอร์ด
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/places">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                จัดการสถานที่
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/categories">
+                <i class="fas fa-tags me-1"></i>
+                จัดการหมวดหมู่
+              </a>
+            </li>
+          </ul>
+
+          <!-- User Info and Logout -->
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user-circle me-1"></i>
+                <span id="username-display">ผู้ดูแลระบบ</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <span class="dropdown-item-text">
+                    <small class="text-muted">เข้าสู่ระบบล่าสุด:</small><br />
+                    <span id="last-login-display">-</span>
+                  </span>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>
+                    ออกจากระบบ
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+      <!-- Page Header -->
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <h1 class="h3 mb-0" id="page-title">เพิ่มสถานที่ใหม่</h1>
+          <p class="text-muted">กรอกข้อมูลสถานที่ท่องเที่ยวในเชียงใหม่</p>
+        </div>
+        <div class="col-md-4 text-end">
+          <a href="/places" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            กลับไปรายการสถานที่
+          </a>
+        </div>
+      </div>
+
+      <!-- Alert Messages -->
+      <div id="alert-container"></div>
+
+      <!-- Place Form -->
+      <form id="placeForm" enctype="multipart/form-data">
+        <input type="hidden" id="placeId" name="id" />
+
+        <div class="row">
+          <!-- Main Form -->
+          <div class="col-lg-8">
+            <!-- Basic Information Card -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                  <i class="fas fa-info-circle me-2"></i>
+                  ข้อมูลพื้นฐาน
+                </h6>
+              </div>
+              <div class="card-body">
+                <!-- Language Tabs -->
+                <div class="mb-4">
+                  <label class="form-label"
+                    >ชื่อสถานที่และคำอธิบาย
+                    <span class="text-danger">*</span></label
+                  >
+                  <ul class="nav nav-tabs" id="languageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link active"
+                        id="th-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#th-content"
+                        type="button"
+                        role="tab"
+                      >
+                        <i class="fas fa-flag me-1"></i>
+                        ไทย <span class="text-danger">*</span>
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link"
+                        id="en-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#en-content"
+                        type="button"
+                        role="tab"
+                      >
+                        <i class="fas fa-flag me-1"></i>
+                        English
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link"
+                        id="zh-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#zh-content"
+                        type="button"
+                        role="tab"
+                      >
+                        <i class="fas fa-flag me-1"></i>
+                        中文
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link"
+                        id="ja-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#ja-content"
+                        type="button"
+                        role="tab"
+                      >
+                        <i class="fas fa-flag me-1"></i>
+                        日本語
+                      </button>
+                    </li>
+                  </ul>
+
+                  <div
+                    class="tab-content border border-top-0 p-3"
+                    id="languageTabContent"
+                  >
+                    <!-- Thai Content -->
+                    <div
+                      class="tab-pane fade show active"
+                      id="th-content"
+                      role="tabpanel"
+                    >
+                      <div class="mb-3">
+                        <label for="nameTh" class="form-label"
+                          >ชื่อสถานที่ (ไทย)
+                          <span class="text-danger">*</span></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nameTh"
+                          name="name_th"
+                          placeholder="ชื่อสถานที่ภาษาไทย"
+                          required
+                        />
+                        <div class="invalid-feedback">
+                          กรุณากรอกชื่อสถานที่ภาษาไทย
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="descriptionTh" class="form-label"
+                          >คำอธิบาย (ไทย)
+                          <span class="text-danger">*</span></label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="descriptionTh"
+                          name="description_th"
+                          rows="4"
+                          placeholder="คำอธิบายสถานที่ภาษาไทย"
+                          required
+                        ></textarea>
+                        <div class="invalid-feedback">
+                          กรุณากรอกคำอธิบายภาษาไทย
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="tab-pane fade" id="en-content" role="tabpanel">
+                      <div class="mb-3">
+                        <label for="nameEn" class="form-label"
+                          >Place Name (English)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nameEn"
+                          name="name_en"
+                          placeholder="Place name in English"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="descriptionEn" class="form-label"
+                          >Description (English)</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="descriptionEn"
+                          name="description_en"
+                          rows="4"
+                          placeholder="Place description in English"
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <!-- Chinese Content -->
+                    <div class="tab-pane fade" id="zh-content" role="tabpanel">
+                      <div class="mb-3">
+                        <label for="nameZh" class="form-label"
+                          >地点名称 (中文)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nameZh"
+                          name="name_zh"
+                          placeholder="中文地点名称"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="descriptionZh" class="form-label"
+                          >描述 (中文)</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="descriptionZh"
+                          name="description_zh"
+                          rows="4"
+                          placeholder="中文地点描述"
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <!-- Japanese Content -->
+                    <div class="tab-pane fade" id="ja-content" role="tabpanel">
+                      <div class="mb-3">
+                        <label for="nameJa" class="form-label"
+                          >場所名 (日本語)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nameJa"
+                          name="name_ja"
+                          placeholder="日本語の場所名"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="descriptionJa" class="form-label"
+                          >説明 (日本語)</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="descriptionJa"
+                          name="description_ja"
+                          rows="4"
+                          placeholder="日本語の場所説明"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Category -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="category" class="form-label"
+                      >หมวดหมู่ <span class="text-danger">*</span></label
+                    >
+                    <select
+                      class="form-select"
+                      id="category"
+                      name="category"
+                      required
+                    >
+                      <option value="">เลือกหมวดหมู่</option>
+                      <!-- Categories will be loaded dynamically -->
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกหมวดหมู่</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="status" class="form-label">สถานะ</label>
+                    <select class="form-select" id="status" name="status">
+                      <option value="draft">ร่าง</option>
+                      <option value="published">เผยแพร่</option>
+                      <option value="inactive">ไม่ใช้งาน</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Hours and Price Range -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="hours" class="form-label">เวลาทำการ</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="hours"
+                      name="hours"
+                      placeholder="เช่น จันทร์-อาทิตย์ 08:00-22:00"
+                    />
+                    <div class="invalid-feedback">
+                      กรุณากรอกเวลาทำการในรูปแบบที่ถูกต้อง
+                    </div>
+                    <div class="form-text">ระบุเวลาทำการของสถานที่</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="priceRange" class="form-label">ช่วงราคา</label>
+                    <select
+                      class="form-select"
+                      id="priceRange"
+                      name="priceRange"
+                    >
+                      <option value="">ไม่ระบุ</option>
+                      <option value="free">ฟรี</option>
+                      <option value="budget">ประหยัด (฿)</option>
+                      <option value="moderate">ปานกลาง (฿฿)</option>
+                      <option value="expensive">แพง (฿฿฿)</option>
+                      <option value="luxury">หรูหรา (฿฿฿฿)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information Card -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                  <i class="fas fa-address-book me-2"></i>
+                  ข้อมูลการติดต่อและตำแหน่ง
+                </h6>
+              </div>
+              <div class="card-body">
+                <!-- Address -->
+                <div class="mb-3">
+                  <label for="address" class="form-label">ที่อยู่</label>
+                  <textarea
+                    class="form-control"
+                    id="address"
+                    name="address"
+                    rows="3"
+                    placeholder="ที่อยู่ของสถานที่"
+                  ></textarea>
+                  <div class="form-text">ระบุที่อยู่ที่สามารถค้นหาได้</div>
+                </div>
+
+                <!-- Phone and Website -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label"
+                      >หมายเลขโทรศัพท์</label
+                    >
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      placeholder="08X-XXX-XXXX"
+                    />
+                    <div class="invalid-feedback">
+                      กรุณากรอกหมายเลขโทรศัพท์ไทยที่ถูกต้อง
+                    </div>
+                    <div class="form-text">
+                      รูปแบบ: 08X-XXX-XXXX หรือ 0X-XXX-XXXX
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="website" class="form-label">เว็บไซต์</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="website"
+                      name="website"
+                      placeholder="https://example.com"
+                    />
+                    <div class="invalid-feedback">กรุณากรอก URL ที่ถูกต้อง</div>
+                  </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="facebook" class="form-label">Facebook</label>
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fab fa-facebook-f text-primary"></i>
+                      </span>
+                      <input
+                        type="url"
+                        class="form-control"
+                        id="facebook"
+                        name="facebook"
+                        placeholder="https://facebook.com/page-name"
+                      />
+                    </div>
+                    <div class="invalid-feedback">
+                      กรุณากรอกลิงก์ Facebook ที่ถูกต้อง
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="instagram" class="form-label">Instagram</label>
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fab fa-instagram text-danger"></i>
+                      </span>
+                      <input
+                        type="url"
+                        class="form-control"
+                        id="instagram"
+                        name="instagram"
+                        placeholder="https://instagram.com/username"
+                      />
+                    </div>
+                    <div class="invalid-feedback">
+                      กรุณากรอกลิงก์ Instagram ที่ถูกต้อง
+                    </div>
+                  </div>
+                </div>
+
+                <!-- GPS Coordinates -->
+                <div class="mb-3">
+                  <label class="form-label">พิกัดตำแหน่ง (GPS)</label>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="latitude" class="form-label small"
+                        >ละติจูด (Latitude)</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="latitude"
+                        name="latitude"
+                        step="any"
+                        min="5"
+                        max="21"
+                        placeholder="18.7883"
+                      />
+                      <div class="invalid-feedback">
+                        ละติจูดต้องอยู่ระหว่าง 5-21 (ประเทศไทย)
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="longitude" class="form-label small"
+                        >ลองจิจูด (Longitude)</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="longitude"
+                        name="longitude"
+                        step="any"
+                        min="97"
+                        max="106"
+                        placeholder="98.9853"
+                      />
+                      <div class="invalid-feedback">
+                        ลองจิจูดต้องอยู่ระหว่าง 97-106 (ประเทศไทย)
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-text">
+                    <i class="fas fa-info-circle me-1"></i>
+                    คลิกขวาบน Google Maps และเลือก "What's here?" เพื่อหาพิกัด
+                  </div>
+                </div>
+
+                <!-- Map Preview -->
+                <div id="map-preview" class="mb-3" style="display: none">
+                  <label class="form-label">
+                    <i class="fas fa-map me-1"></i>
+                    ตัวอย่างตำแหน่ง
+                  </label>
+                  <div class="border rounded shadow-sm">
+                    <div
+                      id="map-container"
+                      style="
+                        height: 250px;
+                        background: #f8f9fa;
+                        border-radius: 0.375rem;
+                        position: relative;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        class="d-flex align-items-center justify-content-center h-100"
+                      >
+                        <div class="text-center">
+                          <i
+                            class="fas fa-map-marker-alt fa-3x text-primary mb-2"
+                          ></i>
+                          <p class="mb-0 text-muted">
+                            แผนที่จะแสดงที่นี่เมื่อกรอกพิกัด
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="mt-2 d-flex justify-content-between align-items-center"
+                  >
+                    <small class="text-muted">
+                      <i class="fas fa-map-marker-alt me-1"></i>
+                      <span id="coordinates-display">ยังไม่ได้ระบุพิกัด</span>
+                    </small>
+                    <small class="text-muted">
+                      <i class="fas fa-info-circle me-1"></i>
+                      คลิกแผนที่เพื่อดูรายละเอียดเพิ่มเติม
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="col-lg-4">
+            <!-- Status and Actions -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                  <i class="fas fa-cog me-2"></i>
+                  การจัดการ
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="featured"
+                      name="featured"
+                    />
+                    <label class="form-check-label" for="featured">
+                      <i class="fas fa-star text-warning me-1"></i>
+                      สถานที่เด่น
+                    </label>
+                    <div class="form-text">แสดงในหน้าแรกและเน้นในรายการ</div>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary" id="saveBtn">
+                    <i class="fas fa-save me-2"></i>
+                    บันทึกข้อมูล
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    onclick="resetForm()"
+                  >
+                    <i class="fas fa-undo me-2"></i>
+                    รีเซ็ตฟอร์ม
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Info -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  คำแนะนำ
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="small">
+                  <p><strong>ข้อมูลที่จำเป็น:</strong></p>
+                  <ul class="mb-3">
+                    <li>ชื่อสถานที่ (ไทย)</li>
+                    <li>คำอธิบาย (ไทย)</li>
+                    <li>หมวดหมู่</li>
+                  </ul>
+
+                  <p><strong>เคล็ดลับ:</strong></p>
+                  <ul class="mb-0">
+                    <li>กรอกข้อมูลหลายภาษาเพื่อเข้าถึงนักท่องเที่ยวต่างชาติ</li>
+                    <li>ใช้คำอธิบายที่น่าสนใจและครบถ้วน</li>
+                    <li>เลือกหมวดหมู่ที่เหมาะสมที่สุด</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/js/admin.js"></script>
+
+    <!-- Place Form specific JS -->
+    <script>
+      let categories = [];
+      let editingPlaceId = null;
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        initializePage();
+        loadCategories();
+        loadUserInfo();
+        initializeEventListeners();
+      });
+
+      function initializePage() {
+        // Check if we're editing an existing place
+        const urlParams = new URLSearchParams(window.location.search);
+        const placeId = urlParams.get("id");
+
+        if (placeId) {
+          editingPlaceId = placeId;
+          document.getElementById("page-title").textContent = "แก้ไขสถานที่";
+          document.getElementById("saveBtn").innerHTML =
+            '<i class="fas fa-save me-2"></i>อัปเดตข้อมูล';
+          loadPlaceData(placeId);
+        }
+      }
+
+      function initializeEventListeners() {
+        // Form submission
+        document
+          .getElementById("placeForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            savePlace();
+          });
+
+        // Language tab validation
+        const languageTabs = document.querySelectorAll("#languageTabs button");
+        languageTabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // Validate current tab before switching
+            validateCurrentTab();
+
+            // Add visual indicator for Thai tab completion
+            setTimeout(() => {
+              updateTabIndicators();
+            }, 100);
+          });
+        });
+
+        // Real-time validation for required Thai fields
+        document.getElementById("nameTh").addEventListener("blur", function () {
+          validateThaiFields();
+          updateTabIndicators();
+        });
+        document
+          .getElementById("descriptionTh")
+          .addEventListener("blur", function () {
+            validateThaiFields();
+            updateTabIndicators();
+          });
+
+        // Also update indicators on input for immediate feedback
+        document
+          .getElementById("nameTh")
+          .addEventListener("input", updateTabIndicators);
+        document
+          .getElementById("descriptionTh")
+          .addEventListener("input", updateTabIndicators);
+
+        // Real-time validation for main fields
+        document
+          .getElementById("category")
+          .addEventListener("change", function () {
+            if (this.value) {
+              this.classList.remove("is-invalid");
+              this.classList.add("is-valid");
+            } else {
+              this.classList.add("is-invalid");
+              this.classList.remove("is-valid");
+            }
+          });
+
+        document.getElementById("hours").addEventListener("blur", function () {
+          if (this.value.trim()) {
+            const hoursPattern = /^[\u0E00-\u0E7Fa-zA-Z0-9\s\-:.,()]+$/;
+            if (hoursPattern.test(this.value.trim())) {
+              this.classList.remove("is-invalid");
+              this.classList.add("is-valid");
+            } else {
+              this.classList.add("is-invalid");
+              this.classList.remove("is-valid");
+            }
+          } else {
+            this.classList.remove("is-invalid", "is-valid");
+          }
+        });
+
+        // Contact field validation
+        document
+          .getElementById("phone")
+          .addEventListener("blur", validatePhone);
+        document
+          .getElementById("website")
+          .addEventListener("blur", validateWebsite);
+        document
+          .getElementById("facebook")
+          .addEventListener("blur", validateFacebook);
+        document
+          .getElementById("instagram")
+          .addEventListener("blur", validateInstagram);
+        document
+          .getElementById("latitude")
+          .addEventListener("input", validateCoordinates);
+        document
+          .getElementById("longitude")
+          .addEventListener("input", validateCoordinates);
+      }
+
+      function loadCategories() {
+        fetch("/api/categories")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              categories = data.categories;
+              populateCategorySelect();
+            } else {
+              showAlert(
+                "error",
+                "เกิดข้อผิดพลาดในการโหลดหมวดหมู่: " + data.message
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading categories:", error);
+            showAlert("error", "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+          });
+      }
+
+      function populateCategorySelect() {
+        const categorySelect = document.getElementById("category");
+
+        // Clear existing options except the first one
+        categorySelect.innerHTML = '<option value="">เลือกหมวดหมู่</option>';
+
+        // Sort categories by order
+        const sortedCategories = [...categories].sort(
+          (a, b) => (a.order || 999) - (b.order || 999)
+        );
+
+        sortedCategories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.id;
+          option.textContent = category.name.th;
+          categorySelect.appendChild(option);
+        });
+      }
+
+      function loadPlaceData(placeId) {
+        fetch(`/api/places/${placeId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              populateForm(data.place);
+            } else {
+              showAlert(
+                "error",
+                "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่: " + data.message
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading place data:", error);
+            showAlert("error", "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+          });
+      }
+
+      function populateForm(place) {
+        // Populate basic information
+        document.getElementById("placeId").value = place.id;
+
+        // Populate multilingual fields
+        if (place.name) {
+          document.getElementById("nameTh").value = place.name.th || "";
+          document.getElementById("nameEn").value = place.name.en || "";
+          document.getElementById("nameZh").value = place.name.zh || "";
+          document.getElementById("nameJa").value = place.name.ja || "";
+        }
+
+        if (place.description) {
+          document.getElementById("descriptionTh").value =
+            place.description.th || "";
+          document.getElementById("descriptionEn").value =
+            place.description.en || "";
+          document.getElementById("descriptionZh").value =
+            place.description.zh || "";
+          document.getElementById("descriptionJa").value =
+            place.description.ja || "";
+        }
+
+        // Populate other fields
+        document.getElementById("category").value = place.category || "";
+        document.getElementById("status").value = place.status || "draft";
+        document.getElementById("hours").value = place.hours || "";
+        document.getElementById("priceRange").value = place.priceRange || "";
+        document.getElementById("featured").checked = place.featured || false;
+
+        // Populate contact information
+        if (place.contact) {
+          document.getElementById("address").value =
+            place.contact.address || "";
+          document.getElementById("phone").value = place.contact.phone || "";
+          document.getElementById("website").value =
+            place.contact.website || "";
+          document.getElementById("facebook").value =
+            place.contact.facebook || "";
+          document.getElementById("instagram").value =
+            place.contact.instagram || "";
+
+          if (place.contact.coordinates) {
+            document.getElementById("latitude").value =
+              place.contact.coordinates.lat || "";
+            document.getElementById("longitude").value =
+              place.contact.coordinates.lng || "";
+
+            // Update map preview if coordinates exist
+            if (
+              place.contact.coordinates.lat &&
+              place.contact.coordinates.lng
+            ) {
+              updateMapPreview();
+            }
+          }
+        }
+
+        // Update tab indicators
+        updateTabIndicators();
+
+        // Validate contact fields
+        validatePhone();
+        validateWebsite();
+        validateFacebook();
+        validateInstagram();
+        validateCoordinates();
+      }
+
+      function validateThaiFields() {
+        const nameTh = document.getElementById("nameTh");
+        const descriptionTh = document.getElementById("descriptionTh");
+
+        let isValid = true;
+
+        if (!nameTh.value.trim()) {
+          nameTh.classList.add("is-invalid");
+          isValid = false;
+        } else {
+          nameTh.classList.remove("is-invalid");
+          nameTh.classList.add("is-valid");
+        }
+
+        if (!descriptionTh.value.trim()) {
+          descriptionTh.classList.add("is-invalid");
+          isValid = false;
+        } else {
+          descriptionTh.classList.remove("is-invalid");
+          descriptionTh.classList.add("is-valid");
+        }
+
+        return isValid;
+      }
+
+      function validateMainFields() {
+        let isValid = true;
+
+        // Validate Thai fields (required)
+        if (!validateThaiFields()) {
+          isValid = false;
+        }
+
+        // Validate category selection
+        const category = document.getElementById("category");
+        if (!category.value) {
+          category.classList.add("is-invalid");
+          isValid = false;
+        } else {
+          category.classList.remove("is-invalid");
+          category.classList.add("is-valid");
+        }
+
+        // Validate hours format (optional but if provided should be valid)
+        const hours = document.getElementById("hours");
+        if (hours.value.trim()) {
+          // Basic validation for hours format - allow Thai, English, numbers, and common time symbols
+          const hoursPattern = /^[\u0E00-\u0E7Fa-zA-Z0-9\s\-:.,()]+$/;
+          if (!hoursPattern.test(hours.value.trim())) {
+            hours.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            hours.classList.remove("is-invalid");
+            hours.classList.add("is-valid");
+          }
+        } else {
+          hours.classList.remove("is-invalid", "is-valid");
+        }
+
+        // Price range validation (optional field, no validation needed as it's a select)
+        const priceRange = document.getElementById("priceRange");
+        priceRange.classList.remove("is-invalid", "is-valid");
+
+        return isValid;
+      }
+
+      function validateCurrentTab() {
+        const activeTab = document.querySelector(
+          "#languageTabs .nav-link.active"
+        );
+        if (!activeTab) return true;
+
+        const tabId = activeTab.getAttribute("data-bs-target");
+
+        // Only validate Thai tab as it's required
+        if (tabId === "#th-content") {
+          return validateThaiFields();
+        }
+
+        return true;
+      }
+
+      function updateTabIndicators() {
+        const thaiTab = document.getElementById("th-tab");
+        const nameTh = document.getElementById("nameTh");
+        const descriptionTh = document.getElementById("descriptionTh");
+
+        // Check if Thai fields are completed
+        if (nameTh.value.trim() && descriptionTh.value.trim()) {
+          thaiTab.classList.add("text-success");
+          thaiTab.classList.remove("text-danger");
+        } else {
+          thaiTab.classList.add("text-danger");
+          thaiTab.classList.remove("text-success");
+        }
+      }
+
+      function validatePhone() {
+        const phoneInput = document.getElementById("phone");
+        const phone = phoneInput.value.trim();
+
+        if (!phone) {
+          phoneInput.classList.remove("is-invalid", "is-valid");
+          return true; // Optional field
+        }
+
+        // Thai phone number patterns
+        const phonePatterns = [
+          /^0[2-9]\d{1}-\d{3}-\d{4}$/, // Landline: 0X-XXX-XXXX
+          /^0[8-9]\d{1}-\d{3}-\d{4}$/, // Mobile: 08X-XXX-XXXX or 09X-XXX-XXXX
+          /^0[2-9]\d{8}$/, // Without dashes: 0XXXXXXXXX
+        ];
+
+        const isValid = phonePatterns.some((pattern) => pattern.test(phone));
+
+        if (isValid) {
+          phoneInput.classList.remove("is-invalid");
+          phoneInput.classList.add("is-valid");
+        } else {
+          phoneInput.classList.remove("is-valid");
+          phoneInput.classList.add("is-invalid");
+        }
+
+        return isValid;
+      }
+
+      function validateWebsite() {
+        const websiteInput = document.getElementById("website");
+        const website = websiteInput.value.trim();
+
+        if (!website) {
+          websiteInput.classList.remove("is-invalid", "is-valid");
+          return true; // Optional field
+        }
+
+        try {
+          const url = new URL(website);
+          const isValid = url.protocol === "http:" || url.protocol === "https:";
+
+          if (isValid) {
+            websiteInput.classList.remove("is-invalid");
+            websiteInput.classList.add("is-valid");
+          } else {
+            websiteInput.classList.remove("is-valid");
+            websiteInput.classList.add("is-invalid");
+          }
+
+          return isValid;
+        } catch {
+          websiteInput.classList.remove("is-valid");
+          websiteInput.classList.add("is-invalid");
+          return false;
+        }
+      }
+
+      function validateFacebook() {
+        const facebookInput = document.getElementById("facebook");
+        const facebook = facebookInput.value.trim();
+
+        if (!facebook) {
+          facebookInput.classList.remove("is-invalid", "is-valid");
+          return true; // Optional field
+        }
+
+        const facebookPattern =
+          /^https?:\/\/(www\.)?(facebook\.com|fb\.com)\/.+/i;
+        const isValid = facebookPattern.test(facebook);
+
+        if (isValid) {
+          facebookInput.classList.remove("is-invalid");
+          facebookInput.classList.add("is-valid");
+        } else {
+          facebookInput.classList.remove("is-valid");
+          facebookInput.classList.add("is-invalid");
+        }
+
+        return isValid;
+      }
+
+      function validateInstagram() {
+        const instagramInput = document.getElementById("instagram");
+        const instagram = instagramInput.value.trim();
+
+        if (!instagram) {
+          instagramInput.classList.remove("is-invalid", "is-valid");
+          return true; // Optional field
+        }
+
+        const instagramPattern = /^https?:\/\/(www\.)?instagram\.com\/.+/i;
+        const isValid = instagramPattern.test(instagram);
+
+        if (isValid) {
+          instagramInput.classList.remove("is-invalid");
+          instagramInput.classList.add("is-valid");
+        } else {
+          instagramInput.classList.remove("is-valid");
+          instagramInput.classList.add("is-invalid");
+        }
+
+        return isValid;
+      }
+
+      function validateCoordinates() {
+        const latInput = document.getElementById("latitude");
+        const lngInput = document.getElementById("longitude");
+        const lat = parseFloat(latInput.value);
+        const lng = parseFloat(lngInput.value);
+
+        let isLatValid = true;
+        let isLngValid = true;
+
+        // Validate latitude (Thailand range: approximately 5-21)
+        if (latInput.value && (isNaN(lat) || lat < 5 || lat > 21)) {
+          latInput.classList.remove("is-valid");
+          latInput.classList.add("is-invalid");
+          isLatValid = false;
+        } else if (latInput.value) {
+          latInput.classList.remove("is-invalid");
+          latInput.classList.add("is-valid");
+        } else {
+          latInput.classList.remove("is-invalid", "is-valid");
+        }
+
+        // Validate longitude (Thailand range: approximately 97-106)
+        if (lngInput.value && (isNaN(lng) || lng < 97 || lng > 106)) {
+          lngInput.classList.remove("is-valid");
+          lngInput.classList.add("is-invalid");
+          isLngValid = false;
+        } else if (lngInput.value) {
+          lngInput.classList.remove("is-invalid");
+          lngInput.classList.add("is-valid");
+        } else {
+          lngInput.classList.remove("is-invalid", "is-valid");
+        }
+
+        // Update map preview if both coordinates are valid
+        if (isLatValid && isLngValid && latInput.value && lngInput.value) {
+          updateMapPreview();
+        } else {
+          hideMapPreview();
+        }
+
+        return isLatValid && isLngValid;
+      }
+
+      function updateMapPreview() {
+        const lat = parseFloat(document.getElementById("latitude").value);
+        const lng = parseFloat(document.getElementById("longitude").value);
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+          const mapPreview = document.getElementById("map-preview");
+          const coordinatesDisplay = document.getElementById(
+            "coordinates-display"
+          );
+          const mapContainer = document.getElementById("map-container");
+
+          // Show map preview
+          mapPreview.style.display = "block";
+          coordinatesDisplay.textContent = `${lat.toFixed(6)}, ${lng.toFixed(
+            6
+          )}`;
+
+          // Show loading state first
+          mapContainer.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center h-100 map-loading">
+              <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-2x text-primary mb-2"></i>
+                <p class="mb-0 text-muted">กำลังโหลดแผนที่...</p>
+              </div>
+            </div>
+          `;
+
+          // Load the actual map after a short delay
+          setTimeout(() => {
+            mapContainer.innerHTML = `
+              <div class="position-relative h-100 rounded overflow-hidden">
+                <iframe 
+                  width="100%" 
+                  height="250" 
+                  frameborder="0" 
+                  style="border:0;" 
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=${
+                    lng - 0.01
+                  },${lat - 0.01},${lng + 0.01},${
+              lat + 0.01
+            }&layer=mapnik&marker=${lat},${lng}"
+                  allowfullscreen
+                  onload="this.parentElement.parentElement.classList.add('active', 'valid')"
+                  onerror="showMapError(this)">
+                </iframe>
+                <div class="position-absolute top-0 end-0 m-2">
+                  <div class="btn-group map-overlay-buttons" role="group">
+                    <a href="https://www.google.com/maps?q=${lat},${lng}" 
+                       target="_blank" 
+                       class="btn btn-sm btn-light shadow-sm" 
+                       title="ดูใน Google Maps">
+                      <i class="fab fa-google text-primary"></i>
+                    </a>
+                    <a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=15" 
+                       target="_blank" 
+                       class="btn btn-sm btn-light shadow-sm" 
+                       title="ดูใน OpenStreetMap">
+                      <i class="fas fa-map text-success"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="position-absolute bottom-0 start-0 end-0 map-info-overlay text-white p-2">
+                  <small>
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                    <span class="float-end">
+                      <i class="fas fa-info-circle me-1"></i>
+                      คลิกเพื่อดูแผนที่แบบเต็ม
+                    </span>
+                  </small>
+                </div>
+              </div>
+            `;
+          }, 500);
+
+          // Add click handler to open full map
+          mapContainer.addEventListener("click", function (e) {
+            if (!e.target.closest(".btn-group")) {
+              window.open(
+                `https://www.google.com/maps?q=${lat},${lng}`,
+                "_blank"
+              );
+            }
+          });
+
+          // Add hover effect
+          mapContainer.style.cursor = "pointer";
+          mapContainer.title = "คลิกเพื่อดูแผนที่ใน Google Maps";
+        }
+      }
+
+      function hideMapPreview() {
+        const mapPreview = document.getElementById("map-preview");
+        const coordinatesDisplay = document.getElementById(
+          "coordinates-display"
+        );
+        const mapContainer = document.getElementById("map-container");
+
+        mapPreview.style.display = "none";
+        coordinatesDisplay.textContent = "ยังไม่ได้ระบุพิกัด";
+
+        // Reset map container to default state
+        mapContainer.innerHTML = `
+          <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="text-center">
+              <i class="fas fa-map-marker-alt fa-3x text-primary mb-2"></i>
+              <p class="mb-0 text-muted">
+                แผนที่จะแสดงที่นี่เมื่อกรอกพิกัด
+              </p>
+            </div>
+          </div>
+        `;
+        mapContainer.style.cursor = "default";
+        mapContainer.title = "";
+        mapContainer.classList.remove("active", "valid", "invalid");
+      }
+
+      function validateContactFields() {
+        let isValid = true;
+        let message = "";
+
+        // Validate phone if provided
+        if (document.getElementById("phone").value.trim() && !validatePhone()) {
+          isValid = false;
+          message = "กรุณากรอกหมายเลขโทรศัพท์ไทยที่ถูกต้อง";
+        }
+
+        // Validate website if provided
+        if (
+          document.getElementById("website").value.trim() &&
+          !validateWebsite()
+        ) {
+          isValid = false;
+          message = "กรุณากรอก URL เว็บไซต์ที่ถูกต้อง";
+        }
+
+        // Validate Facebook if provided
+        if (
+          document.getElementById("facebook").value.trim() &&
+          !validateFacebook()
+        ) {
+          isValid = false;
+          message = "กรุณากรอกลิงก์ Facebook ที่ถูกต้อง";
+        }
+
+        // Validate Instagram if provided
+        if (
+          document.getElementById("instagram").value.trim() &&
+          !validateInstagram()
+        ) {
+          isValid = false;
+          message = "กรุณากรอกลิงก์ Instagram ที่ถูกต้อง";
+        }
+
+        // Validate coordinates if provided
+        const lat = document.getElementById("latitude").value.trim();
+        const lng = document.getElementById("longitude").value.trim();
+
+        if ((lat && !lng) || (!lat && lng)) {
+          isValid = false;
+          message = "กรุณากรอกพิกัดให้ครบทั้งละติจูดและลองจิจูด";
+        } else if (lat && lng && !validateCoordinates()) {
+          isValid = false;
+          message = "กรุณากรอกพิกัดที่ถูกต้องสำหรับประเทศไทย";
+        }
+
+        return { isValid, message };
+      }
+
+      function validateCurrentTab() {
+        // Add visual feedback for tab completion
+        const activeTab = document.querySelector(
+          "#languageTabs .nav-link.active"
+        );
+        const activeContent = document.querySelector(".tab-pane.active");
+
+        if (activeTab && activeContent) {
+          const inputs = activeContent.querySelectorAll("input, textarea");
+          let hasContent = false;
+
+          inputs.forEach((input) => {
+            if (input.value.trim()) {
+              hasContent = true;
+            }
+          });
+
+          // Add visual indicator for completed tabs
+          if (hasContent) {
+            activeTab.classList.add("text-success");
+          } else {
+            activeTab.classList.remove("text-success");
+          }
+        }
+      }
+
+      function savePlace() {
+        // Validate main fields first
+        if (!validateMainFields()) {
+          showAlert(
+            "error",
+            "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน โดยเฉพาะชื่อและคำอธิบายภาษาไทย และเลือกหมวดหมู่"
+          );
+
+          // Switch to Thai tab if Thai fields are invalid
+          const nameTh = document.getElementById("nameTh");
+          const descriptionTh = document.getElementById("descriptionTh");
+          if (!nameTh.value.trim() || !descriptionTh.value.trim()) {
+            document.getElementById("th-tab").click();
+          }
+          return;
+        }
+
+        // Validate contact fields
+        const contactValidation = validateContactFields();
+        if (!contactValidation.isValid) {
+          showAlert("error", contactValidation.message);
+          return;
+        }
+
+        // Prepare form data
+        const placeData = {
+          name: {
+            th: document.getElementById("nameTh").value.trim(),
+            en: document.getElementById("nameEn").value.trim(),
+            zh: document.getElementById("nameZh").value.trim(),
+            ja: document.getElementById("nameJa").value.trim(),
+          },
+          description: {
+            th: document.getElementById("descriptionTh").value.trim(),
+            en: document.getElementById("descriptionEn").value.trim(),
+            zh: document.getElementById("descriptionZh").value.trim(),
+            ja: document.getElementById("descriptionJa").value.trim(),
+          },
+          category: document.getElementById("category").value,
+          status: document.getElementById("status").value,
+          hours: document.getElementById("hours").value.trim(),
+          priceRange: document.getElementById("priceRange").value,
+          featured: document.getElementById("featured").checked,
+          contact: {
+            address: document.getElementById("address").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            website: document.getElementById("website").value.trim(),
+            facebook: document.getElementById("facebook").value.trim(),
+            instagram: document.getElementById("instagram").value.trim(),
+            coordinates: {
+              lat:
+                parseFloat(document.getElementById("latitude").value) || null,
+              lng:
+                parseFloat(document.getElementById("longitude").value) || null,
+            },
+          },
+        };
+
+        const url = editingPlaceId
+          ? `/api/places/${editingPlaceId}`
+          : "/api/places";
+        const method = editingPlaceId ? "PUT" : "POST";
+
+        if (editingPlaceId) {
+          placeData.id = editingPlaceId;
+        }
+
+        // Show loading state
+        const saveBtn = document.getElementById("saveBtn");
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-2"></i>กำลังบันทึก...';
+        saveBtn.disabled = true;
+
+        fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(placeData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              showAlert(
+                "success",
+                editingPlaceId
+                  ? "อัปเดตสถานที่เรียบร้อยแล้ว"
+                  : "เพิ่มสถานที่เรียบร้อยแล้ว"
+              );
+
+              // Redirect to places list after a short delay
+              setTimeout(() => {
+                window.location.href = "/places";
+              }, 1500);
+            } else {
+              showAlert("error", "เกิดข้อผิดพลาด: " + data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error saving place:", error);
+            showAlert("error", "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+          })
+          .finally(() => {
+            // Restore button state
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = false;
+          });
+      }
+
+      function resetForm() {
+        if (confirm("คุณต้องการรีเซ็ตฟอร์มหรือไม่? ข้อมูลที่กรอกจะหายไป")) {
+          document.getElementById("placeForm").reset();
+
+          // Clear validation classes
+          document
+            .querySelectorAll(".is-valid, .is-invalid")
+            .forEach((element) => {
+              element.classList.remove("is-valid", "is-invalid");
+            });
+
+          // Reset tab indicators
+          document
+            .querySelectorAll("#languageTabs .nav-link")
+            .forEach((tab) => {
+              tab.classList.remove("text-success");
+            });
+
+          // Hide map preview
+          hideMapPreview();
+
+          // Switch to Thai tab
+          document.getElementById("th-tab").click();
+        }
+      }
+
+      function loadUserInfo() {
+        fetch("/api/user/info")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              document.getElementById("username-display").textContent =
+                data.user.username;
+              if (data.user.lastLogin) {
+                const lastLogin = new Date(data.user.lastLogin);
+                document.getElementById("last-login-display").textContent =
+                  lastLogin.toLocaleString("th-TH");
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading user info:", error);
+          });
+      }
+
+      function showAlert(type, message) {
+        const alertContainer = document.getElementById("alert-container");
+        const alertClass =
+          type === "success" ? "alert-success" : "alert-danger";
+        const iconClass =
+          type === "success" ? "fa-check-circle" : "fa-exclamation-triangle";
+
+        const alertHtml = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    <i class="fas ${iconClass} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+        alertContainer.innerHTML = alertHtml;
+
+        // Scroll to top to show alert
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Auto dismiss after 5 seconds for success messages
+        if (type === "success") {
+          setTimeout(() => {
+            const alert = alertContainer.querySelector(".alert");
+            if (alert) {
+              const bsAlert = new bootstrap.Alert(alert);
+              bsAlert.close();
+            }
+          }, 5000);
+        }
+      }
+
+      function logout() {
+        if (confirm("คุณต้องการออกจากระบบหรือไม่?")) {
+          window.location.href = "/auth/logout";
+        }
+      }
+    </script>
+  </body>
 </html>

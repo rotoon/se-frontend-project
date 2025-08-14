@@ -1,0 +1,54 @@
+[
+  {
+    "id": "restaurant",
+    "name": {
+      "th": "ร้านอาหาร",
+      "en": "Restaurant",
+      "zh": "餐厅",
+      "ja": "レストラン"
+    },
+    "slug": "restaurant",
+    "icon": "utensils",
+    "order": 1,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "accommodation",
+    "name": {
+      "th": "ที่พัก",
+      "en": "Accommodation",
+      "zh": "住宿",
+      "ja": "宿泊施設"
+    },
+    "slug": "accommodation",
+    "icon": "bed",
+    "order": 2,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "attraction",
+    "name": {
+      "th": "สถานที่ท่องเที่ยว",
+      "en": "Tourist Attraction",
+      "zh": "旅游景点",
+      "ja": "観光地"
+    },
+    "slug": "attraction",
+    "icon": "camera",
+    "order": 3,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "activity",
+    "name": {
+      "th": "กิจกรรม",
+      "en": "Activity",
+      "zh": "活动",
+      "ja": "アクティビティ"
+    },
+    "slug": "activity",
+    "icon": "play",
+    "order": 4,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]

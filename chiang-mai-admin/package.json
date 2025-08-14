@@ -8,7 +8,12 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["admin", "tourism", "chiang-mai", "express"],
+  "keywords": [
+    "admin",
+    "tourism",
+    "chiang-mai",
+    "express"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
