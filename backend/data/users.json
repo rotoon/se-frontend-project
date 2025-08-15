@@ -1,0 +1,13 @@
+[
+  {
+    "id": "admin-001",
+    "username": "admin",
+    "password": "$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "email": "admin@chiangmai-admin.com",
+    "role": "admin",
+    "loginAttempts": 0,
+    "lockUntil": null,
+    "lastLogin": "2025-08-15T08:15:21.608Z",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]

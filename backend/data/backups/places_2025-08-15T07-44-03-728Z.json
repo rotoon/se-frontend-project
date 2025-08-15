@@ -1,0 +1,115 @@
+[
+  {
+    "id": "place-001",
+    "name": {
+      "th": "วัดพระธาตุดอยสุเทพ",
+      "en": "Wat Phra That Doi Suthep",
+      "zh": "素贴山双龙寺",
+      "ja": "ワット・プラタート・ドイ・ステープ"
+    },
+    "description": {
+      "th": "วัดที่มีชื่อเสียงที่สุดของเชียงใหม่ ตั้งอยู่บนยอดดอยสุเทพ มีพระธาตุเจดีย์ทองคำที่งดงาม",
+      "en": "The most famous temple in Chiang Mai, located on top of Doi Suthep mountain with a beautiful golden pagoda",
+      "zh": "清迈最著名的寺庙，位于素贴山顶，有美丽的金色佛塔",
+      "ja": "チェンマイで最も有名な寺院で、ドイ・ステープ山の頂上にあり、美しい金色の仏塔があります"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ดอยสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-295-002",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.8048,
+        "lng": 98.9216
+      }
+    },
+    "hours": "06:00 - 18:00",
+    "priceRange": "ฟรี",
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-15T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-002",
+    "name": {
+      "th": "ตลาดวโรรส",
+      "en": "Warorot Market",
+      "zh": "瓦洛洛市场",
+      "ja": "ワロロット市場"
+    },
+    "description": {
+      "th": "ตลาดเก่าแก่ของเชียงใหม่ ขายของฝาก อาหารพื้นเมือง และสินค้าราคาถูก",
+      "en": "Historic market in Chiang Mai selling souvenirs, local food, and affordable goods",
+      "zh": "清迈历史悠久的市场，出售纪念品、当地食物和便宜商品",
+      "ja": "チェンマイの歴史ある市場で、お土産、地元料理、手頃な商品を販売"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "90 ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
+      "phone": "",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7967,
+        "lng": 99.0033
+      }
+    },
+    "hours": "05:00 - 17:00",
+    "priceRange": "ราคาประหยัด",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-10T10:30:00.000Z",
+    "updatedAt": "2024-01-10T10:30:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-003",
+    "name": {
+      "th": "ร้านข้าวซอยลำดวน ฟ้าฮ่าม",
+      "en": "Khao Soi Lamduan Faham",
+      "zh": "蓝端法罕咖喱面店",
+      "ja": "カオソーイ・ラムドゥアン・ファーハム"
+    },
+    "description": {
+      "th": "ร้านข้าวซอยชื่อดังของเชียงใหม่ เสิร์ฟข้าวซอยรสชาติต้นตำรับ",
+      "en": "Famous Khao Soi restaurant in Chiang Mai serving authentic northern Thai curry noodles",
+      "zh": "清迈著名的咖喱面店，提供正宗的泰北咖喱面",
+      "ja": "チェンマイの有名なカオソーイ店で、本格的な北タイのカレーヌードルを提供"
+    },
+    "category": "restaurant",
+    "images": [],
+    "contact": {
+      "address": "352/22 ถนนเจริญราษฎร์ ตำบลวัดเกต อำเภอเมือง จังหวัดเชียงใหม่ 50000",
+      "phone": "053-243-519",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7886,
+        "lng": 98.9853
+      }
+    },
+    "hours": "08:00 - 16:00",
+    "priceRange": "50-100 บาท",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-20T14:15:00.000Z",
+    "updatedAt": "2025-08-15T07:25:12.647Z",
+    "createdBy": "admin",
+    "statusHistory": [
+      {
+        "from": "draft",
+        "to": "published",
+        "changedAt": "2025-08-15T07:25:12.647Z",
+        "changedBy": "admin-001"
+      }
+    ]
+  }
+]
