@@ -8,7 +8,6 @@ import { CategoriesAPI } from './modules/categories-api';
 
 // Places page functionality
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🗺️ Places page loaded with Webpack');
     
     // Initialize places page
     initPlacesPage();

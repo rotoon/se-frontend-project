@@ -20,16 +20,12 @@ export class ApiClient {
     };
 
     try {
-      console.log(`🔄 API Request: ${config.method || 'GET'} ${url}`);
-      
       const response = await fetch(url, config);
       const data = await response.json();
       
       if (!response.ok) {
         throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
-
-      console.log(`✅ API Response: ${url}`, data);
       return data;
     } catch (error) {
       console.error(`❌ API Error: ${url}`, error);

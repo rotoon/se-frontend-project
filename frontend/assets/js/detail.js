@@ -8,7 +8,6 @@ import { CategoriesAPI } from './modules/categories-api';
 
 // Detail page functionality
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📍 Place detail page loaded with Webpack');
     
     // Initialize detail page
     initDetailPage();
@@ -338,13 +337,11 @@ function createRelatedPlaceCard(place) {
 // Initialize image gallery
 function initImageGallery() {
     // Gallery functionality will be initialized here
-    console.log('Image gallery initialized');
 }
 
 // Initialize map
 function initMap() {
     // Map functionality will be initialized here
-    console.log('Map initialized');
 }
 
 // Initialize social share
@@ -390,7 +387,6 @@ function translateDay(day) {
 // Global functions for interactions
 window.openLightbox = function(index) {
     // Implement lightbox functionality
-    console.log('Open lightbox for image:', index);
 };
 
 window.openGoogleMaps = function(lat, lng) {

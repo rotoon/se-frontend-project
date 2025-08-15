@@ -7,7 +7,6 @@ import { PlacesAPI } from './modules/places-api';
 import { CategoriesAPI } from './modules/categories-api';
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Chiang Mai Tourism Frontend loaded with Webpack');
 
     // Initialize components
     initLanguageSwitcher();
