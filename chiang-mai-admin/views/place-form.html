@@ -220,7 +220,7 @@
                           required
                         />
                         <div class="invalid-feedback">
-                          กรุณากรอกชื่อสถานที่ภาษาไทย
+                          กรุณากรอกชื่อสถานที่ภาษาไทย (2-200 ตัวอักษร)
                         </div>
                       </div>
                       <div class="mb-3">
@@ -237,7 +237,7 @@
                           required
                         ></textarea>
                         <div class="invalid-feedback">
-                          กรุณากรอกคำอธิบายภาษาไทย
+                          กรุณากรอกคำอธิบายภาษาไทย (10-2000 ตัวอักษร)
                         </div>
                       </div>
                     </div>
@@ -367,7 +367,7 @@
                       placeholder="เช่น จันทร์-อาทิตย์ 08:00-22:00"
                     />
                     <div class="invalid-feedback">
-                      กรุณากรอกเวลาทำการในรูปแบบที่ถูกต้อง
+                      กรุณากรอกเวลาทำการในรูปแบบที่ถูกต้อง (สูงสุด 100 ตัวอักษร)
                     </div>
                     <div class="form-text">ระบุเวลาทำการของสถานที่</div>
                   </div>
@@ -529,6 +529,10 @@
                   <div class="form-text">
                     <i class="fas fa-info-circle me-1"></i>
                     คลิกขวาบน Google Maps และเลือก "What's here?" เพื่อหาพิกัด
+                    <br>
+                    <small class="text-muted">
+                      ตัวอย่าง: เชียงใหม่ (18.7883, 98.9853) | กรุงเทพฯ (13.7563, 100.5018)
+                    </small>
                   </div>
                 </div>
 
@@ -571,8 +575,8 @@
                       <span id="coordinates-display">ยังไม่ได้ระบุพิกัด</span>
                     </small>
                     <small class="text-muted">
-                      <i class="fas fa-info-circle me-1"></i>
-                      คลิกแผนที่เพื่อดูรายละเอียดเพิ่มเติม
+                      <i class="fas fa-external-link-alt me-1"></i>
+                      คลิกปุ่มด้านบนเพื่อดูแผนที่แบบเต็ม
                     </small>
                   </div>
                 </div>
@@ -730,6 +734,16 @@
         document
           .getElementById("descriptionTh")
           .addEventListener("input", updateTabIndicators);
+
+        // Add validation for other language fields (optional but should be valid if provided)
+        ['nameEn', 'nameZh', 'nameJa', 'descriptionEn', 'descriptionZh', 'descriptionJa'].forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if (field) {
+            field.addEventListener('blur', function() {
+              validateOptionalLanguageField(this);
+            });
+          }
+        });
 
         // Real-time validation for main fields
         document
@@ -913,7 +927,14 @@
 
         let isValid = true;
 
+        // Validate Thai name (required) - ความต้องการ 7.4
         if (!nameTh.value.trim()) {
+          nameTh.classList.add("is-invalid");
+          isValid = false;
+        } else if (nameTh.value.trim().length < 2) {
+          nameTh.classList.add("is-invalid");
+          isValid = false;
+        } else if (nameTh.value.trim().length > 200) {
           nameTh.classList.add("is-invalid");
           isValid = false;
         } else {
@@ -921,7 +942,14 @@
           nameTh.classList.add("is-valid");
         }
 
+        // Validate Thai description (required) - ความต้องการ 7.4
         if (!descriptionTh.value.trim()) {
+          descriptionTh.classList.add("is-invalid");
+          isValid = false;
+        } else if (descriptionTh.value.trim().length < 10) {
+          descriptionTh.classList.add("is-invalid");
+          isValid = false;
+        } else if (descriptionTh.value.trim().length > 2000) {
           descriptionTh.classList.add("is-invalid");
           isValid = false;
         } else {
@@ -934,17 +962,20 @@
 
       function validateMainFields() {
         let isValid = true;
+        let errorMessages = [];
 
-        // Validate Thai fields (required)
+        // Validate Thai fields (required) - ความต้องการ 7.4
         if (!validateThaiFields()) {
           isValid = false;
+          errorMessages.push("กรุณากรอกชื่อและคำอธิบายภาษาไทย (จำเป็น)");
         }
 
-        // Validate category selection
+        // Validate category selection (required) - ความต้องการ 3.2, 3.3
         const category = document.getElementById("category");
         if (!category.value) {
           category.classList.add("is-invalid");
           isValid = false;
+          errorMessages.push("กรุณาเลือกหมวดหมู่");
         } else {
           category.classList.remove("is-invalid");
           category.classList.add("is-valid");
@@ -953,11 +984,12 @@
         // Validate hours format (optional but if provided should be valid)
         const hours = document.getElementById("hours");
         if (hours.value.trim()) {
-          // Basic validation for hours format - allow Thai, English, numbers, and common time symbols
-          const hoursPattern = /^[\u0E00-\u0E7Fa-zA-Z0-9\s\-:.,()]+$/;
-          if (!hoursPattern.test(hours.value.trim())) {
+          // Enhanced validation for hours format - allow Thai, English, numbers, and common time symbols
+          const hoursPattern = /^[\u0E00-\u0E7Fa-zA-Z0-9\s\-:.,()\/]+$/;
+          if (!hoursPattern.test(hours.value.trim()) || hours.value.trim().length > 100) {
             hours.classList.add("is-invalid");
             isValid = false;
+            errorMessages.push("รูปแบบเวลาทำการไม่ถูกต้อง");
           } else {
             hours.classList.remove("is-invalid");
             hours.classList.add("is-valid");
@@ -970,7 +1002,35 @@
         const priceRange = document.getElementById("priceRange");
         priceRange.classList.remove("is-invalid", "is-valid");
 
+        // Store error messages for detailed feedback
+        validateMainFields.errorMessages = errorMessages;
+
         return isValid;
+      }
+
+      function validateOptionalLanguageField(field) {
+        const value = field.value.trim();
+        
+        if (!value) {
+          // Optional field, remove validation classes
+          field.classList.remove("is-invalid", "is-valid");
+          return true;
+        }
+
+        // If provided, validate length constraints
+        const isNameField = field.id.includes('name');
+        const minLength = isNameField ? 2 : 10;
+        const maxLength = isNameField ? 200 : 2000;
+
+        if (value.length < minLength || value.length > maxLength) {
+          field.classList.add("is-invalid");
+          field.classList.remove("is-valid");
+          return false;
+        } else {
+          field.classList.remove("is-invalid");
+          field.classList.add("is-valid");
+          return true;
+        }
       }
 
       function validateCurrentTab() {
@@ -1179,8 +1239,18 @@
             </div>
           `;
 
+          // Reset container classes
+          mapContainer.classList.remove('active', 'valid', 'invalid');
+
           // Load the actual map after a short delay
           setTimeout(() => {
+            const bbox = {
+              west: lng - 0.01,
+              south: lat - 0.01,
+              east: lng + 0.01,
+              north: lat + 0.01
+            };
+
             mapContainer.innerHTML = `
               <div class="position-relative h-100 rounded overflow-hidden">
                 <iframe 
@@ -1188,13 +1258,9 @@
                   height="250" 
                   frameborder="0" 
                   style="border:0;" 
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=${
-                    lng - 0.01
-                  },${lat - 0.01},${lng + 0.01},${
-              lat + 0.01
-            }&layer=mapnik&marker=${lat},${lng}"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}&layer=mapnik&marker=${lat},${lng}"
                   allowfullscreen
-                  onload="this.parentElement.parentElement.classList.add('active', 'valid')"
+                  onload="this.parentElement.parentElement.classList.add('active', 'valid'); console.log('Map loaded successfully');"
                   onerror="showMapError(this)">
                 </iframe>
                 <div class="position-absolute top-0 end-0 m-2">
@@ -1202,21 +1268,29 @@
                     <a href="https://www.google.com/maps?q=${lat},${lng}" 
                        target="_blank" 
                        class="btn btn-sm btn-light shadow-sm" 
-                       title="ดูใน Google Maps">
+                       title="ดูใน Google Maps"
+                       onclick="trackMapClick('google')">
                       <i class="fab fa-google text-primary"></i>
                     </a>
                     <a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=15" 
                        target="_blank" 
                        class="btn btn-sm btn-light shadow-sm" 
-                       title="ดูใน OpenStreetMap">
+                       title="ดูใน OpenStreetMap"
+                       onclick="trackMapClick('osm')">
                       <i class="fas fa-map text-success"></i>
                     </a>
+                    <button type="button" 
+                            class="btn btn-sm btn-light shadow-sm" 
+                            title="คัดลอกพิกัด"
+                            onclick="copyCoordinates(${lat}, ${lng})">
+                      <i class="fas fa-copy text-info"></i>
+                    </button>
                   </div>
                 </div>
                 <div class="position-absolute bottom-0 start-0 end-0 map-info-overlay text-white p-2">
                   <small>
                     <i class="fas fa-map-marker-alt me-1"></i>
-                    ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                    <span class="coordinates-text">${lat.toFixed(6)}, ${lng.toFixed(6)}</span>
                     <span class="float-end">
                       <i class="fas fa-info-circle me-1"></i>
                       คลิกเพื่อดูแผนที่แบบเต็ม
@@ -1225,6 +1299,15 @@
                 </div>
               </div>
             `;
+
+            // Add timeout for iframe loading
+            setTimeout(() => {
+              const iframe = mapContainer.querySelector('iframe');
+              if (iframe && !mapContainer.classList.contains('valid')) {
+                console.warn('Map loading timeout, showing fallback');
+                showMapFallback(lat, lng);
+              }
+            }, 10000); // 10 second timeout
           }, 500);
 
           // Add click handler to open full map
@@ -1240,6 +1323,153 @@
           // Add hover effect
           mapContainer.style.cursor = "pointer";
           mapContainer.title = "คลิกเพื่อดูแผนที่ใน Google Maps";
+        }
+      }
+
+      function showMapError(iframe) {
+        const mapContainer = iframe.parentElement.parentElement;
+        mapContainer.classList.add('invalid');
+        mapContainer.classList.remove('valid', 'active');
+        
+        // Show error message in map container
+        mapContainer.innerHTML = `
+          <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="text-center text-danger">
+              <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+              <p class="mb-2">ไม่สามารถโหลดแผนที่ได้</p>
+              <small class="text-muted">กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</small>
+              <div class="mt-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="retryMapLoad()">
+                  <i class="fas fa-redo me-1"></i>
+                  ลองใหม่
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function retryMapLoad() {
+        const lat = parseFloat(document.getElementById("latitude").value);
+        const lng = parseFloat(document.getElementById("longitude").value);
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+          updateMapPreview();
+        }
+      }
+
+      function showMapFallback(lat, lng) {
+        const mapContainer = document.getElementById("map-container");
+        mapContainer.classList.add('invalid');
+        mapContainer.classList.remove('valid', 'active');
+        
+        // Show fallback with external links
+        mapContainer.innerHTML = `
+          <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="text-center">
+              <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
+              <h6 class="text-muted mb-3">ไม่สามารถแสดงแผนที่ได้</h6>
+              <p class="small text-muted mb-3">คุณสามารถดูตำแหน่งได้จากลิงก์ด้านล่าง</p>
+              <div class="d-grid gap-2">
+                <a href="https://www.google.com/maps?q=${lat},${lng}" 
+                   target="_blank" 
+                   class="btn btn-outline-primary btn-sm">
+                  <i class="fab fa-google me-1"></i>
+                  ดูใน Google Maps
+                </a>
+                <a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=15" 
+                   target="_blank" 
+                   class="btn btn-outline-success btn-sm">
+                  <i class="fas fa-map me-1"></i>
+                  ดูใน OpenStreetMap
+                </a>
+                <button type="button" 
+                        class="btn btn-outline-secondary btn-sm" 
+                        onclick="retryMapLoad()">
+                  <i class="fas fa-redo me-1"></i>
+                  ลองโหลดแผนที่อีกครั้ง
+                </button>
+              </div>
+              <div class="mt-2">
+                <small class="text-muted">
+                  <i class="fas fa-map-marker-alt me-1"></i>
+                  ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                </small>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function trackMapClick(provider) {
+        console.log(`Map link clicked: ${provider}`);
+        // This could be used for analytics in the future
+      }
+
+      function copyCoordinates(lat, lng) {
+        const coordinates = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        
+        // Try to use the modern clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(coordinates).then(() => {
+            showCoordinatesCopiedFeedback();
+          }).catch(err => {
+            console.error('Failed to copy coordinates:', err);
+            fallbackCopyCoordinates(coordinates);
+          });
+        } else {
+          fallbackCopyCoordinates(coordinates);
+        }
+      }
+
+      function fallbackCopyCoordinates(coordinates) {
+        // Fallback method for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = coordinates;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          showCoordinatesCopiedFeedback();
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
+          // Show manual copy dialog
+          prompt('คัดลอกพิกัดนี้:', coordinates);
+        }
+        
+        document.body.removeChild(textArea);
+      }
+
+      function showCoordinatesCopiedFeedback() {
+        // Find the copy button and show feedback
+        const copyBtn = document.querySelector('button[onclick*="copyCoordinates"]');
+        if (copyBtn) {
+          const originalHTML = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<i class="fas fa-check text-success"></i>';
+          copyBtn.classList.add('btn-success');
+          copyBtn.classList.remove('btn-light');
+          
+          setTimeout(() => {
+            copyBtn.innerHTML = originalHTML;
+            copyBtn.classList.remove('btn-success');
+            copyBtn.classList.add('btn-light');
+          }, 2000);
+        }
+        
+        // Also show a small toast-like message
+        const coordinatesDisplay = document.getElementById('coordinates-display');
+        if (coordinatesDisplay) {
+          const originalText = coordinatesDisplay.textContent;
+          coordinatesDisplay.innerHTML = '<i class="fas fa-check text-success me-1"></i>คัดลอกแล้ว!';
+          
+          setTimeout(() => {
+            coordinatesDisplay.textContent = originalText;
+          }, 2000);
         }
       }
 
@@ -1348,18 +1578,27 @@
       }
 
       function savePlace() {
-        // Validate main fields first
+        // Validate main fields first - ความต้องการ 3.2, 3.3, 7.4
         if (!validateMainFields()) {
-          showAlert(
-            "error",
-            "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน โดยเฉพาะชื่อและคำอธิบายภาษาไทย และเลือกหมวดหมู่"
-          );
+          // Show detailed error messages
+          const errorMessages = validateMainFields.errorMessages || [];
+          const errorText = errorMessages.length > 0 
+            ? errorMessages.join('<br>') 
+            : "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน โดยเฉพาะชื่อและคำอธิบายภาษาไทย และเลือกหมวดหมู่";
+          
+          showAlert("error", errorText);
 
-          // Switch to Thai tab if Thai fields are invalid
+          // Switch to Thai tab if Thai fields are invalid - ความต้องการ 7.4
           const nameTh = document.getElementById("nameTh");
           const descriptionTh = document.getElementById("descriptionTh");
           if (!nameTh.value.trim() || !descriptionTh.value.trim()) {
             document.getElementById("th-tab").click();
+            // Focus on the first invalid field
+            if (!nameTh.value.trim()) {
+              setTimeout(() => nameTh.focus(), 300);
+            } else if (!descriptionTh.value.trim()) {
+              setTimeout(() => descriptionTh.focus(), 300);
+            }
           }
           return;
         }
