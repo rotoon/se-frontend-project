@@ -10,7 +10,8 @@
     "slug": "restaurant",
     "icon": "utensils",
     "order": 1,
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "status": "active"
   },
   {
     "id": "accommodation",
@@ -23,7 +24,8 @@
     "slug": "accommodation",
     "icon": "bed",
     "order": 2,
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "status": "active"
   },
   {
     "id": "attraction",
@@ -36,7 +38,8 @@
     "slug": "attraction",
     "icon": "camera",
     "order": 3,
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "status": "active"
   },
   {
     "id": "activity",
@@ -49,6 +52,7 @@
     "slug": "activity",
     "icon": "play",
     "order": 4,
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "status": "active"
   }
 ]
