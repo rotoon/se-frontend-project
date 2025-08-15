@@ -1,505 +1,624 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>รายการสถานที่ - ระบบจัดการสถานที่ท่องเที่ยวเชียงใหม่</title>
-    
+
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Google Fonts - Sarabun -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/admin.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/dashboard">
-                <i class="fas fa-map-marked-alt me-2"></i>
-                เชียงใหม่ Admin
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">
-                            <i class="fas fa-tachometer-alt me-1"></i>
-                            แดชบอร์ด
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/places">
-                            <i class="fas fa-map-marker-alt me-1"></i>
-                            จัดการสถานที่
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/categories">
-                            <i class="fas fa-tags me-1"></i>
-                            จัดการหมวดหมู่
-                        </a>
-                    </li>
-                </ul>
-                
-                <!-- User Info and Logout -->
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i>
-                            <span id="username-display">ผู้ดูแลระบบ</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <span class="dropdown-item-text">
-                                    <small class="text-muted">เข้าสู่ระบบล่าสุด:</small><br>
-                                    <span id="last-login-display">-</span>
-                                </span>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="#" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt me-1"></i>
-                                    ออกจากระบบ
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">
+          <i class="fas fa-map-marked-alt me-2"></i>
+          เชียงใหม่ Admin
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard">
+                <i class="fas fa-tachometer-alt me-1"></i>
+                แดชบอร์ด
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/places">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                จัดการสถานที่
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/categories">
+                <i class="fas fa-tags me-1"></i>
+                จัดการหมวดหมู่
+              </a>
+            </li>
+          </ul>
+
+          <!-- User Info and Logout -->
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user-circle me-1"></i>
+                <span id="username-display">ผู้ดูแลระบบ</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <span class="dropdown-item-text">
+                    <small class="text-muted">เข้าสู่ระบบล่าสุด:</small><br />
+                    <span id="last-login-display">-</span>
+                  </span>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>
+                    ออกจากระบบ
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
     <!-- Main Content -->
     <div class="container-fluid py-4">
-        <!-- Page Header -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <h1 class="h3 mb-0">รายการสถานที่</h1>
-                <p class="text-muted">จัดการข้อมูลสถานที่ท่องเที่ยวทั้งหมด</p>
+      <!-- Page Header -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <h1 class="h3 mb-0">รายการสถานที่</h1>
+          <p class="text-muted">จัดการข้อมูลสถานที่ท่องเที่ยวทั้งหมด</p>
+        </div>
+        <div class="col-md-6 text-end">
+          <a href="/places/new" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            เพิ่มสถานที่ใหม่
+          </a>
+        </div>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="row mb-4">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-body">
+              <div class="row g-3">
+                <!-- Search Input -->
+                <div class="col-md-4">
+                  <label for="search-input" class="form-label">ค้นหา</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="search-input"
+                      placeholder="ค้นหาชื่อสถานที่หรือคำสำคัญ..."
+                    />
+                  </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="col-md-3">
+                  <label for="category-filter" class="form-label"
+                    >หมวดหมู่</label
+                  >
+                  <select class="form-select" id="category-filter">
+                    <option value="">ทุกหมวดหมู่</option>
+                  </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="col-md-3">
+                  <label for="status-filter" class="form-label">สถานะ</label>
+                  <select class="form-select" id="status-filter">
+                    <option value="">ทุกสถานะ</option>
+                    <option value="draft">ร่าง</option>
+                    <option value="published">เผยแพร่</option>
+                    <option value="inactive">ไม่ใช้งาน</option>
+                  </select>
+                </div>
+
+                <!-- Filter Actions -->
+                <div class="col-md-2 d-flex align-items-end">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary w-100"
+                    onclick="clearFilters()"
+                  >
+                    <i class="fas fa-times me-1"></i>
+                    ล้าง
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="col-md-6 text-end">
+          </div>
+        </div>
+      </div>
+
+      <!-- Places Table -->
+      <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div
+              class="card-header py-3 d-flex justify-content-between align-items-center"
+            >
+              <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-list me-2"></i>
+                รายการสถานที่
+              </h6>
+              <div class="d-flex align-items-center">
+                <span class="text-muted me-3">
+                  แสดง <span id="showing-count">0</span> จาก
+                  <span id="total-count">0</span> รายการ
+                </span>
+                <div class="btn-group btn-group-sm" role="group">
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="view-mode"
+                    id="table-view"
+                    checked
+                  />
+                  <label class="btn btn-outline-primary" for="table-view">
+                    <i class="fas fa-table"></i>
+                  </label>
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="view-mode"
+                    id="grid-view"
+                  />
+                  <label class="btn btn-outline-primary" for="grid-view">
+                    <i class="fas fa-th"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <!-- Loading State -->
+              <div id="loading-state" class="text-center py-5">
+                <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                <p class="text-muted mt-2">กำลังโหลดข้อมูล...</p>
+              </div>
+
+              <!-- Table View -->
+              <div id="table-container" style="display: none">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th width="5%">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="select-all"
+                          />
+                        </th>
+                        <th width="8%">รูปภาพ</th>
+                        <th width="25%">
+                          <a
+                            href="#"
+                            class="text-decoration-none text-dark"
+                            onclick="sortTable('name')"
+                          >
+                            ชื่อสถานที่
+                            <i class="fas fa-sort ms-1"></i>
+                          </a>
+                        </th>
+                        <th width="15%">
+                          <a
+                            href="#"
+                            class="text-decoration-none text-dark"
+                            onclick="sortTable('category')"
+                          >
+                            หมวดหมู่
+                            <i class="fas fa-sort ms-1"></i>
+                          </a>
+                        </th>
+                        <th width="12%">
+                          <a
+                            href="#"
+                            class="text-decoration-none text-dark"
+                            onclick="sortTable('status')"
+                          >
+                            สถานะ
+                            <i class="fas fa-sort ms-1"></i>
+                          </a>
+                        </th>
+                        <th width="15%">
+                          <a
+                            href="#"
+                            class="text-decoration-none text-dark"
+                            onclick="sortTable('updatedAt')"
+                          >
+                            อัปเดตล่าสุด
+                            <i class="fas fa-sort ms-1"></i>
+                          </a>
+                        </th>
+                        <th width="20%">การจัดการ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="places-table-body">
+                      <!-- Table rows will be populated by JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Grid View -->
+              <div id="grid-container" style="display: none">
+                <div class="row g-3 p-3" id="places-grid">
+                  <!-- Grid items will be populated by JavaScript -->
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div
+                id="empty-state"
+                class="text-center py-5"
+                style="display: none"
+              >
+                <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">ไม่พบสถานที่</h5>
+                <p class="text-muted">ไม่มีสถานที่ที่ตรงกับเงื่อนไขการค้นหา</p>
                 <a href="/places/new" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>
-                    เพิ่มสถานที่ใหม่
+                  <i class="fas fa-plus me-2"></i>
+                  เพิ่มสถานที่ใหม่
                 </a>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Search and Filter Section -->
-        <div class="row mb-4">
-            <div class="col">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <!-- Search Input -->
-                            <div class="col-md-4">
-                                <label for="search-input" class="form-label">ค้นหา</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="search-input" 
-                                           placeholder="ค้นหาชื่อสถานที่หรือคำสำคัญ...">
-                                </div>
-                            </div>
-                            
-                            <!-- Category Filter -->
-                            <div class="col-md-3">
-                                <label for="category-filter" class="form-label">หมวดหมู่</label>
-                                <select class="form-select" id="category-filter">
-                                    <option value="">ทุกหมวดหมู่</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Status Filter -->
-                            <div class="col-md-3">
-                                <label for="status-filter" class="form-label">สถานะ</label>
-                                <select class="form-select" id="status-filter">
-                                    <option value="">ทุกสถานะ</option>
-                                    <option value="draft">ร่าง</option>
-                                    <option value="published">เผยแพร่</option>
-                                    <option value="inactive">ไม่ใช้งาน</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Filter Actions -->
-                            <div class="col-md-2 d-flex align-items-end">
-                                <button type="button" class="btn btn-outline-secondary w-100" onclick="clearFilters()">
-                                    <i class="fas fa-times me-1"></i>
-                                    ล้าง
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Pagination -->
+      <div class="row mt-4">
+        <div class="col">
+          <nav aria-label="Places pagination">
+            <ul class="pagination justify-content-center" id="pagination">
+              <!-- Pagination will be populated by JavaScript -->
+            </ul>
+          </nav>
         </div>
-
-        <!-- Places Table -->
-        <div class="row">
-            <div class="col">
-                <div class="card shadow">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-list me-2"></i>
-                            รายการสถานที่
-                        </h6>
-                        <div class="d-flex align-items-center">
-                            <span class="text-muted me-3">
-                                แสดง <span id="showing-count">0</span> จาก <span id="total-count">0</span> รายการ
-                            </span>
-                            <div class="btn-group btn-group-sm" role="group">
-                                <input type="radio" class="btn-check" name="view-mode" id="table-view" checked>
-                                <label class="btn btn-outline-primary" for="table-view">
-                                    <i class="fas fa-table"></i>
-                                </label>
-                                <input type="radio" class="btn-check" name="view-mode" id="grid-view">
-                                <label class="btn btn-outline-primary" for="grid-view">
-                                    <i class="fas fa-th"></i>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <!-- Loading State -->
-                        <div id="loading-state" class="text-center py-5">
-                            <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
-                            <p class="text-muted mt-2">กำลังโหลดข้อมูล...</p>
-                        </div>
-
-                        <!-- Table View -->
-                        <div id="table-container" style="display: none;">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th width="5%">
-                                                <input type="checkbox" class="form-check-input" id="select-all">
-                                            </th>
-                                            <th width="8%">รูปภาพ</th>
-                                            <th width="25%">
-                                                <a href="#" class="text-decoration-none text-dark" onclick="sortTable('name')">
-                                                    ชื่อสถานที่
-                                                    <i class="fas fa-sort ms-1"></i>
-                                                </a>
-                                            </th>
-                                            <th width="15%">
-                                                <a href="#" class="text-decoration-none text-dark" onclick="sortTable('category')">
-                                                    หมวดหมู่
-                                                    <i class="fas fa-sort ms-1"></i>
-                                                </a>
-                                            </th>
-                                            <th width="12%">
-                                                <a href="#" class="text-decoration-none text-dark" onclick="sortTable('status')">
-                                                    สถานะ
-                                                    <i class="fas fa-sort ms-1"></i>
-                                                </a>
-                                            </th>
-                                            <th width="15%">
-                                                <a href="#" class="text-decoration-none text-dark" onclick="sortTable('updatedAt')">
-                                                    อัปเดตล่าสุด
-                                                    <i class="fas fa-sort ms-1"></i>
-                                                </a>
-                                            </th>
-                                            <th width="20%">การจัดการ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="places-table-body">
-                                        <!-- Table rows will be populated by JavaScript -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Grid View -->
-                        <div id="grid-container" style="display: none;">
-                            <div class="row g-3 p-3" id="places-grid">
-                                <!-- Grid items will be populated by JavaScript -->
-                            </div>
-                        </div>
-
-                        <!-- Empty State -->
-                        <div id="empty-state" class="text-center py-5" style="display: none;">
-                            <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">ไม่พบสถานที่</h5>
-                            <p class="text-muted">ไม่มีสถานที่ที่ตรงกับเงื่อนไขการค้นหา</p>
-                            <a href="/places/new" class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i>
-                                เพิ่มสถานที่ใหม่
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="row mt-4">
-            <div class="col">
-                <nav aria-label="Places pagination">
-                    <ul class="pagination justify-content-center" id="pagination">
-                        <!-- Pagination will be populated by JavaScript -->
-                    </ul>
-                </nav>
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- Bulk Actions Modal -->
     <div class="modal fade" id="bulkActionsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">การดำเนินการกับรายการที่เลือก</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>คุณได้เลือกสถานที่ <span id="selected-count">0</span> รายการ</p>
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-success" onclick="bulkAction('publish')">
-                            <i class="fas fa-eye me-2"></i>
-                            เผยแพร่ทั้งหมด
-                        </button>
-                        <button type="button" class="btn btn-warning" onclick="bulkAction('draft')">
-                            <i class="fas fa-edit me-2"></i>
-                            เปลี่ยนเป็นร่างทั้งหมด
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="bulkAction('inactive')">
-                            <i class="fas fa-eye-slash me-2"></i>
-                            ปิดใช้งานทั้งหมด
-                        </button>
-                        <hr>
-                        <button type="button" class="btn btn-danger" onclick="bulkAction('delete')">
-                            <i class="fas fa-trash me-2"></i>
-                            ลบทั้งหมด
-                        </button>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">การดำเนินการกับรายการที่เลือก</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>คุณได้เลือกสถานที่ <span id="selected-count">0</span> รายการ</p>
+            <div class="d-grid gap-2">
+              <button
+                type="button"
+                class="btn btn-success"
+                onclick="bulkAction('publish')"
+              >
+                <i class="fas fa-eye me-2"></i>
+                เผยแพร่ทั้งหมด
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                onclick="bulkAction('draft')"
+              >
+                <i class="fas fa-edit me-2"></i>
+                เปลี่ยนเป็นร่างทั้งหมด
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="bulkAction('inactive')"
+              >
+                <i class="fas fa-eye-slash me-2"></i>
+                ปิดใช้งานทั้งหมด
+              </button>
+              <hr />
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="bulkAction('delete')"
+              >
+                <i class="fas fa-trash me-2"></i>
+                ลบทั้งหมด
+              </button>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom JS -->
     <script src="/js/admin.js"></script>
-    
+
     <!-- Places List specific JS -->
     <script>
-        // Global variables
-        let allPlaces = [];
-        let filteredPlaces = [];
-        let categories = [];
-        let currentPage = 1;
-        let itemsPerPage = 10;
-        let currentSort = { field: 'updatedAt', direction: 'desc' };
-        let selectedPlaces = new Set();
+      // Global variables
+      let allPlaces = [];
+      let filteredPlaces = [];
+      let categories = [];
+      let currentPage = 1;
+      let itemsPerPage = 10;
+      let currentSort = { field: "updatedAt", direction: "desc" };
+      let selectedPlaces = new Set();
 
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            initPlacesList();
-            setupEventListeners();
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        initPlacesList();
+        setupEventListeners();
+      });
+
+      function initPlacesList() {
+        loadCategories();
+        loadPlaces();
+        loadUserInfo();
+      }
+
+      function setupEventListeners() {
+        // Search input
+        document
+          .getElementById("search-input")
+          .addEventListener("input", debounce(filterPlaces, 300));
+
+        // Filter selects
+        document
+          .getElementById("category-filter")
+          .addEventListener("change", filterPlaces);
+        document
+          .getElementById("status-filter")
+          .addEventListener("change", filterPlaces);
+
+        // View mode toggles
+        document
+          .getElementById("table-view")
+          .addEventListener("change", function () {
+            if (this.checked) switchView("table");
+          });
+        document
+          .getElementById("grid-view")
+          .addEventListener("change", function () {
+            if (this.checked) switchView("grid");
+          });
+
+        // Select all checkbox
+        document
+          .getElementById("select-all")
+          .addEventListener("change", toggleSelectAll);
+      }
+
+      function loadCategories() {
+        fetch("/api/categories")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              categories = data.categories;
+              populateCategoryFilter();
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading categories:", error);
+          });
+      }
+
+      function loadPlaces() {
+        document.getElementById("loading-state").style.display = "block";
+        document.getElementById("table-container").style.display = "none";
+        document.getElementById("grid-container").style.display = "none";
+        document.getElementById("empty-state").style.display = "none";
+
+        fetch("/api/places")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              allPlaces = data.places;
+              filteredPlaces = [...allPlaces];
+              sortPlaces();
+              renderPlaces();
+              updateCounts();
+            } else {
+              showError("ไม่สามารถโหลดข้อมูลสถานที่ได้");
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading places:", error);
+            showError("เกิดข้อผิดพลาดในการโหลดข้อมูล");
+          })
+          .finally(() => {
+            document.getElementById("loading-state").style.display = "none";
+          });
+      }
+
+      function populateCategoryFilter() {
+        const select = document.getElementById("category-filter");
+        categories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.id;
+          option.textContent = category.name.th;
+          select.appendChild(option);
+        });
+      }
+
+      function filterPlaces() {
+        const searchTerm = document
+          .getElementById("search-input")
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById("category-filter").value;
+        const statusFilter = document.getElementById("status-filter").value;
+
+        filteredPlaces = allPlaces.filter((place) => {
+          // Search filter
+          const matchesSearch =
+            !searchTerm ||
+            place.name.th.toLowerCase().includes(searchTerm) ||
+            place.name.en.toLowerCase().includes(searchTerm) ||
+            place.description.th.toLowerCase().includes(searchTerm) ||
+            place.description.en.toLowerCase().includes(searchTerm);
+
+          // Category filter
+          const matchesCategory =
+            !categoryFilter || place.category === categoryFilter;
+
+          // Status filter
+          const matchesStatus = !statusFilter || place.status === statusFilter;
+
+          return matchesSearch && matchesCategory && matchesStatus;
         });
 
-        function initPlacesList() {
-            loadCategories();
-            loadPlaces();
-            loadUserInfo();
+        currentPage = 1;
+        sortPlaces();
+        renderPlaces();
+        updateCounts();
+      }
+
+      function sortPlaces() {
+        filteredPlaces.sort((a, b) => {
+          let aValue, bValue;
+
+          switch (currentSort.field) {
+            case "name":
+              aValue = a.name.th.toLowerCase();
+              bValue = b.name.th.toLowerCase();
+              break;
+            case "category":
+              const aCat = categories.find((c) => c.id === a.category);
+              const bCat = categories.find((c) => c.id === b.category);
+              aValue = aCat ? aCat.name.th.toLowerCase() : "";
+              bValue = bCat ? bCat.name.th.toLowerCase() : "";
+              break;
+            case "status":
+              aValue = a.status;
+              bValue = b.status;
+              break;
+            case "updatedAt":
+              aValue = new Date(a.updatedAt);
+              bValue = new Date(b.updatedAt);
+              break;
+            default:
+              return 0;
+          }
+
+          if (aValue < bValue) return currentSort.direction === "asc" ? -1 : 1;
+          if (aValue > bValue) return currentSort.direction === "asc" ? 1 : -1;
+          return 0;
+        });
+      }
+
+      function renderPlaces() {
+        const isTableView = document.getElementById("table-view").checked;
+
+        if (filteredPlaces.length === 0) {
+          document.getElementById("table-container").style.display = "none";
+          document.getElementById("grid-container").style.display = "none";
+          document.getElementById("empty-state").style.display = "block";
+          document.getElementById("pagination").innerHTML = "";
+          return;
         }
 
-        function setupEventListeners() {
-            // Search input
-            document.getElementById('search-input').addEventListener('input', debounce(filterPlaces, 300));
-            
-            // Filter selects
-            document.getElementById('category-filter').addEventListener('change', filterPlaces);
-            document.getElementById('status-filter').addEventListener('change', filterPlaces);
-            
-            // View mode toggles
-            document.getElementById('table-view').addEventListener('change', function() {
-                if (this.checked) switchView('table');
-            });
-            document.getElementById('grid-view').addEventListener('change', function() {
-                if (this.checked) switchView('grid');
-            });
-            
-            // Select all checkbox
-            document.getElementById('select-all').addEventListener('change', toggleSelectAll);
+        document.getElementById("empty-state").style.display = "none";
+
+        if (isTableView) {
+          renderTableView();
+          document.getElementById("table-container").style.display = "block";
+          document.getElementById("grid-container").style.display = "none";
+        } else {
+          renderGridView();
+          document.getElementById("table-container").style.display = "none";
+          document.getElementById("grid-container").style.display = "block";
         }
 
-        function loadCategories() {
-            fetch('/api/categories')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        categories = data.categories;
-                        populateCategoryFilter();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading categories:', error);
-                });
-        }
+        renderPagination();
+      }
 
-        function loadPlaces() {
-            document.getElementById('loading-state').style.display = 'block';
-            document.getElementById('table-container').style.display = 'none';
-            document.getElementById('grid-container').style.display = 'none';
-            document.getElementById('empty-state').style.display = 'none';
+      function renderTableView() {
+        const tbody = document.getElementById("places-table-body");
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const placesToShow = filteredPlaces.slice(startIndex, endIndex);
 
-            fetch('/api/places')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        allPlaces = data.places;
-                        filteredPlaces = [...allPlaces];
-                        sortPlaces();
-                        renderPlaces();
-                        updateCounts();
-                    } else {
-                        showError('ไม่สามารถโหลดข้อมูลสถานที่ได้');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading places:', error);
-                    showError('เกิดข้อผิดพลาดในการโหลดข้อมูล');
-                })
-                .finally(() => {
-                    document.getElementById('loading-state').style.display = 'none';
-                });
-        }
+        tbody.innerHTML = placesToShow
+          .map((place) => {
+            const category = categories.find((c) => c.id === place.category);
+            const statusBadge = getStatusBadge(place.status);
+            const featuredIcon = place.featured
+              ? '<i class="fas fa-star text-warning ms-1" title="สถานที่เด่น"></i>'
+              : "";
+            const imageUrl =
+              place.images && place.images.length > 0
+                ? `/uploads/${
+                    place.images.find((img) => img.featured)?.filename ||
+                    place.images[0].filename
+                  }`
+                : "/images/placeholder.jpg";
 
-        function populateCategoryFilter() {
-            const select = document.getElementById('category-filter');
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name.th;
-                select.appendChild(option);
-            });
-        }
-
-        function filterPlaces() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const categoryFilter = document.getElementById('category-filter').value;
-            const statusFilter = document.getElementById('status-filter').value;
-
-            filteredPlaces = allPlaces.filter(place => {
-                // Search filter
-                const matchesSearch = !searchTerm || 
-                    place.name.th.toLowerCase().includes(searchTerm) ||
-                    place.name.en.toLowerCase().includes(searchTerm) ||
-                    place.description.th.toLowerCase().includes(searchTerm) ||
-                    place.description.en.toLowerCase().includes(searchTerm);
-
-                // Category filter
-                const matchesCategory = !categoryFilter || place.category === categoryFilter;
-
-                // Status filter
-                const matchesStatus = !statusFilter || place.status === statusFilter;
-
-                return matchesSearch && matchesCategory && matchesStatus;
-            });
-
-            currentPage = 1;
-            sortPlaces();
-            renderPlaces();
-            updateCounts();
-        }
-
-        function sortPlaces() {
-            filteredPlaces.sort((a, b) => {
-                let aValue, bValue;
-
-                switch (currentSort.field) {
-                    case 'name':
-                        aValue = a.name.th.toLowerCase();
-                        bValue = b.name.th.toLowerCase();
-                        break;
-                    case 'category':
-                        const aCat = categories.find(c => c.id === a.category);
-                        const bCat = categories.find(c => c.id === b.category);
-                        aValue = aCat ? aCat.name.th.toLowerCase() : '';
-                        bValue = bCat ? bCat.name.th.toLowerCase() : '';
-                        break;
-                    case 'status':
-                        aValue = a.status;
-                        bValue = b.status;
-                        break;
-                    case 'updatedAt':
-                        aValue = new Date(a.updatedAt);
-                        bValue = new Date(b.updatedAt);
-                        break;
-                    default:
-                        return 0;
-                }
-
-                if (aValue < bValue) return currentSort.direction === 'asc' ? -1 : 1;
-                if (aValue > bValue) return currentSort.direction === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
-
-        function renderPlaces() {
-            const isTableView = document.getElementById('table-view').checked;
-            
-            if (filteredPlaces.length === 0) {
-                document.getElementById('table-container').style.display = 'none';
-                document.getElementById('grid-container').style.display = 'none';
-                document.getElementById('empty-state').style.display = 'block';
-                document.getElementById('pagination').innerHTML = '';
-                return;
-            }
-
-            document.getElementById('empty-state').style.display = 'none';
-            
-            if (isTableView) {
-                renderTableView();
-                document.getElementById('table-container').style.display = 'block';
-                document.getElementById('grid-container').style.display = 'none';
-            } else {
-                renderGridView();
-                document.getElementById('table-container').style.display = 'none';
-                document.getElementById('grid-container').style.display = 'block';
-            }
-
-            renderPagination();
-        }
-
-        function renderTableView() {
-            const tbody = document.getElementById('places-table-body');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const placesToShow = filteredPlaces.slice(startIndex, endIndex);
-
-            tbody.innerHTML = placesToShow.map(place => {
-                const category = categories.find(c => c.id === place.category);
-                const statusBadge = getStatusBadge(place.status);
-                const featuredIcon = place.featured ? '<i class="fas fa-star text-warning ms-1" title="สถานที่เด่น"></i>' : '';
-                const imageUrl = place.images && place.images.length > 0 
-                    ? `/uploads/${place.images.find(img => img.featured)?.filename || place.images[0].filename}`
-                    : '/images/placeholder.jpg';
-
-                return `
+            return `
                     <tr>
                         <td>
                             <input type="checkbox" class="form-check-input place-checkbox" 
-                                   value="${place.id}" ${selectedPlaces.has(place.id) ? 'checked' : ''}>
+                                   value="${place.id}" ${
+              selectedPlaces.has(place.id) ? "checked" : ""
+            }>
                         </td>
                         <td>
                             <img src="${imageUrl}" alt="${place.name.th}" 
@@ -508,16 +627,22 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <strong>${place.name.th}</strong>${featuredIcon}
+                                    <strong>${
+                                      place.name.th
+                                    }</strong>${featuredIcon}
                                     <br>
-                                    <small class="text-muted">${place.name.en || ''}</small>
+                                    <small class="text-muted">${
+                                      place.name.en || ""
+                                    }</small>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <span class="badge bg-secondary">
-                                <i class="fas fa-${category?.icon || 'tag'} me-1"></i>
-                                ${category?.name.th || 'ไม่ระบุ'}
+                                <i class="fas fa-${
+                                  category?.icon || "tag"
+                                } me-1"></i>
+                                ${category?.name.th || "ไม่ระบุ"}
                             </span>
                         </td>
                         <td>${statusBadge}</td>
@@ -526,84 +651,126 @@
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
-                                <a href="/places/${place.id}" class="btn btn-outline-primary" title="ดูรายละเอียด">
+                                <a href="/places/${
+                                  place.id
+                                }" class="btn btn-outline-primary" title="ดูรายละเอียด">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="/places/${place.id}/edit" class="btn btn-outline-warning" title="แก้ไข">
+                                <a href="/places/${
+                                  place.id
+                                }/edit" class="btn btn-outline-warning" title="แก้ไข">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <button type="button" class="btn btn-outline-success" 
-                                        onclick="toggleStatus('${place.id}', '${place.status}')" title="เปลี่ยนสถานะ">
-                                    <i class="fas fa-toggle-${place.status === 'published' ? 'on' : 'off'}"></i>
+                                        onclick="toggleStatus('${place.id}', '${
+              place.status
+            }')" title="เปลี่ยนสถานะ">
+                                    <i class="fas fa-toggle-${
+                                      place.status === "published"
+                                        ? "on"
+                                        : "off"
+                                    }"></i>
                                 </button>
                                 <button type="button" class="btn btn-outline-danger" 
-                                        onclick="deletePlace('${place.id}', '${place.name.th}')" title="ลบ">
+                                        onclick="deletePlace('${place.id}', '${
+              place.name.th
+            }')" title="ลบ">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
                 `;
-            }).join('');
+          })
+          .join("");
 
-            // Update checkbox event listeners
-            document.querySelectorAll('.place-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', updateSelectedPlaces);
-            });
-        }
+        // Update checkbox event listeners
+        document.querySelectorAll(".place-checkbox").forEach((checkbox) => {
+          checkbox.addEventListener("change", updateSelectedPlaces);
+        });
+      }
 
-        function renderGridView() {
-            const container = document.getElementById('places-grid');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const placesToShow = filteredPlaces.slice(startIndex, endIndex);
+      function renderGridView() {
+        const container = document.getElementById("places-grid");
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const placesToShow = filteredPlaces.slice(startIndex, endIndex);
 
-            container.innerHTML = placesToShow.map(place => {
-                const category = categories.find(c => c.id === place.category);
-                const statusBadge = getStatusBadge(place.status);
-                const featuredIcon = place.featured ? '<i class="fas fa-star text-warning position-absolute top-0 end-0 m-2"></i>' : '';
-                const imageUrl = place.images && place.images.length > 0 
-                    ? `/uploads/${place.images.find(img => img.featured)?.filename || place.images[0].filename}`
-                    : '/images/placeholder.jpg';
+        container.innerHTML = placesToShow
+          .map((place) => {
+            const category = categories.find((c) => c.id === place.category);
+            const statusBadge = getStatusBadge(place.status);
+            const featuredIcon = place.featured
+              ? '<i class="fas fa-star text-warning position-absolute top-0 end-0 m-2"></i>'
+              : "";
+            const imageUrl =
+              place.images && place.images.length > 0
+                ? `/uploads/${
+                    place.images.find((img) => img.featured)?.filename ||
+                    place.images[0].filename
+                  }`
+                : "/images/placeholder.jpg";
 
-                return `
+            return `
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="card h-100 shadow-sm">
                             <div class="position-relative">
-                                <img src="${imageUrl}" class="card-img-top" alt="${place.name.th}" 
+                                <img src="${imageUrl}" class="card-img-top" alt="${
+              place.name.th
+            }" 
                                      style="height: 200px; object-fit: cover;">
                                 ${featuredIcon}
                                 <div class="position-absolute top-0 start-0 m-2">
                                     <input type="checkbox" class="form-check-input place-checkbox" 
-                                           value="${place.id}" ${selectedPlaces.has(place.id) ? 'checked' : ''}>
+                                           value="${place.id}" ${
+              selectedPlaces.has(place.id) ? "checked" : ""
+            }>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title">${place.name.th}</h6>
-                                <p class="card-text text-muted small">${place.name.en || ''}</p>
+                                <p class="card-text text-muted small">${
+                                  place.name.en || ""
+                                }</p>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="badge bg-secondary">
-                                        <i class="fas fa-${category?.icon || 'tag'} me-1"></i>
-                                        ${category?.name.th || 'ไม่ระบุ'}
+                                        <i class="fas fa-${
+                                          category?.icon || "tag"
+                                        } me-1"></i>
+                                        ${category?.name.th || "ไม่ระบุ"}
                                     </span>
                                     ${statusBadge}
                                 </div>
-                                <small class="text-muted">อัปเดต: ${formatDate(place.updatedAt)}</small>
+                                <small class="text-muted">อัปเดต: ${formatDate(
+                                  place.updatedAt
+                                )}</small>
                             </div>
                             <div class="card-footer bg-transparent">
                                 <div class="btn-group w-100" role="group">
-                                    <a href="/places/${place.id}" class="btn btn-outline-primary btn-sm">
+                                    <a href="/places/${
+                                      place.id
+                                    }" class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="/places/${place.id}/edit" class="btn btn-outline-warning btn-sm">
+                                    <a href="/places/${
+                                      place.id
+                                    }/edit" class="btn btn-outline-warning btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" class="btn btn-outline-success btn-sm" 
-                                            onclick="toggleStatus('${place.id}', '${place.status}')">
-                                        <i class="fas fa-toggle-${place.status === 'published' ? 'on' : 'off'}"></i>
+                                            onclick="toggleStatus('${
+                                              place.id
+                                            }', '${place.status}')">
+                                        <i class="fas fa-toggle-${
+                                          place.status === "published"
+                                            ? "on"
+                                            : "off"
+                                        }"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline-danger btn-sm" 
-                                            onclick="deletePlace('${place.id}', '${place.name.th}')">
+                                            onclick="deletePlace('${
+                                              place.id
+                                            }', '${place.name.th}')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -611,323 +778,412 @@
                         </div>
                     </div>
                 `;
-            }).join('');
+          })
+          .join("");
 
-            // Update checkbox event listeners
-            document.querySelectorAll('.place-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', updateSelectedPlaces);
-            });
+        // Update checkbox event listeners
+        document.querySelectorAll(".place-checkbox").forEach((checkbox) => {
+          checkbox.addEventListener("change", updateSelectedPlaces);
+        });
+      }
+
+      function renderPagination() {
+        const totalPages = Math.ceil(filteredPlaces.length / itemsPerPage);
+        const pagination = document.getElementById("pagination");
+
+        if (totalPages <= 1) {
+          pagination.innerHTML = "";
+          return;
         }
 
-        function renderPagination() {
-            const totalPages = Math.ceil(filteredPlaces.length / itemsPerPage);
-            const pagination = document.getElementById('pagination');
+        let html = "";
 
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let html = '';
-
-            // Previous button
-            html += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">
+        // Previous button
+        html += `
+                <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+                    <a class="page-link" href="#" onclick="changePage(${
+                      currentPage - 1
+                    })">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
             `;
 
-            // Page numbers
-            const startPage = Math.max(1, currentPage - 2);
-            const endPage = Math.min(totalPages, currentPage + 2);
+        // Page numbers
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
 
-            if (startPage > 1) {
-                html += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>`;
-                if (startPage > 2) {
-                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-                }
-            }
+        if (startPage > 1) {
+          html += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>`;
+          if (startPage > 2) {
+            html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+          }
+        }
 
-            for (let i = startPage; i <= endPage; i++) {
-                html += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+        for (let i = startPage; i <= endPage; i++) {
+          html += `
+                    <li class="page-item ${i === currentPage ? "active" : ""}">
                         <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
                     </li>
                 `;
-            }
+        }
 
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-                }
-                html += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a></li>`;
-            }
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+          }
+          html += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a></li>`;
+        }
 
-            // Next button
-            html += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">
+        // Next button
+        html += `
+                <li class="page-item ${
+                  currentPage === totalPages ? "disabled" : ""
+                }">
+                    <a class="page-link" href="#" onclick="changePage(${
+                      currentPage + 1
+                    })">
                         <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
             `;
 
-            pagination.innerHTML = html;
+        pagination.innerHTML = html;
+      }
+
+      function changePage(page) {
+        if (page < 1 || page > Math.ceil(filteredPlaces.length / itemsPerPage))
+          return;
+        currentPage = page;
+        renderPlaces();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function sortTable(field) {
+        if (currentSort.field === field) {
+          currentSort.direction =
+            currentSort.direction === "asc" ? "desc" : "asc";
+        } else {
+          currentSort.field = field;
+          currentSort.direction = "asc";
         }
 
-        function changePage(page) {
-            if (page < 1 || page > Math.ceil(filteredPlaces.length / itemsPerPage)) return;
-            currentPage = page;
-            renderPlaces();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Update sort icons
+        document.querySelectorAll("th .fas").forEach((icon) => {
+          icon.className = "fas fa-sort ms-1";
+        });
+
+        const sortIcon = document.querySelector(
+          `th a[onclick="sortTable('${field}')"] .fas`
+        );
+        if (sortIcon) {
+          sortIcon.className = `fas fa-sort-${
+            currentSort.direction === "asc" ? "up" : "down"
+          } ms-1`;
         }
 
-        function sortTable(field) {
-            if (currentSort.field === field) {
-                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        sortPlaces();
+        renderPlaces();
+      }
+
+      function switchView(view) {
+        renderPlaces();
+      }
+
+      function clearFilters() {
+        document.getElementById("search-input").value = "";
+        document.getElementById("category-filter").value = "";
+        document.getElementById("status-filter").value = "";
+        filterPlaces();
+      }
+
+      function updateCounts() {
+        const showing = Math.min(
+          filteredPlaces.length,
+          currentPage * itemsPerPage
+        );
+        const startShowing =
+          filteredPlaces.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
+
+        document.getElementById(
+          "showing-count"
+        ).textContent = `${startShowing}-${showing}`;
+        document.getElementById("total-count").textContent =
+          filteredPlaces.length;
+      }
+
+      function getStatusBadge(status) {
+        const statusConfig = {
+          draft: { class: "bg-secondary", icon: "edit", text: "ร่าง" },
+          published: { class: "bg-success", icon: "eye", text: "เผยแพร่" },
+          inactive: {
+            class: "bg-danger",
+            icon: "eye-slash",
+            text: "ไม่ใช้งาน",
+          },
+        };
+
+        const config = statusConfig[status] || statusConfig["draft"];
+        return `<span class="badge ${config.class}"><i class="fas fa-${config.icon} me-1"></i>${config.text}</span>`;
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("th-TH", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function toggleSelectAll() {
+        const selectAll = document.getElementById("select-all");
+        const checkboxes = document.querySelectorAll(".place-checkbox");
+
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = selectAll.checked;
+        });
+
+        updateSelectedPlaces();
+      }
+
+      function updateSelectedPlaces() {
+        selectedPlaces.clear();
+        document
+          .querySelectorAll(".place-checkbox:checked")
+          .forEach((checkbox) => {
+            selectedPlaces.add(checkbox.value);
+          });
+
+        // Update select all checkbox
+        const allCheckboxes = document.querySelectorAll(".place-checkbox");
+        const checkedCheckboxes = document.querySelectorAll(
+          ".place-checkbox:checked"
+        );
+        const selectAll = document.getElementById("select-all");
+
+        if (checkedCheckboxes.length === 0) {
+          selectAll.indeterminate = false;
+          selectAll.checked = false;
+        } else if (checkedCheckboxes.length === allCheckboxes.length) {
+          selectAll.indeterminate = false;
+          selectAll.checked = true;
+        } else {
+          selectAll.indeterminate = true;
+          selectAll.checked = false;
+        }
+
+        // Show/hide bulk actions
+        if (selectedPlaces.size > 0) {
+          showBulkActions();
+        }
+      }
+
+      function showBulkActions() {
+        document.getElementById("selected-count").textContent =
+          selectedPlaces.size;
+        const modal = new bootstrap.Modal(
+          document.getElementById("bulkActionsModal")
+        );
+        modal.show();
+      }
+
+      function toggleStatus(placeId, currentStatus) {
+        const newStatus =
+          currentStatus === "published" ? "inactive" : "published";
+
+        fetch(`/api/places/${placeId}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              loadPlaces(); // Reload to reflect changes
+              showSuccess(
+                `เปลี่ยนสถานะเป็น ${
+                  newStatus === "published" ? "เผยแพร่" : "ไม่ใช้งาน"
+                } เรียบร้อยแล้ว`
+              );
             } else {
-                currentSort.field = field;
-                currentSort.direction = 'asc';
+              showError(data.message || "ไม่สามารถเปลี่ยนสถานะได้");
             }
+          })
+          .catch((error) => {
+            console.error("Error toggling status:", error);
+            showError("เกิดข้อผิดพลาดในการเปลี่ยนสถานะ");
+          });
+      }
 
-            // Update sort icons
-            document.querySelectorAll('th .fas').forEach(icon => {
-                icon.className = 'fas fa-sort ms-1';
-            });
-
-            const sortIcon = document.querySelector(`th a[onclick="sortTable('${field}')"] .fas`);
-            if (sortIcon) {
-                sortIcon.className = `fas fa-sort-${currentSort.direction === 'asc' ? 'up' : 'down'} ms-1`;
-            }
-
-            sortPlaces();
-            renderPlaces();
-        }
-
-        function switchView(view) {
-            renderPlaces();
-        }
-
-        function clearFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('category-filter').value = '';
-            document.getElementById('status-filter').value = '';
-            filterPlaces();
-        }
-
-        function updateCounts() {
-            const showing = Math.min(filteredPlaces.length, currentPage * itemsPerPage);
-            const startShowing = filteredPlaces.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
-            
-            document.getElementById('showing-count').textContent = `${startShowing}-${showing}`;
-            document.getElementById('total-count').textContent = filteredPlaces.length;
-        }
-
-        function getStatusBadge(status) {
-            const statusConfig = {
-                'draft': { class: 'bg-secondary', icon: 'edit', text: 'ร่าง' },
-                'published': { class: 'bg-success', icon: 'eye', text: 'เผยแพร่' },
-                'inactive': { class: 'bg-danger', icon: 'eye-slash', text: 'ไม่ใช้งาน' }
-            };
-
-            const config = statusConfig[status] || statusConfig['draft'];
-            return `<span class="badge ${config.class}"><i class="fas fa-${config.icon} me-1"></i>${config.text}</span>`;
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('th-TH', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        function toggleSelectAll() {
-            const selectAll = document.getElementById('select-all');
-            const checkboxes = document.querySelectorAll('.place-checkbox');
-            
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAll.checked;
-            });
-            
-            updateSelectedPlaces();
-        }
-
-        function updateSelectedPlaces() {
-            selectedPlaces.clear();
-            document.querySelectorAll('.place-checkbox:checked').forEach(checkbox => {
-                selectedPlaces.add(checkbox.value);
-            });
-
-            // Update select all checkbox
-            const allCheckboxes = document.querySelectorAll('.place-checkbox');
-            const checkedCheckboxes = document.querySelectorAll('.place-checkbox:checked');
-            const selectAll = document.getElementById('select-all');
-            
-            if (checkedCheckboxes.length === 0) {
-                selectAll.indeterminate = false;
-                selectAll.checked = false;
-            } else if (checkedCheckboxes.length === allCheckboxes.length) {
-                selectAll.indeterminate = false;
-                selectAll.checked = true;
-            } else {
-                selectAll.indeterminate = true;
-                selectAll.checked = false;
-            }
-
-            // Show/hide bulk actions
-            if (selectedPlaces.size > 0) {
-                showBulkActions();
-            }
-        }
-
-        function showBulkActions() {
-            document.getElementById('selected-count').textContent = selectedPlaces.size;
-            const modal = new bootstrap.Modal(document.getElementById('bulkActionsModal'));
-            modal.show();
-        }
-
-        function toggleStatus(placeId, currentStatus) {
-            const newStatus = currentStatus === 'published' ? 'inactive' : 'published';
-            
-            fetch(`/api/places/${placeId}/status`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: newStatus })
+      // Delete place function is now handled by admin.js
+      // This function is kept for compatibility but will delegate to the global function
+      function deletePlace(placeId, placeName) {
+        // The deletePlace function is now implemented in admin.js with proper confirmation dialog
+        if (window.deletePlace && typeof window.deletePlace === "function") {
+          window.deletePlace(placeId, placeName);
+        } else {
+          // Fallback to simple confirm if admin.js is not loaded
+          if (
+            confirm(
+              `คุณต้องการลบสถานที่ "${placeName}" หรือไม่?\n\nการดำเนินการนี้ไม่สามารถยกเลิกได้`
+            )
+          ) {
+            fetch(`/api/places/${placeId}`, {
+              method: "DELETE",
             })
-            .then(response => response.json())
-            .then(data => {
+              .then((response) => response.json())
+              .then((data) => {
                 if (data.success) {
-                    loadPlaces(); // Reload to reflect changes
-                    showSuccess(`เปลี่ยนสถานะเป็น ${newStatus === 'published' ? 'เผยแพร่' : 'ไม่ใช้งาน'} เรียบร้อยแล้ว`);
+                  loadPlaces();
+                  showSuccess("ลบสถานที่เรียบร้อยแล้ว");
                 } else {
-                    showError(data.message || 'ไม่สามารถเปลี่ยนสถานะได้');
+                  showError(data.message || "ไม่สามารถลบสถานที่ได้");
                 }
+              })
+              .catch((error) => {
+                console.error("Error deleting place:", error);
+                showError("เกิดข้อผิดพลาดในการลบสถานที่");
+              });
+          }
+        }
+      }
+
+      async function bulkAction(action) {
+        if (selectedPlaces.size === 0) return;
+
+        const actionText = {
+          publish: "เผยแพร่",
+          draft: "เปลี่ยนเป็นร่าง",
+          inactive: "ปิดใช้งาน",
+          delete: "ลบ",
+        };
+
+        let confirmed = false;
+
+        if (action === "delete") {
+          // Use the enhanced delete confirmation for delete actions
+          const placeIds = Array.from(selectedPlaces);
+          const placeNames = placeIds.map((id) => {
+            const place = filteredPlaces.find((p) => p.id === id);
+            return place ? place.name.th : "ไม่ทราบชื่อ";
+          });
+
+          if (
+            window.bulkDeletePlaces &&
+            typeof window.bulkDeletePlaces === "function"
+          ) {
+            // Use the enhanced bulk delete function from admin.js
+            window.bulkDeletePlaces(placeIds, placeNames);
+            bootstrap.Modal.getInstance(
+              document.getElementById("bulkActionsModal")
+            ).hide();
+            return;
+          } else {
+            // Fallback to simple confirm
+            confirmed = confirm(
+              `คุณต้องการลบสถานที่ ${selectedPlaces.size} รายการหรือไม่?\n\nการดำเนินการนี้ไม่สามารถยกเลิกได้`
+            );
+          }
+        } else {
+          // Use simple confirm for non-delete actions
+          confirmed = confirm(
+            `คุณต้องการ${actionText[action]}สถานที่ ${selectedPlaces.size} รายการหรือไม่?`
+          );
+        }
+
+        if (confirmed) {
+          const placeIds = Array.from(selectedPlaces);
+
+          // Use different endpoint and method for delete action
+          const endpoint =
+            action === "delete"
+              ? "/api/places/bulk/delete"
+              : `/api/places/bulk/${action}`;
+          const method = action === "delete" ? "DELETE" : "POST";
+
+          fetch(endpoint, {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ placeIds }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                selectedPlaces.clear();
+                loadPlaces(); // Reload to reflect changes
+                showSuccess(
+                  `${actionText[action]}สถานที่ ${placeIds.length} รายการเรียบร้อยแล้ว`
+                );
+                bootstrap.Modal.getInstance(
+                  document.getElementById("bulkActionsModal")
+                ).hide();
+              } else {
+                showError(
+                  data.message || `ไม่สามารถ${actionText[action]}สถานที่ได้`
+                );
+              }
             })
-            .catch(error => {
-                console.error('Error toggling status:', error);
-                showError('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
+            .catch((error) => {
+              console.error("Error performing bulk action:", error);
+              showError("เกิดข้อผิดพลาดในการดำเนินการ");
             });
         }
+      }
 
-        function deletePlace(placeId, placeName) {
-            if (confirm(`คุณต้องการลบสถานที่ "${placeName}" หรือไม่?\n\nการดำเนินการนี้ไม่สามารถยกเลิกได้`)) {
-                fetch(`/api/places/${placeId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        loadPlaces(); // Reload to reflect changes
-                        showSuccess('ลบสถานที่เรียบร้อยแล้ว');
-                    } else {
-                        showError(data.message || 'ไม่สามารถลบสถานที่ได้');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting place:', error);
-                    showError('เกิดข้อผิดพลาดในการลบสถานที่');
-                });
+      function loadUserInfo() {
+        fetch("/api/user/info")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              document.getElementById("username-display").textContent =
+                data.user.username;
+              if (data.user.lastLogin) {
+                const lastLogin = new Date(data.user.lastLogin);
+                document.getElementById("last-login-display").textContent =
+                  lastLogin.toLocaleString("th-TH");
+              }
             }
+          })
+          .catch((error) => {
+            console.error("Error loading user info:", error);
+          });
+      }
+
+      function showSuccess(message) {
+        // Implementation depends on your notification system
+        alert(message); // Temporary implementation
+      }
+
+      function showError(message) {
+        // Implementation depends on your notification system
+        alert("ข้อผิดพลาด: " + message); // Temporary implementation
+      }
+
+      function logout() {
+        if (confirm("คุณต้องการออกจากระบบหรือไม่?")) {
+          window.location.href = "/auth/logout";
         }
+      }
 
-        function bulkAction(action) {
-            if (selectedPlaces.size === 0) return;
-
-            const actionText = {
-                'publish': 'เผยแพร่',
-                'draft': 'เปลี่ยนเป็นร่าง',
-                'inactive': 'ปิดใช้งาน',
-                'delete': 'ลบ'
-            };
-
-            const confirmMessage = `คุณต้องการ${actionText[action]}สถานที่ ${selectedPlaces.size} รายการหรือไม่?`;
-            
-            if (action === 'delete') {
-                confirmMessage += '\n\nการดำเนินการนี้ไม่สามารถยกเลิกได้';
-            }
-
-            if (confirm(confirmMessage)) {
-                const placeIds = Array.from(selectedPlaces);
-                
-                fetch(`/api/places/bulk/${action}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ placeIds })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        selectedPlaces.clear();
-                        loadPlaces(); // Reload to reflect changes
-                        showSuccess(`${actionText[action]}สถานที่ ${placeIds.length} รายการเรียบร้อยแล้ว`);
-                        bootstrap.Modal.getInstance(document.getElementById('bulkActionsModal')).hide();
-                    } else {
-                        showError(data.message || `ไม่สามารถ${actionText[action]}สถานที่ได้`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error performing bulk action:', error);
-                    showError('เกิดข้อผิดพลาดในการดำเนินการ');
-                });
-            }
-        }
-
-        function loadUserInfo() {
-            fetch('/api/user/info')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('username-display').textContent = data.user.username;
-                        if (data.user.lastLogin) {
-                            const lastLogin = new Date(data.user.lastLogin);
-                            document.getElementById('last-login-display').textContent = 
-                                lastLogin.toLocaleString('th-TH');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user info:', error);
-                });
-        }
-
-        function showSuccess(message) {
-            // Implementation depends on your notification system
-            alert(message); // Temporary implementation
-        }
-
-        function showError(message) {
-            // Implementation depends on your notification system
-            alert('ข้อผิดพลาด: ' + message); // Temporary implementation
-        }
-
-        function logout() {
-            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
-                window.location.href = '/auth/logout';
-            }
-        }
-
-        // Utility function for debouncing
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
+      // Utility function for debouncing
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
     </script>
-</body>
+  </body>
 </html>
