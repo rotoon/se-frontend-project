@@ -259,8 +259,6 @@
         border-left: none;
       }
 
-
-
       .places-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -304,7 +302,8 @@
         background: hsl(var(--card));
         border: 1px solid hsl(var(--border));
         border-radius: var(--radius);
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
       }
 
       .card-shadcn-header {
@@ -537,6 +536,129 @@
         opacity: 1;
       }
 
+      /* Modal Styles */
+      .modal-content {
+        background: hsl(var(--background));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius-lg);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+      }
+
+      .modal-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+        background: hsl(var(--background));
+      }
+
+      .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        gap: 0.5rem;
+      }
+
+      .btn-close {
+        background: transparent;
+        border: none;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+
+      .btn-close:hover {
+        opacity: 1;
+      }
+
+      .btn-close:focus {
+        box-shadow: none;
+        opacity: 1;
+      }
+
+      /* Dark mode modal backdrop */
+      [data-theme="dark"] .modal-backdrop {
+        background-color: #000;
+        opacity: 0.8;
+      }
+
+      /* Form styles in modal */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: hsl(var(--foreground));
+        margin-bottom: 0.5rem;
+      }
+
+      .form-control-shadcn {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: hsl(var(--background));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        color: hsl(var(--foreground));
+        font-size: 0.875rem;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .form-control-shadcn:focus {
+        outline: none;
+        border-color: hsl(var(--ring));
+        box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+      }
+
+      .form-control-shadcn::placeholder {
+        color: hsl(var(--muted-foreground));
+      }
+
+      textarea.form-control-shadcn {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .text-danger {
+        color: hsl(var(--destructive));
+      }
+
+      .text-muted,
+      .form-text {
+        color: hsl(var(--muted-foreground));
+        font-size: 0.75rem;
+      }
+
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+
+      .mb-4 {
+        margin-bottom: 1.5rem;
+      }
+
+      .my-4 {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid hsl(var(--border));
+        margin: 1.5rem 0;
+      }
+
       @media (max-width: 768px) {
         .stats-grid {
           grid-template-columns: 1fr;
@@ -554,6 +676,10 @@
 
         .places-grid {
           grid-template-columns: 1fr;
+        }
+
+        .modal-dialog {
+          margin: 0.5rem;
         }
       }
     </style>
@@ -637,35 +763,32 @@
                   <i data-lucide="user" style="width: 1rem; height: 1rem"></i>
                 </div>
                 <div class="flex-1 text-left">
-                  <div style="font-size: 0.875rem; font-weight: 500" id="sidebarUserName">Admin</div>
-                  <div style="font-size: 0.75rem; color: hsl(var(--muted-foreground))">ผู้ดูแลระบบ</div>
+                  <div
+                    style="font-size: 0.875rem; font-weight: 500"
+                    id="sidebarUserName"
+                  >
+                    Admin
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      color: hsl(var(--muted-foreground));
+                    "
+                  >
+                    ผู้ดูแลระบบ
+                  </div>
                 </div>
                 <i
                   data-lucide="chevron-up"
-                  style="width: 1rem; height: 1rem; color: hsl(var(--muted-foreground))"
+                  style="
+                    width: 1rem;
+                    height: 1rem;
+                    color: hsl(var(--muted-foreground));
+                  "
                 ></i>
               </div>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark w-full">
-              <li>
-                <a class="dropdown-item" href="#"
-                  ><i
-                    data-lucide="user"
-                    style="width: 1rem; height: 1rem; margin-right: 0.5rem"
-                  ></i
-                  >โปรไฟล์</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="#"
-                  ><i
-                    data-lucide="settings"
-                    style="width: 1rem; height: 1rem; margin-right: 0.5rem"
-                  ></i
-                  >การตั้งค่า</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
               <li>
                 <a class="dropdown-item" href="#" id="sidebarLogoutBtn"
                   ><i
@@ -798,14 +921,22 @@
                     id="searchPlaces"
                     style="width: 200px"
                   />
-                  
+
                   <!-- Category Filter -->
-                  <select class="form-select-shadcn" id="categoryFilter" style="width: 150px">
+                  <select
+                    class="form-select-shadcn"
+                    id="categoryFilter"
+                    style="width: 150px"
+                  >
                     <option value="">ทุกหมวดหมู่</option>
                   </select>
 
                   <!-- Status Filter -->
-                  <select class="form-select-shadcn" id="statusFilter" style="width: 120px">
+                  <select
+                    class="form-select-shadcn"
+                    id="statusFilter"
+                    style="width: 120px"
+                  >
                     <option value="">ทุกสถานะ</option>
                     <option value="published">เผยแพร่</option>
                     <option value="draft">แบบร่าง</option>
@@ -820,14 +951,20 @@
                       class="btn-shadcn outline sm active"
                       id="gridViewBtn"
                     >
-                      <i data-lucide="grid" style="width: 1rem; height: 1rem"></i>
+                      <i
+                        data-lucide="grid"
+                        style="width: 1rem; height: 1rem"
+                      ></i>
                     </button>
                     <button
                       type="button"
                       class="btn-shadcn outline sm"
                       id="listViewBtn"
                     >
-                      <i data-lucide="list" style="width: 1rem; height: 1rem"></i>
+                      <i
+                        data-lucide="list"
+                        style="width: 1rem; height: 1rem"
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -839,8 +976,6 @@
               </div>
             </div>
           </div>
-
-
         </div>
       </main>
     </div>
@@ -863,28 +998,41 @@
 
               <!-- Language Tabs -->
               <div class="form-tabs">
-                <button type="button" class="form-tab active" data-lang="th">ภาษาไทย</button>
-                <button type="button" class="form-tab" data-lang="en">English</button>
-                <button type="button" class="form-tab" data-lang="zh">中文</button>
-                <button type="button" class="form-tab" data-lang="ja">日本語</button>
+                <button type="button" class="form-tab active" data-lang="th">
+                  ภาษาไทย
+                </button>
+                <button type="button" class="form-tab" data-lang="en">
+                  English
+                </button>
+                <button type="button" class="form-tab" data-lang="zh">
+                  中文
+                </button>
+                <button type="button" class="form-tab" data-lang="ja">
+                  日本語
+                </button>
               </div>
 
               <!-- Thai Tab -->
               <div class="tab-content active" id="tab-th">
-                <div class="mb-3">
-                  <label class="form-label">ชื่อสถานที่ (ภาษาไทย) <span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <label class="form-label"
+                    >ชื่อสถานที่ (ภาษาไทย)
+                    <span class="text-danger">*</span></label
+                  >
                   <input
                     type="text"
                     class="form-control-shadcn"
                     id="name_th"
+                    name="name_th"
                     required
                   />
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">คำอธิบาย (ภาษาไทย)</label>
                   <textarea
                     class="form-control-shadcn"
                     id="description_th"
+                    name="description_th"
                     rows="4"
                   ></textarea>
                 </div>
@@ -892,19 +1040,21 @@
 
               <!-- English Tab -->
               <div class="tab-content" id="tab-en">
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">Place Name (English)</label>
                   <input
                     type="text"
                     class="form-control-shadcn"
                     id="name_en"
+                    name="name_en"
                   />
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">Description (English)</label>
                   <textarea
                     class="form-control-shadcn"
                     id="description_en"
+                    name="description_en"
                     rows="4"
                   ></textarea>
                 </div>
@@ -912,19 +1062,21 @@
 
               <!-- Chinese Tab -->
               <div class="tab-content" id="tab-zh">
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">地点名称 (中文)</label>
                   <input
                     type="text"
                     class="form-control-shadcn"
                     id="name_zh"
+                    name="name_zh"
                   />
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">描述 (中文)</label>
                   <textarea
                     class="form-control-shadcn"
                     id="description_zh"
+                    name="description_zh"
                     rows="4"
                   ></textarea>
                 </div>
@@ -932,19 +1084,21 @@
 
               <!-- Japanese Tab -->
               <div class="tab-content" id="tab-ja">
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">場所名 (日本語)</label>
                   <input
                     type="text"
                     class="form-control-shadcn"
                     id="name_ja"
+                    name="name_ja"
                   />
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                   <label class="form-label">説明 (日本語)</label>
                   <textarea
                     class="form-control-shadcn"
                     id="description_ja"
+                    name="description_ja"
                     rows="4"
                   ></textarea>
                 </div>
@@ -955,41 +1109,62 @@
               <h6 class="mb-3">ข้อมูลทั่วไป</h6>
 
               <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">หมวดหมู่ <span class="text-danger">*</span></label>
-                  <select class="form-select-shadcn" id="categoryId" required>
-                    <option value="">เลือกหมวดหมู่</option>
-                  </select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >หมวดหมู่ <span class="text-danger">*</span></label
+                    >
+                    <select
+                      class="form-select-shadcn"
+                      id="categoryId"
+                      name="categoryId"
+                      required
+                    >
+                      <option value="">เลือกหมวดหมู่</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">สถานะ</label>
-                  <select class="form-select-shadcn" id="status">
-                    <option value="draft">แบบร่าง</option>
-                    <option value="published">เผยแพร่</option>
-                    <option value="featured">แนะนำ</option>
-                    <option value="inactive">ไม่ใช้งาน</option>
-                  </select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">สถานะ</label>
+                    <select
+                      class="form-select-shadcn"
+                      id="status"
+                      name="status"
+                    >
+                      <option value="draft">แบบร่าง</option>
+                      <option value="published">เผยแพร่</option>
+                      <option value="featured">แนะนำ</option>
+                      <option value="inactive">ไม่ใช้งาน</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">ช่วงราคา</label>
-                  <input
-                    type="text"
-                    class="form-control-shadcn"
-                    id="priceRange"
-                    placeholder="เช่น ฟรี, 50-100 บาท"
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">ช่วงราคา</label>
+                    <input
+                      type="text"
+                      class="form-control-shadcn"
+                      id="priceRange"
+                      name="priceRange"
+                      placeholder="เช่น ฟรี, 50-100 บาท"
+                    />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">เวลาทำการ</label>
-                  <input
-                    type="text"
-                    class="form-control-shadcn"
-                    id="hours"
-                    placeholder="เช่น 08:00-18:00 น."
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">เวลาทำการ</label>
+                    <input
+                      type="text"
+                      class="form-control-shadcn"
+                      id="hours"
+                      name="hours"
+                      placeholder="เช่น 08:00-18:00 น."
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -997,56 +1172,69 @@
               <hr class="my-4" />
               <h6 class="mb-3">ข้อมูลติดต่อ</h6>
 
-              <div class="mb-3">
+              <div class="form-group">
                 <label class="form-label">ที่อยู่</label>
                 <textarea
                   class="form-control-shadcn"
                   id="address"
+                  name="address"
                   rows="2"
                 ></textarea>
               </div>
 
               <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">เบอร์โทรศัพท์</label>
-                  <input
-                    type="tel"
-                    class="form-control-shadcn"
-                    id="phone"
-                    placeholder="0XX-XXX-XXXX"
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">เบอร์โทรศัพท์</label>
+                    <input
+                      type="tel"
+                      class="form-control-shadcn"
+                      id="phone"
+                      name="phone"
+                      placeholder="0XX-XXX-XXXX"
+                    />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">เว็บไซต์</label>
-                  <input
-                    type="url"
-                    class="form-control-shadcn"
-                    id="website"
-                    placeholder="https://"
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">เว็บไซต์</label>
+                    <input
+                      type="url"
+                      class="form-control-shadcn"
+                      id="website"
+                      name="website"
+                      placeholder="https://"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">พิกัด Latitude</label>
-                  <input
-                    type="number"
-                    class="form-control-shadcn"
-                    id="latitude"
-                    step="0.000001"
-                    placeholder="18.788718"
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">พิกัด Latitude</label>
+                    <input
+                      type="number"
+                      class="form-control-shadcn"
+                      id="latitude"
+                      name="latitude"
+                      step="0.000001"
+                      placeholder="18.788718"
+                    />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">พิกัด Longitude</label>
-                  <input
-                    type="number"
-                    class="form-control-shadcn"
-                    id="longitude"
-                    step="0.000001"
-                    placeholder="98.985729"
-                  />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">พิกัด Longitude</label>
+                    <input
+                      type="number"
+                      class="form-control-shadcn"
+                      id="longitude"
+                      name="longitude"
+                      step="0.000001"
+                      placeholder="98.985729"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -1054,16 +1242,19 @@
               <hr class="my-4" />
               <h6 class="mb-3">รูปภาพ</h6>
 
-              <div class="mb-3">
+              <div class="form-group">
                 <label class="form-label">อัปโหลดรูปภาพ</label>
                 <input
                   type="file"
                   class="form-control-shadcn"
                   id="imageUpload"
+                  name="images"
                   accept="image/*"
                   multiple
                 />
-                <div class="form-text">รองรับไฟล์ JPG, PNG, WebP ขนาดไม่เกิน 5MB</div>
+                <small class="text-muted"
+                  >รองรับไฟล์ JPG, PNG, WebP ขนาดไม่เกิน 5MB</small
+                >
               </div>
 
               <div class="image-preview" id="imagePreview">

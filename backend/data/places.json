@@ -125,5 +125,425 @@
         "changedBy": "admin-001"
       }
     ]
+  },
+  {
+    "id": "place-004",
+    "name": {
+      "th": "วัดเจดีย์หลวง",
+      "en": "Wat Chedi Luang",
+      "zh": "契迪龙寺",
+      "ja": "ワット・チェディルアン"
+    },
+    "description": {
+      "th": "วัดโบราณที่มีเจดีย์ขนาดใหญ่ ซึ่งเคยเป็นที่ประดิษฐานพระแก้วมรกต",
+      "en": "Ancient temple with a large ruined pagoda that once housed the Emerald Buddha",
+      "zh": "古老寺庙，有一座大型破损佛塔，曾经供奉翡翠佛",
+      "ja": "エメラルド仏が安置されていた大きな遺跡の仏塔がある古い寺院"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "103 ถนนพระปกเกล้า ตำบลศรีภูมิ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-276-140",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7879,
+        "lng": 98.9853
+      }
+    },
+    "hours": "06:00 - 18:00",
+    "priceRange": "ฟรี",
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-16T09:00:00.000Z",
+    "updatedAt": "2025-08-18T16:12:18.736Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-007",
+    "name": {
+      "th": "วัดพระสิงห์วรมหาวิหาร",
+      "en": "Wat Phra Singh",
+      "zh": "帕辛寺",
+      "ja": "ワット・プラシン"
+    },
+    "description": {
+      "th": "วัดที่เก่าแก่และสำคัญในเชียงใหม่ มีสถาปัตยกรรมล้านนาที่สวยงาม",
+      "en": "Ancient and important temple in Chiang Mai with beautiful Lanna architecture",
+      "zh": "清迈古老而重要的寺庙，有美丽的兰纳建筑",
+      "ja": "美しいランナー建築を持つチェンマイの古くて重要な寺院"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "2 ถนนสามล้าน ตำบลพระสิงห์ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-281-297",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7881,
+        "lng": 98.9845
+      }
+    },
+    "hours": "05:00 - 21:00",
+    "priceRange": "ฟรี",
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-19T08:30:00.000Z",
+    "updatedAt": "2024-01-19T08:30:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-009",
+    "name": {
+      "th": "สวนสัตว์เชียงใหม่",
+      "en": "Chiang Mai Zoo",
+      "zh": "清迈动物园",
+      "ja": "チェンマイ動物園"
+    },
+    "description": {
+      "th": "สวนสัตว์ที่มีสัตว์หลากหลายชนิด รวมถึงแพนด้ายักษ์ที่มีชื่อเสียง",
+      "en": "Zoo with diverse animal species including famous giant pandas",
+      "zh": "有各种动物的动物园，包括著名的大熊猫",
+      "ja": "有名なジャイアントパンダを含む様々な動物種がいる動物園"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "100 ถนนห้วยแก้ว ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-221-179",
+      "website": "https://www.chiangmaizoo.com",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.8022,
+        "lng": 98.9511
+      }
+    },
+    "hours": "08:00 - 17:00",
+    "priceRange": "100-150 บาท",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-21T10:15:00.000Z",
+    "updatedAt": "2024-01-21T10:15:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-011",
+    "name": {
+      "th": "อุทยานแห่งชาติดอยอินทนนท์",
+      "en": "Doi Inthanon National Park",
+      "zh": "因他农山国家公园",
+      "ja": "ドイ・インタノン国立公園"
+    },
+    "description": {
+      "th": "ยอดเขาที่สูงที่สุดในประเทศไทย มีธรรมชาติที่สวยงามและน้ำตกมากมาย",
+      "en": "Thailand's highest peak with beautiful nature and numerous waterfalls",
+      "zh": "泰国最高峰，自然美景和众多瀑布",
+      "ja": "タイの最高峰で美しい自然と多くの滝がある"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "อุทยานแห่งชาติดอยอินทนนท์ อำเภอจอมทอง จังหวัดเชียงใหม่ 50160",
+      "phone": "053-286-729",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.5883,
+        "lng": 98.4867
+      }
+    },
+    "hours": "06:00 - 18:00",
+    "priceRange": "40-300 บาท",
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-23T07:00:00.000Z",
+    "updatedAt": "2024-01-23T07:00:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-012",
+    "name": {
+      "th": "ถนนคนเดินช้างคลาน",
+      "en": "Chang Khlan Walking Street",
+      "zh": "昌克兰步行街",
+      "ja": "チャーンクラン・ウォーキングストリート"
+    },
+    "description": {
+      "th": "ถนนคนเดินกลางคืนที่มีร้านค้า อาหาร และการแสดงศิลปะท้องถิ่น",
+      "en": "Night walking street with shops, food, and local art performances",
+      "zh": "夜间步行街，有商店、美食和当地艺术表演",
+      "ja": "ショップ、料理、地元のアートパフォーマンスがあるナイト・ウォーキングストリート"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
+      "phone": "",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7944,
+        "lng": 99.0033
+      }
+    },
+    "hours": "วันอาทิตย์ 16:00 - 23:00",
+    "priceRange": "ราคาประหยัด",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-24T16:00:00.000Z",
+    "updatedAt": "2024-01-24T16:00:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-013",
+    "name": {
+      "th": "บ้านขนมไทย พิมพ์ผกา",
+      "en": "Ban Khanom Thai Phimpaka",
+      "zh": "泰式甜品屋",
+      "ja": "バーン・カノム・タイ・ピムパカー"
+    },
+    "description": {
+      "th": "ร้านขนมไทยโบราณที่มีชื่อเสียง ทำขนมด้วยสูตรดั้งเดิม",
+      "en": "Famous traditional Thai dessert shop making sweets with original recipes",
+      "zh": "著名的传统泰式甜品店，用传统配方制作甜品",
+      "ja": "伝統的なレシピで作る有名なタイの伝統菓子店"
+    },
+    "category": "restaurant",
+    "images": [],
+    "contact": {
+      "address": "14/1 ถนนราชดำเนิน ตำบลพระสิงห์ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-814-542",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7889,
+        "lng": 98.9867
+      }
+    },
+    "hours": "08:00 - 18:00",
+    "priceRange": "20-50 บาท",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-25T09:15:00.000Z",
+    "updatedAt": "2024-01-25T09:15:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-014",
+    "name": {
+      "th": "วัดอุโมงค์",
+      "en": "Wat Umong",
+      "zh": "乌蒙寺",
+      "ja": "ワット・ウモーン"
+    },
+    "description": {
+      "th": "วัดที่มีอุโมงค์โบราณใต้ดิน บรรยากาศเงียบสงบเหมาะสำหรับการทำสมาธิ",
+      "en": "Temple with ancient underground tunnels, peaceful atmosphere perfect for meditation",
+      "zh": "有古老地下隧道的寺庙，宁静的氛围适合冥想",
+      "ja": "古い地下トンネルがある寺院、瞑想に最適な静かな雰囲気"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "135 ถนนสุเทพ ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-277-248",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.8056,
+        "lng": 98.9444
+      }
+    },
+    "hours": "06:00 - 17:00",
+    "priceRange": "ฟรี",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-26T08:00:00.000Z",
+    "updatedAt": "2024-01-26T08:00:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-015",
+    "name": {
+      "th": "หอศิลปวัฒนธรรมเชียงใหม่",
+      "en": "Chiang Mai Arts and Cultural Centre",
+      "zh": "清迈艺术文化中心",
+      "ja": "チェンマイ芸術文化センター"
+    },
+    "description": {
+      "th": "พิพิธภัณฑ์ที่จัดแสดงประวัติศาสตร์และวัฒนธรรมของเชียงใหม่",
+      "en": "Museum showcasing the history and culture of Chiang Mai",
+      "zh": "展示清迈历史和文化的博物馆",
+      "ja": "チェンマイの歴史と文化を展示する博物館"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ถนนพระปกเกล้า ตำบลศรีภูมิ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-217-793",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7875,
+        "lng": 98.9856
+      }
+    },
+    "hours": "08:30 - 17:00 (ปิดวันจันทร์)",
+    "priceRange": "90 บาท",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-27T10:30:00.000Z",
+    "updatedAt": "2024-01-27T10:30:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-018",
+    "name": {
+      "th": "วนอุทยานราชพฤกษ์",
+      "en": "Royal Park Rajapruek",
+      "zh": "皇家植物园",
+      "ja": "ロイヤルパーク・ラチャプルック"
+    },
+    "description": {
+      "th": "สวนพฤกษศาสตร์ที่มีพืชไผ่หลากหลายชนิดและสวนสวยงาม",
+      "en": "Botanical garden with diverse plants, flowers and beautiful landscapes",
+      "zh": "植物园，有各种植物、花卉和美丽景观",
+      "ja": "多様な植物、花、美しい景観がある植物園"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "80 ถนนเชียงใหม่-หางดง ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+      "phone": "053-543-200",
+      "website": "https://www.royalparkrajapruek.org",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7456,
+        "lng": 98.8967
+      }
+    },
+    "hours": "08:00 - 18:00",
+    "priceRange": "20-100 บาท",
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-30T08:00:00.000Z",
+    "updatedAt": "2024-01-30T08:00:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-019",
+    "name": {
+      "th": "วัดเจ็ดยอด",
+      "en": "Wat Jed Yod",
+      "zh": "七旋塔寺",
+      "ja": "ワット・ジェートヨート"
+    },
+    "description": {
+      "th": "วัดที่มีเจดีย์เจ็ดยอดเป็นเอกลักษณ์ สร้างตามแบบพุทธคยา",
+      "en": "Temple with unique seven-spired pagoda built in Bodh Gaya style",
+      "zh": "有独特七塔的寺庙，按菩提伽耶风格建造",
+      "ja": "ブッダガヤ様式で建てられた独特な七つの塔がある寺院"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ถนนซุปเปอร์ไฮเวย์ ตำบลช้างเผือก อำเภอเมือง จังหวัดเชียงใหม่ 50300",
+      "phone": "053-221-846",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.8067,
+        "lng": 99.0144
+      }
+    },
+    "hours": "06:00 - 18:00",
+    "priceRange": "ฟรี",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-31T07:30:00.000Z",
+    "updatedAt": "2024-01-31T07:30:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-020",
+    "name": {
+      "th": "ตลาดต้นพยอม",
+      "en": "Ton Payom Market",
+      "zh": "通帕约姆市场",
+      "ja": "トン・パヨーム・マーケット"
+    },
+    "description": {
+      "th": "ตลาดเช้าที่มีผักผลไม้สดใหม่และอาหารพื้นเมืองที่หลากหลาย",
+      "en": "Morning market with fresh vegetables, fruits and diverse local foods",
+      "zh": "早市，有新鲜蔬菜、水果和各种当地食物",
+      "ja": "新鮮な野菜、果物、多様な地元料理がある朝市"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ถนนมหิดล ตำบลช้างเผือก อำเภอเมือง จังหวัดเชียงใหม่ 50300",
+      "phone": "",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7889,
+        "lng": 99.0178
+      }
+    },
+    "hours": "05:00 - 11:00",
+    "priceRange": "ราคาประหยัด",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-02-01T05:30:00.000Z",
+    "updatedAt": "2024-02-01T05:30:00.000Z",
+    "createdBy": "admin"
+  },
+  {
+    "id": "place-023",
+    "name": {
+      "th": "ไนท์บาซาร์เชียงใหม่",
+      "en": "Chiang Mai Night Bazaar",
+      "zh": "清迈夜市",
+      "ja": "チェンマイ・ナイトバザール"
+    },
+    "description": {
+      "th": "ตลาดกลางคืนที่มีของที่ระลึก เสื้อผ้า และงานหัตถกรรมท้องถิ่น",
+      "en": "Night market with souvenirs, clothes, and local handicrafts",
+      "zh": "夜市，有纪念品、服装和当地手工艺品",
+      "ja": "お土産、衣類、地元の手工芸品があるナイトマーケット"
+    },
+    "category": "attraction",
+    "images": [],
+    "contact": {
+      "address": "ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
+      "phone": "",
+      "website": "",
+      "facebook": "",
+      "instagram": "",
+      "coordinates": {
+        "lat": 18.7944,
+        "lng": 99.0056
+      }
+    },
+    "hours": "18:00 - 24:00",
+    "priceRange": "ราคาประหยัด-กลาง",
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-02-04T18:00:00.000Z",
+    "updatedAt": "2024-02-04T18:00:00.000Z",
+    "createdBy": "admin"
   }
 ]

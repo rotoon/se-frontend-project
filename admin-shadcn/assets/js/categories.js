@@ -49,6 +49,12 @@ const elements = {
   categoryNameJa: document.getElementById("categoryNameJa"),
   categoryIcon: document.getElementById("categoryIcon"),
   categoryOrder: document.getElementById("categoryOrder"),
+
+  // Icon selector
+  iconSelectorButton: document.getElementById("iconSelectorButton"),
+  iconDropdown: document.getElementById("iconDropdown"),
+  selectedIconPreview: document.getElementById("selectedIconPreview"),
+  selectedIconText: document.getElementById("selectedIconText"),
 };
 
 // Bootstrap Modal instances
@@ -111,6 +117,9 @@ function setupEventListeners() {
     "hidden.bs.modal",
     resetCategoryForm
   );
+
+  // Icon selector
+  setupIconSelector();
 
   // Theme toggle
   const themeToggle = document.getElementById("themeToggle");
@@ -387,7 +396,7 @@ function openAddCategoryModal() {
 /**
  * Open edit category modal
  */
-function openEditCategoryModal(categoryId) {
+window.openEditCategoryModal = function(categoryId) {
   const category = categories.find((c) => c.id === categoryId);
   if (!category) {
     showNotification("ไม่พบหมวดหมู่ที่ต้องการแก้ไข", "error");
@@ -399,7 +408,7 @@ function openEditCategoryModal(categoryId) {
   elements.categoryModalLabel.textContent = "แก้ไขหมวดหมู่";
   elements.submitBtnText.textContent = "บันทึกการเปลี่ยนแปลง";
   categoryModalInstance.show();
-}
+};
 
 /**
  * Reset category form
@@ -407,6 +416,9 @@ function openEditCategoryModal(categoryId) {
 function resetCategoryForm() {
   elements.categoryForm?.reset();
   currentCategory = null;
+  
+  // Reset icon selector
+  selectIcon('folder', 'เลือกไอคอน');
 }
 
 /**
@@ -419,6 +431,84 @@ function populateCategoryForm(category) {
   elements.categoryNameJa.value = category.name.ja || "";
   elements.categoryIcon.value = category.icon || "";
   elements.categoryOrder.value = category.order || "";
+  
+  // Update icon selector
+  if (category.icon) {
+    const iconOption = document.querySelector(`.icon-option[data-icon="${category.icon}"]`);
+    const iconText = iconOption ? iconOption.querySelector('span').textContent : category.icon;
+    selectIcon(category.icon, iconText);
+  }
+}
+
+/**
+ * Setup icon selector functionality
+ */
+function setupIconSelector() {
+  // Toggle dropdown
+  elements.iconSelectorButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    elements.iconDropdown?.classList.toggle('show');
+  });
+
+  // Handle icon selection
+  const iconOptions = document.querySelectorAll('.icon-option');
+  iconOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      const iconName = option.dataset.icon;
+      const iconText = option.querySelector('span').textContent;
+      
+      // Update selected icon
+      selectIcon(iconName, iconText);
+      
+      // Close dropdown
+      elements.iconDropdown?.classList.remove('show');
+    });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.icon-selector')) {
+      elements.iconDropdown?.classList.remove('show');
+    }
+  });
+}
+
+/**
+ * Select an icon
+ */
+function selectIcon(iconName, iconText) {
+  // Update hidden input value
+  if (elements.categoryIcon) {
+    elements.categoryIcon.value = iconName;
+    // Also update the actual input attribute to ensure it's changed
+    elements.categoryIcon.setAttribute('value', iconName);
+    
+    // Trigger change event to notify form
+    const event = new Event('change', { bubbles: true });
+    elements.categoryIcon.dispatchEvent(event);
+    
+    // Debug log
+    console.log('Icon selected:', iconName, 'Input value:', elements.categoryIcon.value);
+  }
+  
+  // Update preview
+  if (elements.selectedIconPreview) {
+    elements.selectedIconPreview.setAttribute('data-lucide', iconName);
+  }
+  
+  if (elements.selectedIconText) {
+    elements.selectedIconText.textContent = iconText || iconName;
+  }
+  
+  // Re-initialize lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  
+  // Update selected state
+  document.querySelectorAll('.icon-option').forEach(opt => {
+    opt.classList.toggle('selected', opt.dataset.icon === iconName);
+  });
 }
 
 /**
@@ -437,6 +527,11 @@ async function handleCategoryFormSubmit(event) {
 
     // Get form data
     const formData = new FormData(elements.categoryForm);
+    
+    // Debug: Log icon value before submission
+    console.log('Icon input value before submission:', elements.categoryIcon.value);
+    console.log('FormData icon value:', formData.get("icon"));
+    
     const categoryData = {
       name: {
         th: formData.get("nameTh").trim(),
@@ -455,7 +550,7 @@ async function handleCategoryFormSubmit(event) {
     }
 
     if (!categoryData.icon) {
-      showNotification("กรุณากรอกชื่อไอคอน", "error");
+      showNotification("กรุณาเลือกไอคอน", "error");
       return;
     }
 
@@ -513,7 +608,7 @@ async function handleCategoryFormSubmit(event) {
 /**
  * Open delete category modal
  */
-function openDeleteCategoryModal(categoryId) {
+window.openDeleteCategoryModal = function(categoryId) {
   const category = categories.find((c) => c.id === categoryId);
   if (!category) {
     showNotification("ไม่พบหมวดหมู่ที่ต้องการลบ", "error");

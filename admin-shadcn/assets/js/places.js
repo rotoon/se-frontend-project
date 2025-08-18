@@ -553,7 +553,12 @@ window.confirmDeletePlace = function(placeId, placeName) {
  * Handle delete place
  */
 async function handleDeletePlace() {
-  if (!currentPlaceId) return;
+  if (!currentPlaceId) {
+    console.error('No place ID provided for deletion');
+    return;
+  }
+  
+  console.log(`Attempting to delete place with ID: ${currentPlaceId}`);
   
   try {
     const response = await fetch(`/api/admin/places/${currentPlaceId}`, {
@@ -561,18 +566,35 @@ async function handleDeletePlace() {
       headers: getAuthHeaders()
     });
     
+    console.log(`Delete response status: ${response.status}`);
+    
+    if (!response.ok) {
+      // Try to get error message from response
+      let errorMessage = `HTTP Error: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+        console.error('Delete error response:', errorData);
+      } catch (parseError) {
+        console.error('Could not parse error response:', parseError);
+      }
+      throw new Error(errorMessage);
+    }
+    
     const data = await response.json();
+    console.log('Delete response data:', data);
     
     if (data.success) {
       showNotification('ลบสถานที่เรียบร้อยแล้ว', 'success');
       deletePlaceModalInstance.hide();
       loadPlaces();
     } else {
+      console.error('Delete failed with response:', data);
       showNotification(data.message || 'ไม่สามารถลบสถานที่ได้', 'error');
     }
   } catch (error) {
     console.error('Error deleting place:', error);
-    showNotification('เกิดข้อผิดพลาดในการลบสถานที่', 'error');
+    showNotification(`เกิดข้อผิดพลาดในการลบสถานที่: ${error.message}`, 'error');
   }
 }
 
@@ -589,15 +611,18 @@ function populatePlaceForm(place) {
   elements.description_en.value = place.description.en || '';
   elements.description_zh.value = place.description.zh || '';
   elements.description_ja.value = place.description.ja || '';
-  elements.categoryId.value = place.categoryId || '';
+  elements.categoryId.value = place.categoryId || place.category || '';
   elements.status.value = place.status || 'draft';
   elements.priceRange.value = place.priceRange || '';
   elements.hours.value = place.hours || '';
-  elements.address.value = place.address || '';
-  elements.phone.value = place.phone || '';
-  elements.website.value = place.website || '';
-  elements.latitude.value = place.coordinates?.lat || '';
-  elements.longitude.value = place.coordinates?.lng || '';
+  
+  // Handle contact information (support both flat and nested structure)
+  const contact = place.contact || {};
+  elements.address.value = place.address || contact.address || '';
+  elements.phone.value = place.phone || contact.phone || '';
+  elements.website.value = place.website || contact.website || '';
+  elements.latitude.value = place.coordinates?.lat || contact.coordinates?.lat || '';
+  elements.longitude.value = place.coordinates?.lng || contact.coordinates?.lng || '';
   
   // Show existing images
   if (place.images && place.images.length > 0) {
@@ -910,6 +935,9 @@ function getAuthHeaders(skipContentType = false) {
   const token = getAuthToken();
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+    console.log('Using auth token for request (truncated):', token.substring(0, 20) + '...');
+  } else {
+    console.warn('No auth token found!');
   }
   
   if (!skipContentType) {
@@ -948,8 +976,22 @@ async function handleLogout(e) {
  * Show notification
  */
 function showNotification(message, type = 'info') {
-  // Simple alert for now - can be replaced with a better notification system
-  alert(message);
+  // Enhanced notification system
+  const prefix = type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ';
+  const fullMessage = prefix + message;
+  
+  // Log to console for debugging
+  if (type === 'error') {
+    console.error('Notification Error:', message);
+  } else if (type === 'success') {
+    console.log('Notification Success:', message);
+  } else {
+    console.info('Notification Info:', message);
+  }
+  
+  alert(fullMessage);
+  
+  // TODO: Replace with a better toast notification system
 }
 
 // Load saved theme

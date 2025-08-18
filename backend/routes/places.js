@@ -15,6 +15,7 @@ const {
   savePlaces,
   COMMON_MESSAGES,
 } = require("../utils/routeHelpers");
+const { upload, processMultipleImages, handleUploadError } = require("../utils/uploadManager");
 
 const router = express.Router();
 
@@ -94,6 +95,31 @@ function isValidFeatured(featured) {
 // Unused helper functions removed
 
 /**
+ * Middleware สำหรับประมวลผล FormData และแปลง JSON
+ */
+const parseFormDataMiddleware = (req, res, next) => {
+  try {
+    // Parse JSON data from form
+    if (req.body.data) {
+      const parsedData = JSON.parse(req.body.data);
+      req.body = { ...req.body, ...parsedData };
+      delete req.body.data;
+    }
+    
+    // Process uploaded images
+    if (req.files && req.files.length > 0) {
+      const processedImages = processMultipleImages(req.files);
+      req.body.images = processedImages;
+    }
+    
+    next();
+  } catch (error) {
+    console.error('Error parsing form data:', error);
+    return createErrorResponse(res, 400, 'ข้อมูลฟอร์มไม่ถูกต้อง');
+  }
+};
+
+/**
  * Middleware สำหรับตรวจสอบข้อมูลสถานที่
  */
 const validatePlaceMiddleware = (req, res, next) => {
@@ -109,13 +135,16 @@ const validatePlaceMiddleware = (req, res, next) => {
  */
 const validateCategoryMiddleware = async (req, res, next) => {
   try {
+    // Support both category and categoryId fields
+    const categoryValue = req.body.category || req.body.categoryId;
+    
     // ข้ามไม่มีหมวดหมู่ ให้ผ่านไป validation หลัก
-    if (!req.body.category) {
+    if (!categoryValue) {
       return next();
     }
 
     const categories = await loadCategories();
-    const categoryExists = findCategoryById(categories, req.body.category);
+    const categoryExists = findCategoryById(categories, categoryValue);
 
     if (!categoryExists) {
       return createErrorResponse(res, 400, MESSAGES.ERRORS.CATEGORY_NOT_EXISTS);
@@ -179,60 +208,77 @@ router.get("/:id", requireAuth, async (req, res) => {
 router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(`Attempting to delete place with ID: ${id}`);
+
+    if (!id || id.trim() === '') {
+      return createErrorResponse(res, 400, "ID สถานที่ไม่ถูกต้อง");
+    }
 
     const places = await loadPlaces();
+    console.log(`Found ${places.length} places in database`);
+    
     const placeIndex = places.findIndex((p) => p.id === id);
+    console.log(`Place index: ${placeIndex}`);
 
     if (placeIndex === -1) {
-      return res.status(404).json({
-        success: false,
-        message: "ไม่พบสถานที่ที่ต้องการลบ",
-      });
+      console.log(`Place with ID ${id} not found`);
+      return createErrorResponse(res, 404, MESSAGES.ERRORS.NO_DELETE_FOUND);
     }
 
     const placeToDelete = places[placeIndex];
+    console.log(`Found place to delete: ${placeToDelete.name?.th || 'Unknown'}`);
 
     // Remove place from array
     places.splice(placeIndex, 1);
+    console.log(`Removed place from array. New array length: ${places.length}`);
 
-    // Save updated places
+    // Save updated places first
     await savePlaces(places);
+    console.log('Successfully saved updated places array');
 
     // Handle cascading deletes - delete associated image files
     if (placeToDelete.images && placeToDelete.images.length > 0) {
-      const fs = require("fs").promises;
-      const path = require("path");
-
-      // Delete each image file
-      for (const image of placeToDelete.images) {
-        try {
-          const imagePath = path.join(
-            __dirname,
-            "../public/uploads",
-            image.filename
-          );
-          await fs.unlink(imagePath);
-          console.log(`Deleted image file: ${image.filename}`);
-        } catch (error) {
-          // Log error but don't fail the deletion if image file doesn't exist
-          console.warn(
-            `Could not delete image file ${image.filename}:`,
-            error.message
-          );
+      console.log(`Place has ${placeToDelete.images.length} images to delete`);
+      const { deleteMultipleImages } = require("../utils/uploadManager");
+      
+      try {
+        // Extract filenames from image objects
+        const imageFilenames = placeToDelete.images
+          .filter(image => image && (image.filename || typeof image === 'string'))
+          .map(image => typeof image === 'string' ? image : image.filename);
+        
+        console.log(`Extracted ${imageFilenames.length} filenames:`, imageFilenames);
+        
+        if (imageFilenames.length > 0) {
+          await deleteMultipleImages(imageFilenames);
+          console.log(`Successfully deleted ${imageFilenames.length} image files for place ${id}`);
         }
+      } catch (error) {
+        // Log error but don't fail the deletion if image cleanup fails
+        console.warn(
+          `Could not delete image files for place ${id}:`,
+          error.message
+        );
       }
+    } else {
+      console.log('No images to delete for this place');
     }
 
-    res.json({
-      success: true,
-      message: "ลบสถานที่เรียบร้อยแล้ว",
-    });
+    console.log(`Successfully deleted place ${id}`);
+    return createSuccessResponse(
+      res,
+      { deletedId: id },
+      "ลบสถานที่เรียบร้อยแล้ว"
+    );
   } catch (error) {
     console.error("Error deleting place:", error);
-    res.status(500).json({
-      success: false,
-      message: "เกิดข้อผิดพลาดในการลบสถานที่",
-    });
+    console.error("Error stack:", error.stack);
+    return createErrorResponse(
+      res,
+      500,
+      "เกิดข้อผิดพลาดในการลบสถานที่",
+      error
+    );
   }
 });
 
@@ -285,7 +331,7 @@ router.patch("/:id/status", requireAuth, async (req, res) => {
         from: places[placeIndex].status,
         to: status,
         changedAt: new Date().toISOString(),
-        changedBy: req.session.user.id,
+        changedBy: req.user.id,
       });
     }
 
@@ -456,7 +502,7 @@ router.patch("/bulk/status", requireAuth, async (req, res) => {
             from: places[placeIndex].status,
             to: status,
             changedAt: new Date().toISOString(),
-            changedBy: req.session.user.id,
+            changedBy: req.user.id,
           });
           updates.status = status;
         }
@@ -657,11 +703,24 @@ router.get("/places/new", requireAuth, (req, res) => {
 router.post(
   "/",
   requireAuth,
+  upload.array('images', 10), // Allow up to 10 images
+  parseFormDataMiddleware,
   validatePlaceMiddleware,
   validateCategoryMiddleware,
+  handleUploadError,
   async (req, res) => {
     try {
       const placeData = req.body;
+
+      // Process contact information from flat structure
+      const contact = {
+        address: placeData.address || "",
+        phone: placeData.phone || "",
+        website: placeData.website || "",
+        facebook: placeData.facebook || "",
+        instagram: placeData.instagram || "",
+        coordinates: placeData.coordinates || { lat: null, lng: null },
+      };
 
       // Generate unique ID and set defaults
       const newPlace = {
@@ -673,24 +732,16 @@ router.post(
           zh: "",
           ja: "",
         },
-        category: placeData.category || "",
+        category: placeData.category || placeData.categoryId || "",
         images: placeData.images || [],
-        contact: {
-          address: "",
-          phone: "",
-          website: "",
-          facebook: "",
-          instagram: "",
-          coordinates: { lat: null, lng: null },
-          ...placeData.contact,
-        },
+        contact: contact,
         hours: placeData.hours || "",
         priceRange: placeData.priceRange || "",
         status: placeData.status || "draft", // Default to draft
         featured: placeData.featured || false, // Default to not featured
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        createdBy: req.session.user.id,
+        createdBy: req.user.id,
       };
 
       const places = await loadPlaces();
@@ -718,8 +769,11 @@ router.post(
 router.put(
   "/:id",
   requireAuth,
+  upload.array('images', 10), // Allow up to 10 images
+  parseFormDataMiddleware,
   validatePlaceMiddleware,
   validateCategoryMiddleware,
+  handleUploadError,
   async (req, res) => {
     try {
       const { id } = req.params;
@@ -735,10 +789,37 @@ router.put(
         });
       }
 
+      // Normalize categoryId to category for storage consistency
+      if (placeData.categoryId && !placeData.category) {
+        placeData.category = placeData.categoryId;
+        delete placeData.categoryId;
+      }
+
+      // Process contact information from flat structure if provided
+      const existingContact = places[placeIndex].contact || {};
+      const contact = {
+        address: placeData.address !== undefined ? placeData.address : existingContact.address,
+        phone: placeData.phone !== undefined ? placeData.phone : existingContact.phone,
+        website: placeData.website !== undefined ? placeData.website : existingContact.website,
+        facebook: placeData.facebook !== undefined ? placeData.facebook : existingContact.facebook,
+        instagram: placeData.instagram !== undefined ? placeData.instagram : existingContact.instagram,
+        coordinates: placeData.coordinates !== undefined ? placeData.coordinates : existingContact.coordinates,
+      };
+
+      // Clean up flat contact fields from placeData
+      const cleanedPlaceData = { ...placeData };
+      delete cleanedPlaceData.address;
+      delete cleanedPlaceData.phone;
+      delete cleanedPlaceData.website;
+      delete cleanedPlaceData.facebook;
+      delete cleanedPlaceData.instagram;
+      delete cleanedPlaceData.coordinates;
+
       // Update place data
       const updatedPlace = {
         ...places[placeIndex],
-        ...placeData,
+        ...cleanedPlaceData,
+        contact: contact,
         id: id, // Ensure ID doesn't change
         updatedAt: new Date().toISOString(),
       };
@@ -847,7 +928,9 @@ function validatePlaceData(data) {
     errors.push("กรุณากรอกคำอธิบายภาษาไทย");
   }
 
-  if (!data.category || !data.category.trim()) {
+  // Check for category (support both category and categoryId fields)
+  const categoryValue = data.category || data.categoryId;
+  if (!categoryValue || !categoryValue.trim()) {
     errors.push("กรุณาเลือกหมวดหมู่");
   }
 
