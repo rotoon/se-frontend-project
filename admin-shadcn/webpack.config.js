@@ -12,6 +12,7 @@ module.exports = (env, argv) => {
       login: "./assets/js/login.js",
       dashboard: "./assets/js/dashboard.js",
       categories: "./assets/js/categories.js",
+      places: "./assets/js/places.js",
     },
 
     output: {
@@ -102,6 +103,23 @@ module.exports = (env, argv) => {
         template: "./categories.html",
         filename: "categories.html",
         chunks: ["categories"],
+        inject: "body",
+        minify: isProduction
+          ? {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              removeScriptTypeAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              useShortDoctype: true,
+            }
+          : false,
+      }),
+
+      new HtmlWebpackPlugin({
+        template: "./places.html",
+        filename: "places.html",
+        chunks: ["places"],
         inject: "body",
         minify: isProduction
           ? {

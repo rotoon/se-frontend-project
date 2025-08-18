@@ -91,16 +91,20 @@ function initDashboard() {
     async function loadDashboardData() {
         try {
             // Load stats
-            if (window.api && window.api.dashboard) {
-                const statsResponse = await window.api.dashboard.getStats();
-                if (statsResponse.success) {
-                    updateStats(statsResponse.data);
+            const response = await fetch('/api/admin/dashboard/stats', {
+                headers: {
+                    'Authorization': `Bearer ${getAuthToken()}`
                 }
-
-                // Load recent activities
-                const activitiesResponse = await window.api.dashboard.getRecentActivities();
-                if (activitiesResponse.success) {
-                    updateActivities(activitiesResponse.data);
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    updateStats(data.stats);
+                    // Also update activities if available
+                    if (data.recentActivity) {
+                        updateActivities(data.recentActivity);
+                    }
                 }
             }
 
@@ -131,12 +135,12 @@ function initDashboard() {
     function updateStats(stats) {
         const totalPlacesEl = document.getElementById('totalPlaces');
         const publishedPlacesEl = document.getElementById('publishedPlaces');
-        const draftPlacesEl = document.getElementById('draftPlaces');
+        const recentPlacesEl = document.getElementById('recentPlaces');
         const totalCategoriesEl = document.getElementById('totalCategories');
 
         if (totalPlacesEl) totalPlacesEl.textContent = stats.totalPlaces || 0;
         if (publishedPlacesEl) publishedPlacesEl.textContent = stats.publishedPlaces || 0;
-        if (draftPlacesEl) draftPlacesEl.textContent = stats.draftPlaces || 0;
+        if (recentPlacesEl) recentPlacesEl.textContent = stats.recentPlaces || 0;
         if (totalCategoriesEl) totalCategoriesEl.textContent = stats.totalCategories || 0;
     }
 
@@ -147,11 +151,11 @@ function initDashboard() {
             activitiesList.innerHTML = activities.map(activity => `
                 <div class="activity-item">
                     <div class="activity-icon">
-                        <i data-lucide="${getActivityIcon(activity.type)}" style="width: 1rem; height: 1rem;"></i>
+                        <i data-lucide="${activity.icon || getActivityIcon(activity.type)}" style="width: 1rem; height: 1rem;"></i>
                     </div>
                     <div class="activity-content">
-                        <p class="activity-title">${activity.title}</p>
-                        <p class="activity-time">${formatTime(activity.createdAt)}</p>
+                        <p class="activity-title">${activity.message || activity.title}</p>
+                        <p class="activity-time">${formatTime(activity.date || activity.createdAt)}</p>
                     </div>
                 </div>
             `).join('');
@@ -195,12 +199,12 @@ function initDashboard() {
         // Show loading placeholders
         const totalPlacesEl = document.getElementById('totalPlaces');
         const publishedPlacesEl = document.getElementById('publishedPlaces');
-        const draftPlacesEl = document.getElementById('draftPlaces');
+        const recentPlacesEl = document.getElementById('recentPlaces');
         const totalCategoriesEl = document.getElementById('totalCategories');
 
         if (totalPlacesEl) totalPlacesEl.textContent = '...';
         if (publishedPlacesEl) publishedPlacesEl.textContent = '...';
-        if (draftPlacesEl) draftPlacesEl.textContent = '...';
+        if (recentPlacesEl) recentPlacesEl.textContent = '...';
         if (totalCategoriesEl) totalCategoriesEl.textContent = '...';
     }
 
@@ -227,6 +231,11 @@ function initDashboard() {
             if (sidebarOverlay) sidebarOverlay.classList.remove('show');
         }
     });
+
+    // Get auth token
+    function getAuthToken() {
+        return localStorage.getItem('auth_token') || localStorage.getItem('auth_access_token');
+    }
 }
 
 // Show page after CSS loads

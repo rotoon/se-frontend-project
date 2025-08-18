@@ -7,14 +7,14 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const { requireAuth } = require("./auth");
 const {
-    createErrorResponse,
-    createSuccessResponse,
-    loadPlaces,
-    loadCategories,
-    findById,
-    savePlaces,
-    COMMON_MESSAGES
-} = require('../utils/routeHelpers');
+  createErrorResponse,
+  createSuccessResponse,
+  loadPlaces,
+  loadCategories,
+  findById,
+  savePlaces,
+  COMMON_MESSAGES,
+} = require("../utils/routeHelpers");
 
 const router = express.Router();
 
@@ -24,7 +24,8 @@ const MESSAGES = {
     ...COMMON_MESSAGES.ERRORS,
     CATEGORY_CHECK_FAILED: "เกิดข้อผิดพลาดในการตรวจสอบหมวดหมู่",
     CATEGORY_NOT_EXISTS: "หมวดหมู่ที่เลือกไม่มีอยู่ในระบบ",
-    INVALID_STATUS: "สถานะไม่ถูกต้อง (ต้องเป็น draft, published, หรือ inactive)",
+    INVALID_STATUS:
+      "สถานะไม่ถูกต้อง (ต้องเป็น draft, published, หรือ inactive)",
     INVALID_FEATURED: "ค่า featured ต้องเป็น true หรือ false",
     INVALID_PLACE_IDS: "กรุณาระบุรายการสถานที่ที่ต้องการ",
     NO_EDIT_FOUND: "ไม่พบสถานที่ที่ต้องการแก้ไข",
@@ -134,16 +135,9 @@ const validateCategoryMiddleware = async (req, res, next) => {
 // ========================= ROUTES =========================
 
 /**
- * GET /places - แสดงหน้ารายการสถานที่
+ * GET / - โหลดสถานที่ทั้งหมด (เรียงตามวันที่สร้าง)
  */
-router.get("/places", requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/places-list.html"));
-});
-
-/**
- * GET /api/places - โหลดสถานที่ทั้งหมด (เรียงตามวันที่สร้าง)
- */
-router.get("/api/places", requireAuth, async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const places = await loadPlaces();
     const sortedPlaces = sortPlacesByCreatedDate(places);
@@ -159,9 +153,9 @@ router.get("/api/places", requireAuth, async (req, res) => {
 });
 
 /**
- * GET /api/places/:id - โหลดสถานที่ตาม ID ที่ระบุ
+ * GET /:id - โหลดสถานที่ตาม ID ที่ระบุ
  */
-router.get("/api/places/:id", requireAuth, async (req, res) => {
+router.get("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const places = await loadPlaces();
@@ -182,7 +176,7 @@ router.get("/api/places/:id", requireAuth, async (req, res) => {
 });
 
 // DELETE /api/places/:id - API สำหรับลบสถานที่
-router.delete("/api/places/:id", requireAuth, async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -245,7 +239,7 @@ router.delete("/api/places/:id", requireAuth, async (req, res) => {
 /**
  * PATCH /api/places/:id/status - เปลี่ยนสถานะสถานที่
  */
-router.patch("/api/places/:id/status", requireAuth, async (req, res) => {
+router.patch("/:id/status", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, featured } = req.body;
@@ -330,7 +324,7 @@ router.patch("/api/places/:id/status", requireAuth, async (req, res) => {
 });
 
 // DELETE /api/places/bulk/delete - API สำหรับลบหลายสถานที่พร้อมกัน
-router.delete("/api/places/bulk/delete", requireAuth, async (req, res) => {
+router.delete("/bulk/delete", requireAuth, async (req, res) => {
   try {
     const { placeIds } = req.body;
 
@@ -412,7 +406,7 @@ router.delete("/api/places/bulk/delete", requireAuth, async (req, res) => {
 });
 
 // PATCH /api/places/bulk/status - API สำหรับเปลี่ยนสถานะหลายสถานที่พร้อมกัน
-router.patch("/api/places/bulk/status", requireAuth, async (req, res) => {
+router.patch("/bulk/status", requireAuth, async (req, res) => {
   try {
     const { placeIds, status, featured } = req.body;
 
@@ -503,7 +497,7 @@ router.patch("/api/places/bulk/status", requireAuth, async (req, res) => {
 });
 
 // GET /api/places/stats - API สำหรับดึงสถิติสถานที่
-router.get("/api/places/stats", requireAuth, async (req, res) => {
+router.get("/stats", requireAuth, async (req, res) => {
   try {
     const places = await loadPlaces();
 
@@ -554,7 +548,7 @@ router.get("/api/places/stats", requireAuth, async (req, res) => {
 });
 
 // GET /api/places/search - API สำหรับค้นหาสถานที่
-router.get("/api/places/search", requireAuth, async (req, res) => {
+router.get("/search", requireAuth, async (req, res) => {
   try {
     const { q, category, status, featured, limit = 50, offset = 0 } = req.query;
 
@@ -617,7 +611,7 @@ router.get("/api/places/search", requireAuth, async (req, res) => {
 });
 
 // GET /api/places/:id/history - API สำหรับดึงประวัติการเปลี่ยนแปลงสถานะ
-router.get("/api/places/:id/history", requireAuth, async (req, res) => {
+router.get("/:id/history", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const places = await loadPlaces();
@@ -661,7 +655,7 @@ router.get("/places/new", requireAuth, (req, res) => {
 
 // POST /api/places - API สำหรับเพิ่มสถานที่ใหม่
 router.post(
-  "/api/places",
+  "/",
   requireAuth,
   validatePlaceMiddleware,
   validateCategoryMiddleware,
@@ -722,7 +716,7 @@ router.post(
 
 // PUT /api/places/:id - API สำหรับอัปเดตสถานที่
 router.put(
-  "/api/places/:id",
+  "/:id",
   requireAuth,
   validatePlaceMiddleware,
   validateCategoryMiddleware,
