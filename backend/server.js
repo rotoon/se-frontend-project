@@ -31,23 +31,8 @@ app.use(corsMiddleware);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Session configuration
-app.use(
-  session({
-    secret:
-      process.env.SESSION_SECRET ||
-      "chiang-mai-admin-secret-key-change-in-production",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: false, // Set to true in production with HTTPS
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: 'lax'
-    },
-    name: "chiang-mai-admin-session",
-  })
-);
+// JWT-based authentication - no session needed
+// Session middleware removed for JWT implementation
 
 // Static files สำหรับ uploaded images เท่านั้น
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
@@ -134,15 +119,17 @@ app.get("/api/admin/dashboard/stats", authRouter.requireAuth, async (req, res) =
   }
 });
 
-// API Route สำหรับ user info
+// API Route สำหรับ user info - JWT based
 app.get("/api/admin/user/info", authRouter.requireAuth, (req, res) => {
   try {
-    const user = req.session.user;
+    const user = req.user; // From JWT token
     res.json({
       success: true,
       user: {
+        id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
         lastLogin: user.lastLogin,
       },
     });

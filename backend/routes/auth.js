@@ -1,9 +1,15 @@
-// Routes สำหรับการเข้าสู่ระบบ
+// Routes สำหรับการเข้าสู่ระบบ - JWT Based
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const fs = require('fs').promises;
 const path = require('path');
 const router = express.Router();
+
+// JWT Configuration
+const JWT_SECRET = process.env.JWT_SECRET || 'chiang-mai-admin-jwt-secret-change-in-production';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
 // Path to users data file
 const USERS_FILE = path.join(__dirname, '../data/users.json');
@@ -93,22 +99,64 @@ async function resetLoginAttempts(username) {
     return true;
 }
 
-// Authentication middleware
-function requireAuth(req, res, next) {
-    if (req.session && req.session.user) {
-        return next();
-    } else {
-        // For API requests, return JSON
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
-            return res.status(401).json({ 
-                success: false, 
-                message: 'กรุณาเข้าสู่ระบบ',
-                redirect: '/login'
-            });
-        }
-        // For regular requests, redirect to login
-        return res.redirect('/login?error=' + encodeURIComponent('กรุณาเข้าสู่ระบบ'));
+// JWT Helper Functions
+function generateTokens(user) {
+    const accessToken = jwt.sign(
+        { 
+            id: user.id, 
+            username: user.username, 
+            email: user.email, 
+            role: user.role 
+        },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    const refreshToken = jwt.sign(
+        { 
+            id: user.id, 
+            type: 'refresh' 
+        },
+        JWT_SECRET,
+        { expiresIn: JWT_REFRESH_EXPIRES_IN }
+    );
+
+    return { accessToken, refreshToken };
+}
+
+function verifyToken(token) {
+    try {
+        return jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+        return null;
     }
+}
+
+// JWT Authentication middleware
+function requireAuth(req, res, next) {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+
+    if (!token) {
+        return res.status(401).json({ 
+            success: false, 
+            message: 'กรุณาเข้าสู่ระบบ',
+            code: 'NO_TOKEN'
+        });
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+        return res.status(401).json({ 
+            success: false, 
+            message: 'Token ไม่ถูกต้องหรือหมดอายุ',
+            code: 'INVALID_TOKEN'
+        });
+    }
+
+    // Add user info to request
+    req.user = decoded;
+    next();
 }
 
 // GET /login - Show login page
@@ -184,30 +232,21 @@ router.post('/login', async (req, res) => {
         // Reset login attempts on successful login
         await resetLoginAttempts(username);
         
-        // Create session
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role
-        };
-        
-        // Set session options
-        if (remember) {
-            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
-        } else {
-            req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
-        }
+        // Generate JWT tokens
+        const { accessToken, refreshToken } = generateTokens(user);
         
         res.json({
             success: true,
             message: 'เข้าสู่ระบบสำเร็จ',
-            redirect: '/dashboard',
+            accessToken,
+            refreshToken,
             user: {
+                id: user.id,
                 username: user.username,
                 email: user.email,
                 role: user.role
-            }
+            },
+            expiresIn: JWT_EXPIRES_IN
         });
         
     } catch (error) {
@@ -219,42 +258,111 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// POST /logout - Process logout
-router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Logout error:', err);
-            return res.status(500).json({
-                success: false,
-                message: 'เกิดข้อผิดพลาดในการออกจากระบบ'
-            });
-        }
-        
-        res.clearCookie('connect.sid'); // Clear session cookie
-        
-        // For API requests
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
-            return res.json({
-                success: true,
-                message: 'ออกจากระบบสำเร็จ',
-                redirect: '/login'
-            });
-        }
-        
-        // For regular requests
-        res.redirect('/login');
+// POST /logout - Process logout (JWT-based)
+router.post('/logout', requireAuth, (req, res) => {
+    // With JWT, logout is handled client-side by removing tokens
+    // Server can optionally implement token blacklisting here
+    
+    res.json({
+        success: true,
+        message: 'ออกจากระบบสำเร็จ',
+        redirect: '/login'
     });
 });
 
-// GET /logout - Handle GET logout requests
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Logout error:', err);
+// POST /refresh - Refresh JWT token
+router.post('/refresh', async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+        
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: 'Refresh token ไม่พบ',
+                code: 'NO_REFRESH_TOKEN'
+            });
         }
-        res.clearCookie('connect.sid');
-        res.redirect('/login');
-    });
+
+        const decoded = verifyToken(refreshToken);
+        if (!decoded || decoded.type !== 'refresh') {
+            return res.status(401).json({
+                success: false,
+                message: 'Refresh token ไม่ถูกต้องหรือหมดอายุ',
+                code: 'INVALID_REFRESH_TOKEN'
+            });
+        }
+
+        // Find user by ID from refresh token
+        const users = await readUsersData();
+        const user = users.find(u => u.id === decoded.id);
+        
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'ไม่พบผู้ใช้งาน',
+                code: 'USER_NOT_FOUND'
+            });
+        }
+
+        // Generate new tokens
+        const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
+        
+        res.json({
+            success: true,
+            message: 'ต่ออายุ token สำเร็จ',
+            accessToken,
+            refreshToken: newRefreshToken,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            },
+            expiresIn: JWT_EXPIRES_IN
+        });
+        
+    } catch (error) {
+        console.error('Token refresh error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการต่ออายุ token',
+            code: 'REFRESH_ERROR'
+        });
+    }
+});
+
+// GET /me - Get current user info
+router.get('/me', requireAuth, async (req, res) => {
+    try {
+        const users = await readUsersData();
+        const user = users.find(u => u.id === req.user.id);
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'ไม่พบข้อมูลผู้ใช้',
+                code: 'USER_NOT_FOUND'
+            });
+        }
+
+        res.json({
+            success: true,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                lastLogin: user.lastLogin
+            }
+        });
+    } catch (error) {
+        console.error('Get user info error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้',
+            code: 'GET_USER_ERROR'
+        });
+    }
 });
 
 // Export middleware and router
