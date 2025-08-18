@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>จัดการหมวดหมู่ - เชียงใหม่ท่องเที่ยว Admin</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="/css/shadcn-admin.css" />
+
+    <!-- CSS will be injected by Webpack -->
+
+    <!-- Critical CSS to prevent FOUC -->
+    <style>
+      /* Prevent FOUC - hide body until CSS loads */
+      body {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      body.loaded {
+        opacity: 1;
+      }
+
+      /* Basic loading spinner */
+      .page-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+
+      .loading-spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Hide content until loaded */
+      .admin-layout {
+        visibility: hidden;
+      }
+
+      body.loaded .admin-layout {
+        visibility: visible;
+      }
+
+      body.loaded .page-loading {
+        display: none;
+      }
+    </style>
+
+    <style>
+      /* Categories specific styles */
+      .category-icon {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(var(--secondary));
+        border-radius: var(--radius);
+        font-size: 1rem;
+      }
+
+      .category-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .category-stat-card {
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          hsl(var(--primary)),
+          hsl(var(--primary) / 0.7)
+        );
+      }
+
+      .category-stat-card.info::before {
+        background: linear-gradient(
+          90deg,
+          hsl(200 95% 50%),
+          hsl(200 95% 50% / 0.7)
+        );
+      }
+
+      .category-stat-card.success::before {
+        background: linear-gradient(
+          90deg,
+          hsl(142 76% 36%),
+          hsl(142 76% 36% / 0.7)
+        );
+      }
+
+      .stat-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .stat-details h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        color: hsl(var(--foreground));
+      }
+
+      .stat-details p {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0.25rem 0 0 0;
+      }
+
+      .stat-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: var(--radius);
+        background: hsl(var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--foreground));
+      }
+
+      .categories-table-container {
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .table-header {
+        background: hsl(var(--muted));
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+      }
+
+      .table-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+      }
+
+      .category-row {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        transition: background-color 0.2s ease;
+      }
+
+      .category-row:hover {
+        background: hsl(var(--muted) / 0.5);
+      }
+
+      .category-row:last-child {
+        border-bottom: none;
+      }
+
+      .category-info {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .category-details h4 {
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 0;
+        color: hsl(var(--foreground));
+      }
+
+      .category-details p {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0.25rem 0 0 0;
+      }
+
+      .category-meta {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        color: hsl(var(--muted-foreground));
+        font-size: 0.875rem;
+      }
+
+      .category-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .mobile-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+      }
+
+      .mobile-sidebar-overlay.show {
+        display: block;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        color: hsl(var(--muted-foreground));
+      }
+
+      .empty-state-icon {
+        width: 4rem;
+        height: 4rem;
+        margin: 0 auto 1rem;
+        background: hsl(var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        .category-stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .category-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .category-info {
+          width: 100%;
+        }
+
+        .category-meta {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .category-actions {
+          width: 100%;
+          justify-content: flex-end;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div class="page-loading">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Layout -->
+    <div class="admin-layout" id="adminLayout">
+      <!-- Sidebar -->
+      <aside class="sidebar-shadcn" id="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+          <div class="flex items-center gap-4">
+            <div
+              class="w-8 h-8 text-primary-foreground rounded flex items-center justify-center"
+            >
+              <i
+                data-lucide="mountain-snow"
+                style="width: 1rem; height: 1rem"
+              ></i>
+            </div>
+            <div class="sidebar-brand">
+              <h2 style="font-size: 1.125rem; font-weight: 600; margin: 0">
+                เชียงใหม่ท่องเที่ยว
+              </h2>
+              <p
+                style="
+                  font-size: 0.75rem;
+                  color: hsl(var(--muted-foreground));
+                  margin: 0;
+                "
+              >
+                Admin Dashboard
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar-nav">
+          <div class="nav-group">
+            <div class="nav-group-label">หลัก</div>
+            <a href="dashboard.html" class="nav-item">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 1rem; height: 1rem"
+              ></i>
+              <span>แดชบอร์ด</span>
+            </a>
+            <a href="places.html" class="nav-item">
+              <i data-lucide="map-pin" style="width: 1rem; height: 1rem"></i>
+              <span>สถานที่ท่องเที่ยว</span>
+            </a>
+            <a href="categories.html" class="nav-item active">
+              <i data-lucide="tags" style="width: 1rem; height: 1rem"></i>
+              <span>หมวดหมู่</span>
+            </a>
+          </div>
+        </nav>
+
+        <!-- User Menu in Sidebar -->
+        <div class="sidebar-footer">
+          <div class="dropdown dropup">
+            <button
+              class="user-menu-button w-full"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 text-primary-foreground rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" style="width: 1rem; height: 1rem"></i>
+                </div>
+                <div class="flex-1 text-left">
+                  <div
+                    style="font-size: 0.875rem; font-weight: 500"
+                    id="sidebarUserName"
+                  >
+                    Admin
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      color: hsl(var(--muted-foreground));
+                    "
+                  >
+                    ผู้ดูแลระบบ
+                  </div>
+                </div>
+                <i
+                  data-lucide="chevron-up"
+                  style="
+                    width: 1rem;
+                    height: 1rem;
+                    color: hsl(var(--muted-foreground));
+                  "
+                ></i>
+              </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark w-full">
+              <li>
+                <a class="dropdown-item" href="#" id="sidebarLogoutBtn"
+                  ><i
+                    data-lucide="log-out"
+                    style="width: 1rem; height: 1rem; margin-right: 0.5rem"
+                  ></i
+                  >ออกจากระบบ</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Top Navigation -->
+        <header class="page-header">
+          <div class="flex items-center gap-4">
+            <button class="btn-shadcn ghost icon d-md-none" id="sidebarToggle">
+              <i data-lucide="menu" style="width: 1rem; height: 1rem"></i>
+            </button>
+            <div>
+              <h1 class="page-title">จัดการหมวดหมู่</h1>
+              <p class="page-description">
+                จัดการหมวดหมู่สถานที่ท่องเที่ยวในระบบ
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <!-- Add Category Button -->
+            <button class="btn-shadcn default" id="addCategoryBtn">
+              <i data-lucide="plus" style="width: 1rem; height: 1rem"></i>
+              เพิ่มหมวดหมู่
+            </button>
+
+            <!-- Theme Toggle -->
+            <button class="btn-shadcn ghost icon" id="themeToggle">
+              <i
+                data-lucide="sun"
+                class="theme-icon-light"
+                style="width: 1rem; height: 1rem"
+              ></i>
+              <i
+                data-lucide="moon"
+                class="theme-icon-dark"
+                style="width: 1rem; height: 1rem; display: none"
+              ></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Categories Content -->
+        <div class="categories-content">
+          <!-- Stats Cards -->
+          <div class="category-stats-grid" id="categoryStatsGrid">
+            <div class="category-stat-card">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="totalCategories">-</h3>
+                  <p>หมวดหมู่ทั้งหมด</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="tags"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="category-stat-card success">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="categoriesWithPlaces">-</h3>
+                  <p>หมวดหมู่ที่มีสถานที่</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="check-circle"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="category-stat-card info">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="totalPlacesInCategories">-</h3>
+                  <p>สถานที่ทั้งหมด</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="map-pin"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categories Table -->
+          <div class="categories-table-container">
+            <div class="table-header">
+              <div class="flex items-center justify-between">
+                <h3 class="table-title">รายการหมวดหมู่</h3>
+                <div class="flex items-center gap-2">
+                  <input
+                    type="text"
+                    class="input-shadcn"
+                    placeholder="ค้นหาหมวดหมู่..."
+                    id="searchCategories"
+                    style="width: 200px"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div id="categoriesTableBody">
+              <!-- Categories will be loaded here -->
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <i data-lucide="tags" style="width: 2rem; height: 2rem"></i>
+                </div>
+                <h4>กำลังโหลดข้อมูล...</h4>
+                <p>กรุณารอสักครู่</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div
+      class="modal fade"
+      id="categoryModal"
+      tabindex="-1"
+      aria-labelledby="categoryModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="categoryModalLabel">
+              เพิ่มหมวดหมู่ใหม่
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form id="categoryForm">
+            <div class="modal-body">
+              <div class="row">
+                <!-- Thai Name -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >ชื่อหมวดหมู่ (ไทย)
+                      <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="input-shadcn"
+                      id="categoryNameTh"
+                      name="nameTh"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- English Name -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">ชื่อหมวดหมู่ (อังกฤษ)</label>
+                    <input
+                      type="text"
+                      class="input-shadcn"
+                      id="categoryNameEn"
+                      name="nameEn"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Chinese Name -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">ชื่อหมวดหมู่ (จีน)</label>
+                    <input
+                      type="text"
+                      class="input-shadcn"
+                      id="categoryNameZh"
+                      name="nameZh"
+                    />
+                  </div>
+                </div>
+
+                <!-- Japanese Name -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">ชื่อหมวดหมู่ (ญี่ปุ่น)</label>
+                    <input
+                      type="text"
+                      class="input-shadcn"
+                      id="categoryNameJa"
+                      name="nameJa"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Icon -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >ไอคอน <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="input-shadcn"
+                      id="categoryIcon"
+                      name="icon"
+                      placeholder="เช่น mountain, camera, utensils"
+                      required
+                    />
+                    <small class="text-muted"
+                      >ใช้ชื่อไอคอนจาก Lucide Icons</small
+                    >
+                  </div>
+                </div>
+
+                <!-- Order -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">ลำดับการแสดง</label>
+                    <input
+                      type="number"
+                      class="input-shadcn"
+                      id="categoryOrder"
+                      name="order"
+                      min="1"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn-shadcn ghost"
+                data-bs-dismiss="modal"
+              >
+                ยกเลิก
+              </button>
+              <button type="submit" class="btn-shadcn default">
+                <span id="submitBtnText">บันทึก</span>
+                <div class="loading-shadcn d-none" id="submitLoading"></div>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div
+      class="modal fade"
+      id="deleteCategoryModal"
+      tabindex="-1"
+      aria-labelledby="deleteCategoryModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteCategoryModalLabel">
+              ยืนยันการลบหมวดหมู่
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert-shadcn destructive">
+              <i
+                data-lucide="alert-triangle"
+                style="width: 1rem; height: 1rem; margin-right: 0.5rem"
+              ></i>
+              <strong>คำเตือน:</strong> การดำเนินการนี้ไม่สามารถย้อนกลับได้
+            </div>
+            <p>
+              คุณต้องการลบหมวดหมู่ "<strong id="deleteCategoryName"></strong>"
+              หรือไม่?
+            </p>
+            <p class="text-muted">
+              หมวดหมู่นี้มีสถานที่ท่องเที่ยว
+              <strong id="deleteCategoryPlacesCount">0</strong> แห่ง
+              สถานที่เหล่านี้จะถูกตั้งค่าให้ไม่มีหมวดหมู่
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn-shadcn ghost"
+              data-bs-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <button
+              type="button"
+              class="btn-shadcn destructive"
+              id="confirmDeleteBtn"
+            >
+              <span id="deleteBtnText">ลบหมวดหมู่</span>
+              <div class="loading-shadcn d-none" id="deleteLoading"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,105 +1,48 @@
 // Routes สำหรับการเข้าสู่ระบบ - JWT Based
+// ใช้ JWT Token แทน Session-based authentication
 const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const fs = require('fs').promises;
+const bcrypt = require('bcrypt'); // สำหรับเข้ารหัสรหัสผ่าน
+const jwt = require('jsonwebtoken'); // สำหรับสร้าง JWT Token
+const fs = require('fs').promises; // สำหรับอ่าน/เขียนไฟล์
 const path = require('path');
 const router = express.Router();
 
-// JWT Configuration
+// ตั้งค่า JWT - เปลี่ยน JWT_SECRET ในการใช้งานจริง
 const JWT_SECRET = process.env.JWT_SECRET || 'chiang-mai-admin-jwt-secret-change-in-production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
-// Path to users data file
+// ที่อยู่ไฟล์ข้อมูลผู้ใช้
 const USERS_FILE = path.join(__dirname, '../data/users.json');
 
-// Helper function to read users data
+// ฟังก์ชันอ่านข้อมูลผู้ใช้จากไฟล์ JSON
 async function readUsersData() {
     try {
         const data = await fs.readFile(USERS_FILE, 'utf8');
         return JSON.parse(data);
     } catch (error) {
         console.error('Error reading users data:', error);
-        // Return default admin user if file doesn't exist
+        // สร้างผู้ใช้ admin เริ่มต้นถ้าไฟล์ไม่มี
         return [{
             id: "admin-001",
             username: "admin",
             password: "$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password: "password"
             email: "admin@chiangmai-admin.com",
             role: "admin",
-            loginAttempts: 0,
-            lockUntil: null,
-            lastLogin: null,
             createdAt: new Date().toISOString()
         }];
     }
 }
 
-// Helper function to write users data
-async function writeUsersData(users) {
-    try {
-        await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
-        return true;
-    } catch (error) {
-        console.error('Error writing users data:', error);
-        return false;
-    }
-}
 
-// Helper function to find user by username
+// ฟังก์ชันค้นหาผู้ใช้จากชื่อผู้ใช้
 async function findUserByUsername(username) {
     const users = await readUsersData();
     return users.find(user => user.username === username);
 }
 
-// Helper function to check if account is locked
-function isAccountLocked(user) {
-    if (!user.lockUntil) return false;
-    
-    const lockTime = new Date(user.lockUntil);
-    const now = new Date();
-    
-    return now < lockTime;
-}
 
-// Helper function to increment login attempts
-async function incrementLoginAttempts(username) {
-    const users = await readUsersData();
-    const userIndex = users.findIndex(user => user.username === username);
-    
-    if (userIndex === -1) return false;
-    
-    const user = users[userIndex];
-    user.loginAttempts = (user.loginAttempts || 0) + 1;
-    
-    // Lock account after 5 failed attempts for 15 minutes
-    if (user.loginAttempts >= 5) {
-        const lockTime = new Date();
-        lockTime.setMinutes(lockTime.getMinutes() + 15);
-        user.lockUntil = lockTime.toISOString();
-    }
-    
-    await writeUsersData(users);
-    return user;
-}
-
-// Helper function to reset login attempts
-async function resetLoginAttempts(username) {
-    const users = await readUsersData();
-    const userIndex = users.findIndex(user => user.username === username);
-    
-    if (userIndex === -1) return false;
-    
-    users[userIndex].loginAttempts = 0;
-    users[userIndex].lockUntil = null;
-    users[userIndex].lastLogin = new Date().toISOString();
-    
-    await writeUsersData(users);
-    return true;
-}
-
-// JWT Helper Functions
+// ฟังก์ชันช่วยเหลือสำหรับ JWT Token
 function generateTokens(user) {
     const accessToken = jwt.sign(
         { 
@@ -132,7 +75,7 @@ function verifyToken(token) {
     }
 }
 
-// JWT Authentication middleware
+// Middleware ตรวจสอบ JWT Token สำหรับ API ที่ต้องล็อกอิน
 function requireAuth(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
@@ -154,27 +97,18 @@ function requireAuth(req, res, next) {
         });
     }
 
-    // Add user info to request
+    // เพิ่มข้อมูลผู้ใช้ใน request เพื่อใช้ใน route อื่น
     req.user = decoded;
     next();
 }
 
-// GET /login - Show login page
-router.get('/login', (req, res) => {
-    // If already logged in, redirect to dashboard
-    if (req.session && req.session.user) {
-        return res.redirect('/dashboard');
-    }
-    
-    res.sendFile(path.join(__dirname, '../views/login.html'));
-});
 
-// POST /login - Process login
+// POST /login - ประมวลผลการเข้าสู่ระบบ
 router.post('/login', async (req, res) => {
     try {
-        const { username, password, remember } = req.body;
+        const { username, password } = req.body;
         
-        // Validate input
+        // ตรวจสอบข้อมูลที่ส่งมา
         if (!username || !password) {
             return res.status(400).json({
                 success: false,
@@ -182,7 +116,7 @@ router.post('/login', async (req, res) => {
             });
         }
         
-        // Find user
+        // ค้นหาผู้ใช้
         const user = await findUserByUsername(username);
         if (!user) {
             return res.status(401).json({
@@ -191,48 +125,18 @@ router.post('/login', async (req, res) => {
             });
         }
         
-        // Check if account is locked
-        if (isAccountLocked(user)) {
-            const lockTime = new Date(user.lockUntil);
-            const now = new Date();
-            const minutesLeft = Math.ceil((lockTime - now) / (1000 * 60));
-            
-            return res.status(423).json({
-                success: false,
-                message: `บัญชีถูกล็อคชั่วคราว กรุณารอ ${minutesLeft} นาที`,
-                attemptsLeft: 0,
-                lockTime: minutesLeft
-            });
-        }
-        
-        // Verify password
+        // ตรวจสอบรหัสผ่าน
         const isValidPassword = await bcrypt.compare(password, user.password);
         
         if (!isValidPassword) {
-            // Increment login attempts
-            const updatedUser = await incrementLoginAttempts(username);
-            const attemptsLeft = 5 - (updatedUser.loginAttempts || 0);
-            
-            let message = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
-            let lockTime = null;
-            
-            if (updatedUser.loginAttempts >= 5) {
-                message = 'บัญชีถูกล็อคชั่วคราว 15 นาที เนื่องจากพยายามเข้าสู่ระบบผิดหลายครั้ง';
-                lockTime = 15;
-            }
-            
             return res.status(401).json({
                 success: false,
-                message: message,
-                attemptsLeft: Math.max(0, attemptsLeft),
-                lockTime: lockTime
+                message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
             });
         }
         
-        // Reset login attempts on successful login
-        await resetLoginAttempts(username);
         
-        // Generate JWT tokens
+        // สร้าง JWT tokens สำหรับใช้งาน
         const { accessToken, refreshToken } = generateTokens(user);
         
         res.json({
@@ -258,10 +162,10 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// POST /logout - Process logout (JWT-based)
-router.post('/logout', requireAuth, (req, res) => {
-    // With JWT, logout is handled client-side by removing tokens
-    // Server can optionally implement token blacklisting here
+// POST /logout - ออกจากระบบ (JWT-based)
+router.post('/logout', requireAuth, (_, res) => {
+    // JWT ใช้ client-side logout โดยลบ token
+    // Server สามารถเพิ่ม blacklist token ได้ที่นี่
     
     res.json({
         success: true,
@@ -270,7 +174,7 @@ router.post('/logout', requireAuth, (req, res) => {
     });
 });
 
-// POST /refresh - Refresh JWT token
+// POST /refresh - ต่ออายุ JWT token
 router.post('/refresh', async (req, res) => {
     try {
         const { refreshToken } = req.body;
@@ -292,7 +196,7 @@ router.post('/refresh', async (req, res) => {
             });
         }
 
-        // Find user by ID from refresh token
+        // ค้นหาผู้ใช้จาก ID ใน refresh token
         const users = await readUsersData();
         const user = users.find(u => u.id === decoded.id);
         
@@ -304,7 +208,7 @@ router.post('/refresh', async (req, res) => {
             });
         }
 
-        // Generate new tokens
+        // สร้าง tokens ใหม่
         const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
         
         res.json({
@@ -331,7 +235,7 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
-// GET /me - Get current user info
+// GET /me - ดึงข้อมูลผู้ใช้ปัจจุบัน
 router.get('/me', requireAuth, async (req, res) => {
     try {
         const users = await readUsersData();
@@ -365,7 +269,7 @@ router.get('/me', requireAuth, async (req, res) => {
     }
 });
 
-// Export middleware and router
+// ส่งออก middleware และ router เพื่อใช้ในไฟล์อื่น
 module.exports = {
     router,
     requireAuth

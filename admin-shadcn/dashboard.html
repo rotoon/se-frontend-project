@@ -1,221 +1,247 @@
 <!DOCTYPE html>
 <html lang="th" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - เชียงใหม่ท่องเที่ยว Admin</title>
-    
+
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
+
     <!-- CSS will be injected by Webpack -->
-    
+
     <!-- Critical CSS to prevent FOUC -->
     <style>
-        /* Prevent FOUC - hide body until CSS loads */
-        body {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+      /* Prevent FOUC - hide body until CSS loads */
+      body {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      body.loaded {
+        opacity: 1;
+      }
+
+      /* Basic loading spinner */
+      .page-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+
+      .loading-spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        
-        body.loaded {
-            opacity: 1;
+        100% {
+          transform: rotate(360deg);
         }
-        
-        /* Basic loading spinner */
-        .page-loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        
-        .loading-spinner {
-            width: 2rem;
-            height: 2rem;
-            border: 2px solid #e2e8f0;
-            border-top: 2px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Hide content until loaded */
-        .admin-layout {
-            visibility: hidden;
-        }
-        
-        body.loaded .admin-layout {
-            visibility: visible;
-        }
-        
-        body.loaded .page-loading {
-            display: none;
-        }
+      }
+
+      /* Hide content until loaded */
+      .admin-layout {
+        visibility: hidden;
+      }
+
+      body.loaded .admin-layout {
+        visibility: visible;
+      }
+
+      body.loaded .page-loading {
+        display: none;
+      }
     </style>
-    
+
     <style>
-        /* Dashboard specific styles */
+      /* Dashboard specific styles */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          hsl(var(--primary)),
+          hsl(var(--primary) / 0.7)
+        );
+      }
+
+      .stat-card.success::before {
+        background: linear-gradient(
+          90deg,
+          hsl(142 76% 36%),
+          hsl(142 76% 36% / 0.7)
+        );
+      }
+
+      .stat-card.warning::before {
+        background: linear-gradient(
+          90deg,
+          hsl(48 96% 53%),
+          hsl(48 96% 53% / 0.7)
+        );
+      }
+
+      .stat-card.info::before {
+        background: linear-gradient(
+          90deg,
+          hsl(200 95% 50%),
+          hsl(200 95% 50% / 0.7)
+        );
+      }
+
+      .stat-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .stat-details h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        color: hsl(var(--foreground));
+      }
+
+      .stat-details p {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0.25rem 0 0 0;
+      }
+
+      .stat-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: var(--radius);
+        background: hsl(var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--foreground));
+      }
+
+      .recent-activities {
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 1.5rem;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid hsl(var(--border));
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+
+      .activity-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: hsl(var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--foreground));
+        flex-shrink: 0;
+      }
+
+      .activity-content {
+        flex: 1;
+      }
+
+      .activity-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: hsl(var(--foreground));
+        margin: 0;
+      }
+
+      .activity-time {
+        font-size: 0.75rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0.25rem 0 0 0;
+      }
+
+      .mobile-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+      }
+
+      .mobile-sidebar-overlay.show {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+          grid-template-columns: 1fr;
         }
-        
-        .stat-card {
-            background: hsl(var(--card));
-            border: 1px solid hsl(var(--border));
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.7));
-        }
-        
-        .stat-card.success::before {
-            background: linear-gradient(90deg, hsl(142 76% 36%), hsl(142 76% 36% / 0.7));
-        }
-        
-        .stat-card.warning::before {
-            background: linear-gradient(90deg, hsl(48 96% 53%), hsl(48 96% 53% / 0.7));
-        }
-        
-        .stat-card.info::before {
-            background: linear-gradient(90deg, hsl(200 95% 50%), hsl(200 95% 50% / 0.7));
-        }
-        
-        .stat-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .stat-details h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0;
-            color: hsl(var(--foreground));
-        }
-        
-        .stat-details p {
-            font-size: 0.875rem;
-            color: hsl(var(--muted-foreground));
-            margin: 0.25rem 0 0 0;
-        }
-        
-        .stat-icon {
-            width: 3rem;
-            height: 3rem;
-            border-radius: var(--radius);
-            background: hsl(var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: hsl(var(--foreground));
-        }
-        
-        .recent-activities {
-            background: hsl(var(--card));
-            border: 1px solid hsl(var(--border));
-            border-radius: var(--radius);
-            padding: 1.5rem;
-        }
-        
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid hsl(var(--border));
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-        
-        .activity-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background: hsl(var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: hsl(var(--foreground));
-            flex-shrink: 0;
-        }
-        
-        .activity-content {
-            flex: 1;
-        }
-        
-        .activity-title {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: hsl(var(--foreground));
-            margin: 0;
-        }
-        
-        .activity-time {
-            font-size: 0.75rem;
-            color: hsl(var(--muted-foreground));
-            margin: 0.25rem 0 0 0;
-        }
-        
-        .mobile-sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 40;
-            display: none;
-        }
-        
-        .mobile-sidebar-overlay.show {
-            display: block;
-        }
-        
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Loading Screen -->
     <div class="page-loading">
-        <div class="loading-spinner"></div>
+      <div class="loading-spinner"></div>
     </div>
 
     <!-- Mobile Sidebar Overlay -->
@@ -223,262 +249,362 @@
 
     <!-- Main Layout -->
     <div class="admin-layout" id="adminLayout">
-        <!-- Sidebar -->
-        <aside class="sidebar-shadcn" id="sidebar">
-            <!-- Sidebar Header -->
-            <div class="sidebar-header">
-                <div class="flex items-center gap-4">
-                    <div class="w-8 h-8 text-primary-foreground rounded flex items-center justify-center">
-                        <i data-lucide="mountain-snow" style="width: 1rem; height: 1rem;"></i>
-                    </div>
-                    <div class="sidebar-brand">
-                        <h2 style="font-size: 1.125rem; font-weight: 600; margin: 0;">เชียงใหม่ท่องเที่ยว</h2>
-                        <p style="font-size: 0.75rem; color: hsl(var(--muted-foreground)); margin: 0;">Admin Dashboard</p>
-                    </div>
+      <!-- Sidebar -->
+      <aside class="sidebar-shadcn" id="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+          <div class="flex items-center gap-4">
+            <div
+              class="w-8 h-8 text-primary-foreground rounded flex items-center justify-center"
+            >
+              <i
+                data-lucide="mountain-snow"
+                style="width: 1rem; height: 1rem"
+              ></i>
+            </div>
+            <div class="sidebar-brand">
+              <h2 style="font-size: 1.125rem; font-weight: 600; margin: 0">
+                เชียงใหม่ท่องเที่ยว
+              </h2>
+              <p
+                style="
+                  font-size: 0.75rem;
+                  color: hsl(var(--muted-foreground));
+                  margin: 0;
+                "
+              >
+                Admin Dashboard
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar-nav">
+          <div class="nav-group">
+            <div class="nav-group-label">หลัก</div>
+            <a href="dashboard.html" class="nav-item active">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 1rem; height: 1rem"
+              ></i>
+              <span>แดชบอร์ด</span>
+            </a>
+            <a href="places.html" class="nav-item">
+              <i data-lucide="map-pin" style="width: 1rem; height: 1rem"></i>
+              <span>สถานที่ท่องเที่ยว</span>
+            </a>
+            <a href="categories.html" class="nav-item">
+              <i data-lucide="tags" style="width: 1rem; height: 1rem"></i>
+              <span>หมวดหมู่</span>
+            </a>
+          </div>
+        </nav>
+
+        <!-- User Menu in Sidebar -->
+        <div class="sidebar-footer">
+          <div class="dropdown dropup">
+            <button
+              class="user-menu-button w-full"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 text-primary-foreground rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" style="width: 1rem; height: 1rem"></i>
                 </div>
+                <div class="flex-1 text-left">
+                  <div
+                    style="font-size: 0.875rem; font-weight: 500"
+                    id="sidebarUserName"
+                  >
+                    Admin
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      color: hsl(var(--muted-foreground));
+                    "
+                  >
+                    ผู้ดูแลระบบ
+                  </div>
+                </div>
+                <i
+                  data-lucide="chevron-up"
+                  style="
+                    width: 1rem;
+                    height: 1rem;
+                    color: hsl(var(--muted-foreground));
+                  "
+                ></i>
+              </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark w-full">
+              <li>
+                <a class="dropdown-item" href="#" id="sidebarLogoutBtn"
+                  ><i
+                    data-lucide="log-out"
+                    style="width: 1rem; height: 1rem; margin-right: 0.5rem"
+                  ></i
+                  >ออกจากระบบ</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Top Navigation -->
+        <header class="page-header">
+          <div class="flex items-center gap-4">
+            <button class="btn-shadcn ghost icon d-md-none" id="sidebarToggle">
+              <i data-lucide="menu" style="width: 1rem; height: 1rem"></i>
+            </button>
+            <div>
+              <h1 class="page-title">แดชบอร์ด</h1>
+              <p class="page-description">
+                ภาพรวมการจัดการระบบเชียงใหม่ท่องเที่ยว
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <!-- Theme Toggle -->
+            <button class="btn-shadcn ghost icon" id="themeToggle">
+              <i
+                data-lucide="sun"
+                class="theme-icon-light"
+                style="width: 1rem; height: 1rem"
+              ></i>
+              <i
+                data-lucide="moon"
+                class="theme-icon-dark"
+                style="width: 1rem; height: 1rem; display: none"
+              ></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+          <!-- Stats Cards -->
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="totalPlaces">-</h3>
+                  <p>สถานที่ท่องเที่ยว</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="map-pin"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
             </div>
 
-            <!-- Sidebar Navigation -->
-            <nav class="sidebar-nav">
-                <div class="nav-group">
-                    <div class="nav-group-label">หลัก</div>
-                    <a href="dashboard.html" class="nav-item active">
-                        <i data-lucide="layout-dashboard" style="width: 1rem; height: 1rem;"></i>
-                        <span>แดชบอร์ด</span>
-                    </a>
-                    <a href="pages/places.html" class="nav-item">
-                        <i data-lucide="map-pin" style="width: 1rem; height: 1rem;"></i>
-                        <span>สถานที่ท่องเที่ยว</span>
-                    </a>
-                    <a href="pages/categories.html" class="nav-item">
-                        <i data-lucide="tags" style="width: 1rem; height: 1rem;"></i>
-                        <span>หมวดหมู่</span>
-                    </a>
+            <div class="stat-card success">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="publishedPlaces">-</h3>
+                  <p>สถานที่เผยแพร่</p>
                 </div>
-
-                <div class="nav-group">
-                    <div class="nav-group-label">จัดการ</div>
-                    <a href="pages/users.html" class="nav-item">
-                        <i data-lucide="users" style="width: 1rem; height: 1rem;"></i>
-                        <span>ผู้ใช้งาน</span>
-                    </a>
-                    <a href="pages/settings.html" class="nav-item">
-                        <i data-lucide="settings" style="width: 1rem; height: 1rem;"></i>
-                        <span>การตั้งค่า</span>
-                    </a>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="check-circle"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
                 </div>
-
-                <div class="nav-group">
-                    <div class="nav-group-label">รายงาน</div>
-                    <a href="#" class="nav-item">
-                        <i data-lucide="bar-chart-3" style="width: 1rem; height: 1rem;"></i>
-                        <span>สถิติการใช้งาน</span>
-                    </a>
-                    <a href="#" class="nav-item">
-                        <i data-lucide="file-text" style="width: 1rem; height: 1rem;"></i>
-                        <span>รายงาน</span>
-                    </a>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Navigation -->
-            <header class="page-header">
-                <div class="flex items-center gap-4">
-                    <button class="btn-shadcn ghost icon d-md-none" id="sidebarToggle">
-                        <i data-lucide="menu" style="width: 1rem; height: 1rem;"></i>
-                    </button>
-                    <div>
-                        <h1 class="page-title">แดชบอร์ด</h1>
-                        <p class="page-description">ภาพรวมการจัดการระบบเชียงใหม่ท่องเที่ยว</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <!-- Theme Toggle -->
-                    <button class="btn-shadcn ghost icon" id="themeToggle">
-                        <i data-lucide="sun" class="theme-icon-light" style="width: 1rem; height: 1rem;"></i>
-                        <i data-lucide="moon" class="theme-icon-dark" style="width: 1rem; height: 1rem; display: none;"></i>
-                    </button>
-                    
-                    <!-- User Menu -->
-                    <div class="dropdown">
-                        <button class="btn-shadcn ghost" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="w-8 h-8 text-primary-foreground rounded-full flex items-center justify-center">
-                                <i data-lucide="user" style="width: 2rem; height: 1rem;"></i>
-                            </div>
-                            <span id="userName">Admin</span>
-                            <i data-lucide="chevron-down" style="width: 1rem; height: 1rem;"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i data-lucide="user" style="width: 1rem; height: 1rem; margin-right: 0.5rem;"></i>โปรไฟล์</a></li>
-                            <li><a class="dropdown-item" href="#"><i data-lucide="settings" style="width: 1rem; height: 1rem; margin-right: 0.5rem;"></i>การตั้งค่า</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i data-lucide="log-out" style="width: 1rem; height: 1rem; margin-right: 0.5rem;"></i>ออกจากระบบ</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Dashboard Content -->
-            <div class="dashboard-content">
-                <!-- Stats Cards -->
-                <div class="stats-grid" id="statsGrid">
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <div class="stat-details">
-                                <h3 id="totalPlaces">-</h3>
-                                <p>สถานที่ท่องเที่ยว</p>
-                            </div>
-                            <div class="stat-icon">
-                                <i data-lucide="map-pin" style="width: 1.5rem; height: 1.5rem;"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card success">
-                        <div class="stat-content">
-                            <div class="stat-details">
-                                <h3 id="publishedPlaces">-</h3>
-                                <p>สถานที่เผยแพร่</p>
-                            </div>
-                            <div class="stat-icon">
-                                <i data-lucide="check-circle" style="width: 1.5rem; height: 1.5rem;"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card warning">
-                        <div class="stat-content">
-                            <div class="stat-details">
-                                <h3 id="draftPlaces">-</h3>
-                                <p>แบบร่าง</p>
-                            </div>
-                            <div class="stat-icon">
-                                <i data-lucide="edit" style="width: 1.5rem; height: 1.5rem;"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card info">
-                        <div class="stat-content">
-                            <div class="stat-details">
-                                <h3 id="totalCategories">-</h3>
-                                <p>หมวดหมู่</p>
-                            </div>
-                            <div class="stat-icon">
-                                <i data-lucide="tags" style="width: 1.5rem; height: 1.5rem;"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activities & Quick Actions -->
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="recent-activities">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0;">กิจกรรมล่าสุด</h3>
-                                <a href="#" class="btn-shadcn ghost sm">
-                                    ดูทั้งหมด
-                                    <i data-lucide="arrow-right" style="width: 0.875rem; height: 0.875rem;"></i>
-                                </a>
-                            </div>
-                            <div id="activitiesList">
-                                <!-- Activities will be loaded here -->
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <p class="activity-title">เพิ่มสถานที่ใหม่: วัดพระธาตุดอยสุเทพ</p>
-                                        <p class="activity-time">2 ชั่วโมงที่แล้ว</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i data-lucide="edit" style="width: 1rem; height: 1rem;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <p class="activity-title">แก้ไขข้อมูล: ตลาดวโรรส</p>
-                                        <p class="activity-time">4 ชั่วโมงที่แล้ว</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i data-lucide="image" style="width: 1rem; height: 1rem;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <p class="activity-title">อัปโหลดรูปภาพ: สวนสนน่าน</p>
-                                        <p class="activity-time">6 ชั่วโมงที่แล้ว</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="card-shadcn">
-                            <div class="card-shadcn-header">
-                                <h3 class="card-shadcn-title">การดำเนินการด่วน</h3>
-                                <p class="card-shadcn-description">เข้าถึงฟังก์ชันที่ใช้บ่อย</p>
-                            </div>
-                            <div class="card-shadcn-content space-y-4">
-                                <a href="pages/places.html?action=create" class="btn-shadcn default w-full">
-                                    <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
-                                    เพิ่มสถานที่ใหม่
-                                </a>
-                                <a href="pages/categories.html?action=create" class="btn-shadcn outline w-full">
-                                    <i data-lucide="folder-plus" style="width: 1rem; height: 1rem;"></i>
-                                    เพิ่มหมวดหมู่ใหม่
-                                </a>
-                                <a href="#" class="btn-shadcn ghost w-full" id="exportBtn">
-                                    <i data-lucide="download" style="width: 1rem; height: 1rem;"></i>
-                                    ส่งออกข้อมูล
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- System Status -->
-                        <div class="card-shadcn mt-4">
-                            <div class="card-shadcn-header">
-                                <h3 class="card-shadcn-title">สถานะระบบ</h3>
-                            </div>
-                            <div class="card-shadcn-content space-y-4">
-                                <div class="flex items-center justify-between">
-                                    <span style="font-size: 0.875rem;">เซิร์ฟเวอร์</span>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                        <span style="font-size: 0.875rem; color: hsl(var(--muted-foreground));">ออนไลน์</span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span style="font-size: 0.875rem;">ฐานข้อมูล</span>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                        <span style="font-size: 0.875rem; color: hsl(var(--muted-foreground));">ปกติ</span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span style="font-size: 0.875rem;">การสำรองข้อมูล</span>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                        <span style="font-size: 0.875rem; color: hsl(var(--muted-foreground));">อัปเดต</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </main>
+
+            <div class="stat-card warning">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="draftPlaces">-</h3>
+                  <p>แบบร่าง</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="edit"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card info">
+              <div class="stat-content">
+                <div class="stat-details">
+                  <h3 id="totalCategories">-</h3>
+                  <p>หมวดหมู่</p>
+                </div>
+                <div class="stat-icon">
+                  <i
+                    data-lucide="tags"
+                    style="width: 1.5rem; height: 1.5rem"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activities & Quick Actions -->
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="recent-activities">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0">
+                    กิจกรรมล่าสุด
+                  </h3>
+                  <a href="#" class="btn-shadcn ghost sm">
+                    ดูทั้งหมด
+                    <i
+                      data-lucide="arrow-right"
+                      style="width: 0.875rem; height: 0.875rem"
+                    ></i>
+                  </a>
+                </div>
+                <div id="activitiesList">
+                  <!-- Activities will be loaded here -->
+                  <div class="activity-item">
+                    <div class="activity-icon">
+                      <i
+                        data-lucide="plus"
+                        style="width: 1rem; height: 1rem"
+                      ></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-title">
+                        เพิ่มสถานที่ใหม่: วัดพระธาตุดอยสุเทพ
+                      </p>
+                      <p class="activity-time">2 ชั่วโมงที่แล้ว</p>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon">
+                      <i
+                        data-lucide="edit"
+                        style="width: 1rem; height: 1rem"
+                      ></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-title">แก้ไขข้อมูล: ตลาดวโรรส</p>
+                      <p class="activity-time">4 ชั่วโมงที่แล้ว</p>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon">
+                      <i
+                        data-lucide="image"
+                        style="width: 1rem; height: 1rem"
+                      ></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-title">อัปโหลดรูปภาพ: สวนสนน่าน</p>
+                      <p class="activity-time">6 ชั่วโมงที่แล้ว</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="card-shadcn">
+                <div class="card-shadcn-header">
+                  <h3 class="card-shadcn-title">การดำเนินการด่วน</h3>
+                  <p class="card-shadcn-description">
+                    เข้าถึงฟังก์ชันที่ใช้บ่อย
+                  </p>
+                </div>
+                <div class="card-shadcn-content space-y-4">
+                  <a
+                    href="places.html?action=create"
+                    class="btn-shadcn default w-full"
+                  >
+                    <i data-lucide="plus" style="width: 1rem; height: 1rem"></i>
+                    เพิ่มสถานที่ใหม่
+                  </a>
+                  <a
+                    href="categories.html?action=create"
+                    class="btn-shadcn outline w-full"
+                  >
+                    <i
+                      data-lucide="folder-plus"
+                      style="width: 1rem; height: 1rem"
+                    ></i>
+                    เพิ่มหมวดหมู่ใหม่
+                  </a>
+                  <a href="#" class="btn-shadcn ghost w-full" id="exportBtn">
+                    <i
+                      data-lucide="download"
+                      style="width: 1rem; height: 1rem"
+                    ></i>
+                    ส่งออกข้อมูล
+                  </a>
+                </div>
+              </div>
+
+              <!-- System Status -->
+              <div class="card-shadcn mt-4">
+                <div class="card-shadcn-header">
+                  <h3 class="card-shadcn-title">สถานะระบบ</h3>
+                </div>
+                <div class="card-shadcn-content space-y-4">
+                  <div class="flex items-center justify-between">
+                    <span style="font-size: 0.875rem">เซิร์ฟเวอร์</span>
+                    <div class="flex items-center gap-2">
+                      <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span
+                        style="
+                          font-size: 0.875rem;
+                          color: hsl(var(--muted-foreground));
+                        "
+                        >ออนไลน์</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span style="font-size: 0.875rem">ฐานข้อมูล</span>
+                    <div class="flex items-center gap-2">
+                      <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span
+                        style="
+                          font-size: 0.875rem;
+                          color: hsl(var(--muted-foreground));
+                        "
+                        >ปกติ</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span style="font-size: 0.875rem">การสำรองข้อมูล</span>
+                    <div class="flex items-center gap-2">
+                      <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span
+                        style="
+                          font-size: 0.875rem;
+                          color: hsl(var(--muted-foreground));
+                        "
+                        >อัปเดต</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Scripts will be injected by Webpack -->
 
-</body>
+    <!-- Scripts will be injected by Webpack -->
+  </body>
 </html>

@@ -68,15 +68,23 @@ function initDashboard() {
 
     // Logout functionality
     const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
-                if (window.auth && window.auth.logout) {
-                    await window.auth.logout();
-                }
+    const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
+    
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+            if (window.auth && window.auth.logout) {
+                await window.auth.logout();
             }
-        });
+        }
+    };
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+    
+    if (sidebarLogoutBtn) {
+        sidebarLogoutBtn.addEventListener('click', handleLogout);
     }
 
     // Dashboard data loading
@@ -100,9 +108,16 @@ function initDashboard() {
             if (window.auth && window.auth.getCurrentUser) {
                 const user = window.auth.getCurrentUser();
                 if (user) {
+                    // Update header username (if exists)
                     const userNameEl = document.getElementById('userName');
                     if (userNameEl) {
                         userNameEl.textContent = user.username || 'Admin';
+                    }
+                    
+                    // Update sidebar username
+                    const sidebarUserNameEl = document.getElementById('sidebarUserName');
+                    if (sidebarUserNameEl) {
+                        sidebarUserNameEl.textContent = user.username || 'Admin';
                     }
                 }
             }

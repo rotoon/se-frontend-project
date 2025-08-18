@@ -1,128 +1,183 @@
-// Routes สำหรับจัดการสถานที่
+/**
+ * Places Management Routes
+ * จัดการระบบสถานที่ท่องเที่ยว
+ */
 const express = require("express");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const { requireAuth } = require("./auth");
-const DataManager = require("../utils/dataManager");
+const {
+    createErrorResponse,
+    createSuccessResponse,
+    loadPlaces,
+    loadCategories,
+    findById,
+    savePlaces,
+    COMMON_MESSAGES
+} = require('../utils/routeHelpers');
 
 const router = express.Router();
-const dataManager = new DataManager(path.join(__dirname, "../data"));
 
-// Middleware to validate place data
+// ข้อความเฉพาะสถานที่
+const MESSAGES = {
+  ERRORS: {
+    ...COMMON_MESSAGES.ERRORS,
+    CATEGORY_CHECK_FAILED: "เกิดข้อผิดพลาดในการตรวจสอบหมวดหมู่",
+    CATEGORY_NOT_EXISTS: "หมวดหมู่ที่เลือกไม่มีอยู่ในระบบ",
+    INVALID_STATUS: "สถานะไม่ถูกต้อง (ต้องเป็น draft, published, หรือ inactive)",
+    INVALID_FEATURED: "ค่า featured ต้องเป็น true หรือ false",
+    INVALID_PLACE_IDS: "กรุณาระบุรายการสถานที่ที่ต้องการ",
+    NO_EDIT_FOUND: "ไม่พบสถานที่ที่ต้องการแก้ไข",
+    NO_DELETE_FOUND: "ไม่พบสถานที่ที่ต้องการลบ",
+  },
+  SUCCESS: {
+    ...COMMON_MESSAGES.SUCCESS,
+    STATUS_UPDATED: "อัปเดตสถานะเรียบร้อยแล้ว",
+  },
+};
+
+// สถานะที่อนุมัติ
+const VALID_STATUSES = ["draft", "published", "inactive"];
+
+// ========================= HELPER FUNCTIONS =========================
+
+// Helper functions ย้ายไปใช้ shared helpers แล้ว
+
+/**
+ * หาสถานที่ตาม ID
+ */
+function findPlaceById(places, id) {
+  return findById(places, id);
+}
+
+/**
+ * หาหมวดหมู่ตาม ID
+ */
+function findCategoryById(categories, categoryId) {
+  return findById(categories, categoryId);
+}
+
+/**
+ * แปลงสถานะเป็นข้อความไทย
+ */
+function getStatusText(status) {
+  const statusMap = {
+    draft: "ร่าง",
+    published: "เผยแพร่",
+    inactive: "ไม่ใช้งาน",
+  };
+  return statusMap[status] || status;
+}
+
+/**
+ * เรียงลำดับสถานที่ตามวันที่สร้าง (ใหม่สุดก่อน)
+ */
+function sortPlacesByCreatedDate(places) {
+  return places.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+/**
+ * ตรวจสอบความถูกต้องของสถานะ
+ */
+function isValidStatus(status) {
+  return !status || VALID_STATUSES.includes(status);
+}
+
+/**
+ * ตรวจสอบค่า featured
+ */
+function isValidFeatured(featured) {
+  return featured === undefined || typeof featured === "boolean";
+}
+
+// Unused helper functions removed
+
+/**
+ * Middleware สำหรับตรวจสอบข้อมูลสถานที่
+ */
 const validatePlaceMiddleware = (req, res, next) => {
   const validation = validatePlaceData(req.body);
   if (!validation.isValid) {
-    return res.status(400).json({
-      success: false,
-      message: validation.message,
-      errors: validation.errors || [validation.message],
-    });
+    return createErrorResponse(res, 400, validation.message);
   }
   next();
 };
 
-// Middleware to check if category exists
+/**
+ * Middleware สำหรับตรวจสอบว่าหมวดหมู่มีอยู่จริงหรือไม่
+ */
 const validateCategoryMiddleware = async (req, res, next) => {
   try {
+    // ข้ามไม่มีหมวดหมู่ ให้ผ่านไป validation หลัก
     if (!req.body.category) {
-      return next(); // Skip if no category provided (will be caught by main validation)
+      return next();
     }
 
-    const categoriesResult = await dataManager.getCategories();
-    if (!categoriesResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการตรวจสอบหมวดหมู่",
-      });
-    }
+    const categories = await loadCategories();
+    const categoryExists = findCategoryById(categories, req.body.category);
 
-    const categoryExists = categoriesResult.data.some(
-      (cat) => cat.id === req.body.category
-    );
     if (!categoryExists) {
-      return res.status(400).json({
-        success: false,
-        message: "หมวดหมู่ที่เลือกไม่มีอยู่ในระบบ",
-      });
+      return createErrorResponse(res, 400, MESSAGES.ERRORS.CATEGORY_NOT_EXISTS);
     }
 
     next();
   } catch (error) {
-    console.error("Error validating category:", error);
-    res.status(500).json({
-      success: false,
-      message: "เกิดข้อผิดพลาดในการตรวจสอบหมวดหมู่",
-    });
+    return createErrorResponse(
+      res,
+      500,
+      MESSAGES.ERRORS.CATEGORY_CHECK_FAILED,
+      error
+    );
   }
 };
 
-// GET /places - แสดงหน้ารายการสถานที่
+// ========================= ROUTES =========================
+
+/**
+ * GET /places - แสดงหน้ารายการสถานที่
+ */
 router.get("/places", requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "../views/places-list.html"));
 });
 
-// GET /api/places - API สำหรับดึงข้อมูลสถานที่ทั้งหมด
+/**
+ * GET /api/places - โหลดสถานที่ทั้งหมด (เรียงตามวันที่สร้าง)
+ */
 router.get("/api/places", requireAuth, async (req, res) => {
   try {
-    const result = await dataManager.getPlaces();
+    const places = await loadPlaces();
+    const sortedPlaces = sortPlacesByCreatedDate(places);
 
-    if (!result.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    // Sort places by creation date (newest first)
-    const places = result.data.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    return createSuccessResponse(
+      res,
+      { places: sortedPlaces },
+      MESSAGES.SUCCESS.LOADED
     );
-
-    res.json({
-      success: true,
-      places: places,
-    });
   } catch (error) {
-    console.error("Error loading places:", error);
-    res.status(500).json({
-      success: false,
-      message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-    });
+    return createErrorResponse(res, 500, MESSAGES.ERRORS.LOAD_FAILED, error);
   }
 });
 
-// GET /api/places/:id - API สำหรับดึงข้อมูลสถานที่เฉพาะ
+/**
+ * GET /api/places/:id - โหลดสถานที่ตาม ID ที่ระบุ
+ */
 router.get("/api/places/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await dataManager.getPlaces();
+    const places = await loadPlaces();
 
-    if (!result.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const place = result.data.find((p) => p.id === id);
-
+    const place = findPlaceById(places, id);
     if (!place) {
-      return res.status(404).json({
-        success: false,
-        message: "ไม่พบสถานที่ที่ต้องการ",
-      });
+      return createErrorResponse(res, 404, MESSAGES.ERRORS.NOT_FOUND);
     }
 
-    res.json({
-      success: true,
-      place: place,
-    });
+    return createSuccessResponse(
+      res,
+      { place: place },
+      MESSAGES.SUCCESS.LOADED
+    );
   } catch (error) {
-    console.error("Error loading place:", error);
-    res.status(500).json({
-      success: false,
-      message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-    });
+    return createErrorResponse(res, 500, MESSAGES.ERRORS.LOAD_FAILED, error);
   }
 });
 
@@ -131,16 +186,7 @@ router.delete("/api/places/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Get current places
-    const placesResult = await dataManager.getPlaces();
-    if (!placesResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const places = placesResult.data;
+    const places = await loadPlaces();
     const placeIndex = places.findIndex((p) => p.id === id);
 
     if (placeIndex === -1) {
@@ -156,13 +202,7 @@ router.delete("/api/places/:id", requireAuth, async (req, res) => {
     places.splice(placeIndex, 1);
 
     // Save updated places
-    const saveResult = await dataManager.savePlaces(places);
-    if (!saveResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-      });
-    }
+    await savePlaces(places);
 
     // Handle cascading deletes - delete associated image files
     if (placeToDelete.images && placeToDelete.images.length > 0) {
@@ -202,39 +242,24 @@ router.delete("/api/places/:id", requireAuth, async (req, res) => {
   }
 });
 
-// PATCH /api/places/:id/status - API สำหรับเปลี่ยนสถานะสถานที่
+/**
+ * PATCH /api/places/:id/status - เปลี่ยนสถานะสถานที่
+ */
 router.patch("/api/places/:id/status", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, featured } = req.body;
 
-    // Validate status
-    const validStatuses = ["draft", "published", "inactive"];
-    if (status && !validStatuses.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: "สถานะไม่ถูกต้อง (ต้องเป็น draft, published, หรือ inactive)",
-      });
+    // ตรวจสอบข้อมูลที่ส่งมา
+    if (!isValidStatus(status)) {
+      return createErrorResponse(res, 400, MESSAGES.ERRORS.INVALID_STATUS);
     }
 
-    // Validate featured flag
-    if (featured !== undefined && typeof featured !== "boolean") {
-      return res.status(400).json({
-        success: false,
-        message: "ค่า featured ต้องเป็น true หรือ false",
-      });
+    if (!isValidFeatured(featured)) {
+      return createErrorResponse(res, 400, MESSAGES.ERRORS.INVALID_FEATURED);
     }
 
-    // Get current places
-    const placesResult = await dataManager.getPlaces();
-    if (!placesResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const places = placesResult.data;
+    const places = await loadPlaces();
     const placeIndex = places.findIndex((p) => p.id === id);
 
     if (placeIndex === -1) {
@@ -274,13 +299,7 @@ router.patch("/api/places/:id/status", requireAuth, async (req, res) => {
     Object.assign(places[placeIndex], updates);
 
     // Save updated places
-    const saveResult = await dataManager.savePlaces(places);
-    if (!saveResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-      });
-    }
+    await savePlaces(places);
 
     // Create response message
     let message = "อัปเดตสถานะเรียบร้อยแล้ว";
@@ -323,16 +342,7 @@ router.delete("/api/places/bulk/delete", requireAuth, async (req, res) => {
       });
     }
 
-    // Get current places
-    const placesResult = await dataManager.getPlaces();
-    if (!placesResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const places = placesResult.data;
+    const places = await loadPlaces();
     let deletedCount = 0;
     const notFoundIds = [];
     const deletedPlaces = [];
@@ -350,13 +360,7 @@ router.delete("/api/places/bulk/delete", requireAuth, async (req, res) => {
     });
 
     // Save updated places
-    const saveResult = await dataManager.savePlaces(places);
-    if (!saveResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-      });
-    }
+    await savePlaces(places);
 
     // Handle cascading deletes - delete associated image files for all deleted places
     const fs = require("fs").promises;
@@ -437,16 +441,7 @@ router.patch("/api/places/bulk/status", requireAuth, async (req, res) => {
       });
     }
 
-    // Get current places
-    const placesResult = await dataManager.getPlaces();
-    if (!placesResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const places = placesResult.data;
+    const places = await loadPlaces();
     let updatedCount = 0;
     const notFoundIds = [];
 
@@ -484,13 +479,7 @@ router.patch("/api/places/bulk/status", requireAuth, async (req, res) => {
     });
 
     // Save updated places
-    const saveResult = await dataManager.savePlaces(places);
-    if (!saveResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-      });
-    }
+    await savePlaces(places);
 
     // Create response message
     let message = `อัปเดตสถานที่ ${updatedCount} รายการเรียบร้อยแล้ว`;
@@ -516,15 +505,7 @@ router.patch("/api/places/bulk/status", requireAuth, async (req, res) => {
 // GET /api/places/stats - API สำหรับดึงสถิติสถานที่
 router.get("/api/places/stats", requireAuth, async (req, res) => {
   try {
-    const result = await dataManager.getPlaces();
-    if (!result.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const places = result.data;
+    const places = await loadPlaces();
 
     // Calculate statistics
     const stats = {
@@ -539,15 +520,13 @@ router.get("/api/places/stats", requireAuth, async (req, res) => {
     };
 
     // Get category statistics
-    const categoriesResult = await dataManager.getCategories();
-    if (categoriesResult.success) {
-      categoriesResult.data.forEach((category) => {
-        stats.byCategory[category.id] = {
-          name: category.name.th,
-          count: places.filter((p) => p.category === category.id).length,
-        };
-      });
-    }
+    const categories = await loadCategories();
+    categories.forEach((category) => {
+      stats.byCategory[category.id] = {
+        name: category.name.th,
+        count: places.filter((p) => p.category === category.id).length,
+      };
+    });
 
     // Recent activity (places created in last 7 days)
     const sevenDaysAgo = new Date();
@@ -579,15 +558,7 @@ router.get("/api/places/search", requireAuth, async (req, res) => {
   try {
     const { q, category, status, featured, limit = 50, offset = 0 } = req.query;
 
-    const result = await dataManager.getPlaces();
-    if (!result.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    let places = result.data;
+    let places = await loadPlaces();
 
     // Apply filters
     if (q && q.trim()) {
@@ -649,16 +620,8 @@ router.get("/api/places/search", requireAuth, async (req, res) => {
 router.get("/api/places/:id/history", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await dataManager.getPlaces();
-
-    if (!result.success) {
-      return res.status(500).json({
-        success: false,
-        message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-      });
-    }
-
-    const place = result.data.find((p) => p.id === id);
+    const places = await loadPlaces();
+    const place = places.find((p) => p.id === id);
 
     if (!place) {
       return res.status(404).json({
@@ -689,15 +652,7 @@ router.get("/api/places/:id/history", requireAuth, async (req, res) => {
   }
 });
 
-// Helper function to get status text in Thai
-function getStatusText(status) {
-  const statusMap = {
-    draft: "ร่าง",
-    published: "เผยแพร่",
-    inactive: "ไม่ใช้งาน",
-  };
-  return statusMap[status] || status;
-}
+// ฟังก์ชัน getStatusText ย้ายไปข้างบนแล้ว
 
 // GET /places/new - แสดงหน้าฟอร์มเพิ่มสถานที่ใหม่
 router.get("/places/new", requireAuth, (req, res) => {
@@ -744,26 +699,11 @@ router.post(
         createdBy: req.session.user.id,
       };
 
-      // Get current places
-      const placesResult = await dataManager.getPlaces();
-      if (!placesResult.success) {
-        return res.status(500).json({
-          success: false,
-          message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-        });
-      }
-
-      const places = placesResult.data;
+      const places = await loadPlaces();
       places.push(newPlace);
 
       // Save updated places
-      const saveResult = await dataManager.savePlaces(places);
-      if (!saveResult.success) {
-        return res.status(500).json({
-          success: false,
-          message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-        });
-      }
+      await savePlaces(places);
 
       res.json({
         success: true,
@@ -791,16 +731,7 @@ router.put(
       const { id } = req.params;
       const placeData = req.body;
 
-      // Get current places
-      const placesResult = await dataManager.getPlaces();
-      if (!placesResult.success) {
-        return res.status(500).json({
-          success: false,
-          message: "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่",
-        });
-      }
-
-      const places = placesResult.data;
+      const places = await loadPlaces();
       const placeIndex = places.findIndex((p) => p.id === id);
 
       if (placeIndex === -1) {
@@ -821,13 +752,7 @@ router.put(
       places[placeIndex] = updatedPlace;
 
       // Save updated places
-      const saveResult = await dataManager.savePlaces(places);
-      if (!saveResult.success) {
-        return res.status(500).json({
-          success: false,
-          message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
-        });
-      }
+      await savePlaces(places);
 
       res.json({
         success: true,
@@ -1052,9 +977,9 @@ function validatePlaceData(data) {
 router.get("/places/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await dataManager.getPlaces();
+    const places = await loadPlaces();
 
-    if (!result.success) {
+    if (!places) {
       return res.status(500).send(`
                 <html>
                 <head><title>เกิดข้อผิดพลาด</title></head>
@@ -1067,7 +992,7 @@ router.get("/places/:id", requireAuth, async (req, res) => {
             `);
     }
 
-    const place = result.data.find((p) => p.id === id);
+    const place = places.find((p) => p.id === id);
 
     if (!place) {
       return res.status(404).send(`
@@ -1104,9 +1029,9 @@ router.get("/places/:id", requireAuth, async (req, res) => {
 router.get("/places/:id/edit", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await dataManager.getPlaces();
+    const places = await loadPlaces();
 
-    if (!result.success) {
+    if (!places) {
       return res.status(500).send(`
                 <html>
                 <head><title>เกิดข้อผิดพลาด</title></head>
@@ -1119,7 +1044,7 @@ router.get("/places/:id/edit", requireAuth, async (req, res) => {
             `);
     }
 
-    const place = result.data.find((p) => p.id === id);
+    const place = places.find((p) => p.id === id);
 
     if (!place) {
       return res.status(404).send(`

@@ -327,18 +327,22 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-shadcn {
   border-right: 1px solid hsl(var(--border));
   background-color: hsl(var(--background));
-  padding: var(--space-6) 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .sidebar-header {
-  padding: 0 var(--space-6) var(--space-6) var(--space-6);
+  padding: var(--space-6) var(--space-6);
   border-bottom: 1px solid hsl(var(--border));
-  margin-bottom: var(--space-6);
+  flex-shrink: 0;
 }
 
 .sidebar-nav {
-  padding: 0 var(--space-3);
+  padding: var(--space-6) var(--space-3);
+  flex: 1;
+  overflow-y: auto;
 }
 
 .nav-group {
@@ -678,4 +682,112 @@ h1, h2, h3, h4, h5, h6 {
 
 .hidden {
   display: none;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  margin-top: auto;
+  padding: var(--space-4);
+  border-top: 1px solid hsl(var(--border));
+  flex-shrink: 0;
+}
+
+.user-menu-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.user-menu-button:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.user-menu-button:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.user-menu-button[aria-expanded="true"] {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* Flex utilities */
+.flex-1 {
+  flex: 1;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.gap-3 {
+  gap: var(--space-3);
+}
+
+/* Rounded utilities */
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Size utilities */
+.w-8 {
+  width: 2rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.w-2 {
+  width: 0.5rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+/* Background colors */
+.bg-green-500 {
+  background-color: hsl(142 76% 36%);
+}
+
+/* Dropdown menu in sidebar */
+.sidebar-footer .dropdown-menu {
+  background-color: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  margin: var(--space-2) 0;
+}
+
+.sidebar-footer .dropdown-menu-dark {
+  --bs-dropdown-bg: hsl(var(--popover));
+  --bs-dropdown-link-color: hsl(var(--foreground));
+  --bs-dropdown-link-hover-color: hsl(var(--accent-foreground));
+  --bs-dropdown-link-hover-bg: hsl(var(--accent));
+  --bs-dropdown-link-active-color: hsl(var(--accent-foreground));
+  --bs-dropdown-link-active-bg: hsl(var(--accent));
+  --bs-dropdown-divider-bg: hsl(var(--border));
+}
+
+.sidebar-footer .dropdown-item {
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-footer .dropdown-divider {
+  margin: var(--space-2) 0;
 }
