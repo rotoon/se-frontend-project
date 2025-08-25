@@ -25,12 +25,15 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100vw;
-  height: 56.25vw; /* 16:9 Aspect Ratio */
-  min-height: 100vh;
-  min-width: 177.77vh; /* 16:9 Aspect Ratio */
+  width: 130%;
+  height: 130%;
+  min-height: 120vh;
+  min-width: 120vw;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  object-fit: cover;
+  
+   
 }
 
 .hero-overlay {
@@ -51,15 +54,23 @@ body {
 
 .navbar {
   transition: all 0.3s;
+  padding: 0.8rem 0;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
 }
 
 .navbar-scrolled {
   background-color: var(--primary-navy) !important;
+  padding: 0.5rem 0;
 }
 
 .scroll-indicator {
   position: absolute;
-  bottom: 10px;
+  bottom: 50px;
   width: 30px;
   height: 30px;
   border-right: 2px solid #fff;
@@ -352,22 +363,245 @@ body {
 }
 
 /* Navbar brand styling */
-.brand-logo {
-  height: 55px;
-  width: auto;
-  object-fit: contain;
-}
-
 .brand-text {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  color: white;
+  background: linear-gradient(45deg, var(--golden-yellow), #fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
 }
 
-/* Footer logo styling */
-.footer-logo {
+.navbar-brand:hover .brand-text {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+.brand-logo {
   height: 40px;
   width: auto;
   object-fit: contain;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.brand-logo:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Footer logo styling */
+.footer-brand-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+  background: linear-gradient(45deg, var(--golden-yellow), #fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+.footer-logo {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.9;
+  border-radius: 3px;
+}
+
+/* Category Grid Section - Bento Layout */
+.bento-grid-section {
+  background: #F2EEEB;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-grid-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(231, 196, 134, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(54, 81, 130, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(199, 217, 228, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.bento-item {
+  height: 200px;
+  border-radius: 15px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  font-weight: bold;
+  color: white;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform-origin: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.bento-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 0%, rgba(231, 196, 134, 0.1) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.bento-item:hover {
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+}
+
+.bento-item:hover::after {
+  opacity: 1;
+}
+
+.bento-item:hover .card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+}
+
+.bento-item:hover .card-content {
+  transform: translateY(-5px);
+}
+
+.bento-item:hover .card-content h3 {
+  color: var(--golden-yellow);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.bento-item:active {
+  transform: scale(1.02) translateY(-5px);
+  transition: all 0.1s ease;
+}
+
+.bento-tall {
+  height: 410px;
+}
+
+.bento-item .card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+  transition: all 0.3s ease;
+}
+
+.bento-item .card-content {
+  position: relative;
+  z-index: 2;
+  padding: 30px;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(0);
+}
+
+.bento-item .card-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bento-item .card-content h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--golden-yellow), transparent);
+  transition: width 0.4s ease;
+}
+
+.bento-item:hover .card-content h3::after {
+  width: 100%;
+}
+
+.bento-item .card-content p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  transform: translateY(10px);
+}
+
+.bento-item:hover .card-content p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animation for grid entrance */
+.category-grid .row > div {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s ease forwards;
+}
+
+.category-grid .row > div:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.category-grid .row > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.category-grid .row > div:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.category-grid .row > div:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.category-grid .row > div:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    box-shadow: 0 8px 35px rgba(231, 196, 134, 0.3);
+  }
+}
+
+.bento-item:nth-child(odd) {
+  animation: pulse 4s infinite;
+  animation-delay: 2s;
 }
 
 /* Responsive adjustments */
@@ -388,5 +622,71 @@ body {
   .tip-icon {
     margin-right: 0;
     margin-bottom: 1rem;
+  }
+
+  /* Mobile video adjustments */
+  .video-background iframe {
+    width: 180%;
+    height: 180%;
+    min-height: 120vh;
+    min-width: 120vw;
+  }
+
+  .hero-section {
+    height: 100vh;
+    min-height: 600px;
+  }
+
+  /* Mobile logo adjustments */
+  .brand-text {
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .footer-brand-text {
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .brand-logo {
+    height: 35px;
+  }
+  
+  .footer-logo {
+    height: 25px;
+  }
+  
+  /* Mobile Bento layout adjustments */
+  .bento-item {
+    height: 180px;
+  }
+  
+  .bento-tall {
+    height: 250px;
+  }
+  
+  .bento-item:hover {
+    transform: scale(1.03) translateY(-5px);
+  }
+  
+  .bento-item .card-content {
+    padding: 20px;
+  }
+  
+  .bento-item .card-content h3 {
+    font-size: 1.4rem;
+  }
+  
+  .bento-item .card-content p {
+    font-size: 1rem;
+  }
+  
+  /* Reduce animation intensity on mobile */
+  .category-grid .row > div {
+    transform: translateY(20px);
+  }
+  
+  .bento-item:nth-child(odd) {
+    animation: none;
   }
 }
