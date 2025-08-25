@@ -39,18 +39,19 @@ npm run dev                  # Development server with hot reloading
 npm run build                # Production build
 ```
 
-#### Admin Frontend (Admin Panel - Port 3002)
+#### Admin Shadcn Dashboard (Port 3002)
 ```bash
-cd admin-frontend
+cd admin-shadcn
 npm install                  # Install dependencies
-# Start with live-server or similar
+npm run dev                  # Development server with webpack
+npm run build                # Production build
 ```
 
 ### Running All Services
 Start each service in separate terminals in this order:
 1. Backend (port 3000)
 2. Frontend (port 3001) 
-3. Admin Frontend (port 3002)
+3. Admin Shadcn Dashboard (port 3002)
 
 ### File Structure
 ```
@@ -91,15 +92,16 @@ se-frontend-project/
 │   │   └── css/             # Stylesheets
 │   │       └── style.css    # Main CSS file
 │   └── dist/                # Built assets (generated)
-├── admin-frontend/          # Admin Panel (Port 3002)
+├── admin-shadcn/            # Admin Shadcn Dashboard (Port 3002)
+│   ├── webpack.config.js    # Webpack configuration
+│   ├── package.json         # Admin dashboard dependencies
 │   ├── index.html           # Admin login page
 │   ├── dashboard.html       # Admin dashboard
-│   ├── places-list.html     # Places management
-│   ├── place-form.html      # Place create/edit form
+│   ├── places.html          # Places management
 │   ├── categories.html      # Categories management
-│   └── assets/              # Admin assets
-│       ├── css/            # Admin styles
-│       └── js/             # Admin JavaScript
+│   └── assets/              # Source assets
+│       ├── css/            # Shadcn admin styles
+│       └── js/             # Admin JavaScript modules
 ├── webpage/                 # Original template
 └── .kiro/specs/            # Project specifications
 ```
@@ -121,10 +123,11 @@ se-frontend-project/
 - **Features**: Hot Module Replacement, video background, responsive design
 - **API Communication**: Proxied to backend:3000
 
-#### Admin Frontend (Management Panel)
+#### Admin Shadcn Dashboard (Management Panel)
 - **Port**: 3002  
-- **Purpose**: Content management interface
-- **Technology**: HTML, CSS, JavaScript
+- **Purpose**: Modern admin dashboard for content management
+- **Technology**: Webpack 5, Shadcn design system, Bootstrap 5
+- **Features**: Hot Module Replacement, modern UI components
 - **Authentication**: Session-based with backend
 
 ### Data Layer (Backend)
@@ -206,18 +209,19 @@ se-frontend-project/
 - `frontend/assets/css/style.css`: Complete CSS with video background styles
 - `frontend/index.html`: Main HTML template with video hero section
 
-### Admin Frontend
-- `admin-frontend/assets/js/admin.js`: Admin panel JavaScript
-- `admin-frontend/assets/css/admin.css`: Admin panel styles
+### Admin Shadcn Dashboard
+- `admin-shadcn/webpack.config.js`: Webpack configuration for admin dashboard
+- `admin-shadcn/assets/js/`: Modern JavaScript modules for admin functionality
+- `admin-shadcn/assets/css/shadcn-admin.css`: Shadcn-based admin styles
 
 ## Development Context
 
 ### Current Status (from tasks.md)
 **Architecture Migration Complete:**
-- ✅ Separated monolithic app into backend/frontend/admin-frontend
+- ✅ Separated monolithic app into backend/frontend/admin-shadcn
 - ✅ Backend converted to API-only server with CORS
 - ✅ Frontend built with Webpack 5 and modern development workflow
-- ✅ Admin frontend separated for content management
+- ✅ Admin dashboard built with Shadcn design system and Webpack 5
 
 **Features Complete:**
 - ✅ Authentication system with brute force protection
@@ -229,6 +233,7 @@ se-frontend-project/
 - ✅ Webpack development server with hot reloading
 - ✅ ES6 module system with code splitting
 - ✅ Modern responsive frontend with video background
+- ✅ Frontend logo integration with assets/logo.png
 
 ### Testing Strategy (from design.md)
 - **Frontend**: Form validation, UI responsiveness, multi-language switching, image upload

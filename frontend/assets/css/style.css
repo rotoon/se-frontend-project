@@ -352,9 +352,22 @@ body {
 }
 
 /* Navbar brand styling */
+.brand-logo {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+}
+
 .brand-text {
   font-weight: 700;
   font-size: 1.5rem;
+}
+
+/* Footer logo styling */
+.footer-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Responsive adjustments */

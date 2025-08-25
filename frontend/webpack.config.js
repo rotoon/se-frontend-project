@@ -62,9 +62,15 @@ module.exports = (env, argv) => {
 
     // Development server configuration
     devServer: {
-      static: {
-        directory: path.join(__dirname, 'dist')
-      },
+      static: [
+        {
+          directory: path.join(__dirname, 'dist')
+        },
+        {
+          directory: path.join(__dirname, 'assets'),
+          publicPath: '/assets'
+        }
+      ],
       port: 3001,
       open: true,
       hot: true,
