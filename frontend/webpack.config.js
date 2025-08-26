@@ -59,6 +59,12 @@ module.exports = (env, argv) => {
         chunks: ['travel-style'],
         inject: 'body'
       }),
+      new HtmlWebpackPlugin({
+        template: './places/index.html',
+        filename: 'places/index.html',
+        chunks: ['places'],
+        inject: 'body'
+      }),
       // Extract CSS in production
       ...(isProduction ? [
         new MiniCssExtractPlugin({
