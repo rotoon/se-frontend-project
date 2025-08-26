@@ -230,15 +230,20 @@ async function loadBentoGrid() {
         activity:
           "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?ixlib=rb-4.0.3&auto=format&fit=crop&w=2126&q=80",
         accommodation:
-          "https://images.unsplash.com/photo-1551717309-88444dbe54f5?q=80&w=2670&auto=format&fit=crop",
+          "https://img.wongnai.com/p/624x0/2020/02/23/de8d92bd8257467088d914107514d146.jpg",
         shopping:
           "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        temple: "https://images.unsplash.com/photo-1605106715994-18d3fecffb98?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        nature: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        temple:
+          "https://cms.dmpcdn.com/travel/2020/01/09/421cafa0-32bf-11ea-ba25-f3dc3bd21411_original.JPG",
+        nature:
+          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
         spa: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        nightlife: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "art-culture": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        market: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80",
+        nightlife:
+          "https://img.wongnai.com/p/1920x0/2017/07/12/4e2fa59dff994c2e8d65c215cd482a07.jpg",
+        "art-culture":
+          "https://images.squarespace-cdn.com/content/v1/5d91f0811b06bc4c5b873679/1612056644420-RRK8X2WLDXAW621PKUFZ/Kamol%2BPhaosavasdi.jpg?format=2500w",
+        market:
+          "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80",
         default:
           "https://images.unsplash.com/photo-1552550049-db097c9480d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80",
       };
