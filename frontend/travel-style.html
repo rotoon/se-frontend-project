@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Style - Go Chiang Mai</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark fixed-top mountain-bg"
+      id="mainNavbar"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="assets/images/logo.png"
+            alt="Go Chiang Mai"
+            class="navbar-logo"
+          />
+          <span class="brand-text">Go Chiang Mai</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item mx-4">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item mx-4">
+              <a class="nav-link" href="index.html#about">About</a>
+            </li>
+            <li class="nav-item mx-4">
+              <a class="nav-link active" href="travel-style.html"
+                >Travel Style</a
+              >
+            </li>
+            <li class="nav-item mx-4">
+              <a class="nav-link" href="index.html#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <section
+      class="breadcrumb-section py-3"
+      style="
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        margin-top: 76px;
+      "
+    >
+      <div class="container">
+        <nav aria-label="breadcrumb">
+          <ol
+            class="breadcrumb"
+            style="background: none; padding: 0; margin: 0"
+          >
+            <li class="breadcrumb-item">
+              <a
+                href="index.html"
+                style="color: var(--primary-red); text-decoration: none"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li
+              class="breadcrumb-item active"
+              aria-current="page"
+              style="color: #6c757d"
+            >
+              Travel Style
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Bento Grid Section -->
+    <section class="bento-grid-section py-5">
+      <div class="container my-5">
+        <div class="row mb-5">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-title">Choose Your Travel Style</h2>
+            <p class="section-subtitle">
+              Discover Chiang Mai attractions based on your interests
+            </p>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="row" id="loadingSection">
+          <div class="col-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading categories...</p>
+          </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="row g-4" id="categoriesGrid" style="display: none">
+          <!-- Categories will be populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <div class="footer-brand">
+              <div class="footer-brand-logo">
+                <img
+                  src="assets/images/logo.png"
+                  alt="Go Chiang Mai"
+                  class="footer-logo"
+                />
+                <h4>
+                  <span class="footer-brand-text">Go Chiang Mai</span>
+                </h4>
+              </div>
+              <p>
+                Your ultimate guide to exploring the Rose of the North. Discover
+                authentic experiences and create unforgettable memories in
+                Chiang Mai.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4">
+            <h6>Quick Links</h6>
+            <ul class="footer-links">
+              <li><a href="#attractions">Attractions</a></li>
+              <li><a href="#culture">Culture</a></li>
+              <li><a href="#food">Food</a></li>
+              <li><a href="#travel">Travel Tips</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <h6>Connect With Us</h6>
+            <div class="social-links mb-3">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="contact-info">
+              <i class="fas fa-envelope me-2"></i>info@chiangmaitravel.com<br />
+              <i class="fas fa-phone me-2"></i>+66 53 123 456
+            </p>
+          </div>
+        </div>
+        <hr class="footer-divider" />
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p class="copyright">
+              &copy; 2024 Chiang Mai Travel Guide. All rights reserved.
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="made-with">
+              Made with <i class="fas fa-heart text-danger"></i> for travelers
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

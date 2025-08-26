@@ -10,7 +10,8 @@ module.exports = (env, argv) => {
     entry: {
       main: './assets/js/main.js',
       places: './assets/js/places.js',
-      detail: './assets/js/detail.js'
+      detail: './assets/js/detail.js',
+      'travel-style': './assets/js/travel-style.js'
     },
 
     // Output configuration
@@ -52,6 +53,12 @@ module.exports = (env, argv) => {
         chunks: ['main'],
         inject: 'body'
       }),
+      new HtmlWebpackPlugin({
+        template: './travel-style.html',
+        filename: 'travel-style.html',
+        chunks: ['travel-style'],
+        inject: 'body'
+      }),
       // Extract CSS in production
       ...(isProduction ? [
         new MiniCssExtractPlugin({
@@ -78,6 +85,7 @@ module.exports = (env, argv) => {
         rewrites: [
           { from: /^\/places\/detail/, to: '/places/detail.html' },
           { from: /^\/places/, to: '/places/index.html' },
+          { from: /^\/travel-style/, to: '/travel-style.html' },
           { from: /^\//, to: '/index.html' }
         ]
       },
