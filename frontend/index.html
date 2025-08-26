@@ -492,12 +492,155 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <div class="culture-image">
-              <img
-                src="https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                alt="Traditional Lanna Temple"
-                class="img-fluid rounded shadow"
-              />
+            <div class="apple-cards-carousel">
+              <div
+                class="cards-container"
+                id="cardsContainer"
+              >
+                <div
+                  class="card-item active"
+                  data-category="Temple"
+                  data-title="Wat Phra That Doi Suthep"
+                  data-description="Golden temple perched on mountain top, Chiang Mai's most sacred landmark"
+                >
+                  <div class="card-image">
+                    <img
+                      src="assets/slider/1.webp"
+                      alt="Wat Phra That Doi Suthep"
+                    />
+                    <div class="card-overlay">
+                      <span class="card-category">Temple</span>
+                      <h4 class="card-title">Wat Phra That Doi Suthep</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="card-item"
+                  data-category="Temple"
+                  data-title="Wat Den Salee Sri Muang Gan"
+                  data-description="Historic temple featuring exquisite Lanna architecture and ancient Buddha statues"
+                >
+                  <div class="card-image">
+                    <img
+                      src="assets/slider/2.webp"
+                      alt="Wat Den Salee Sri Muang Gan"
+                    />
+                    <div class="card-overlay">
+                      <span class="card-category">Temple</span>
+                      <h4 class="card-title">Wat Den Salee Sri Muang Gan</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="card-item"
+                  data-category="Food"
+                  data-title="Baan Landai Fine Thai Cuisine"
+                  data-description="Authentic northern Thai cuisine in elegant traditional setting with garden views"
+                >
+                  <div class="card-image">
+                    <img
+                      src="assets/slider/3.webp"
+                      alt="Baan Landai Fine Thai Cuisine"
+                    />
+                    <div class="card-overlay">
+                      <span class="card-category">Food</span>
+                      <h4 class="card-title">Baan Landai Fine Thai Cuisine</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="card-item"
+                  data-category="Temple"
+                  data-title="Wat Pa Daraphirom"
+                  data-description="Peaceful forest temple known for meditation retreats and serene mountain atmosphere"
+                >
+                  <div class="card-image">
+                    <img
+                      src="assets/slider/4.webp"
+                      alt="Wat Pa Daraphirom"
+                    />
+                    <div class="card-overlay">
+                      <span class="card-category">Temple</span>
+                      <h4 class="card-title">Wat Pa Daraphirom</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="card-item"
+                  data-category="Festival"
+                  data-title="Songkran Festival"
+                  data-description="Traditional Thai New Year water festival with joyful celebrations and cultural traditions"
+                >
+                  <div class="card-image">
+                    <img
+                      src="assets/slider/5.webp"
+                      alt="Songkran Festival"
+                    />
+                    <div class="card-overlay">
+                      <span class="card-category">Festival</span>
+                      <h4 class="card-title">Songkran Festival</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-navigation">
+                <button
+                  class="nav-btn prev-btn"
+                  id="prevBtn"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button
+                  class="nav-btn next-btn"
+                  id="nextBtn"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+
+              <div class="bottom-controls">
+                <button
+                  class="nav-btn"
+                  id="prevBtnBottom"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="carousel-indicators">
+                  <span
+                    class="indicator active"
+                    data-index="0"
+                  ></span>
+                  <span
+                    class="indicator"
+                    data-index="1"
+                  ></span>
+                  <span
+                    class="indicator"
+                    data-index="2"
+                  ></span>
+                  <span
+                    class="indicator"
+                    data-index="3"
+                  ></span>
+                  <span
+                    class="indicator"
+                    data-index="4"
+                  ></span>
+                </div>
+
+                <button
+                  class="nav-btn"
+                  id="nextBtnBottom"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -564,5 +707,160 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Apple Cards Carousel JavaScript -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const cardsContainer = document.getElementById('cardsContainer')
+        const cards = document.querySelectorAll('.card-item')
+        const prevBtn = document.getElementById('prevBtn')
+        const nextBtn = document.getElementById('nextBtn')
+        const prevBtnBottom = document.getElementById('prevBtnBottom')
+        const nextBtnBottom = document.getElementById('nextBtnBottom')
+        const indicators = document.querySelectorAll('.indicator')
+
+        let currentIndex = 0
+        let isTransitioning = false
+
+        function updateCarousel() {
+          if (isTransitioning) return
+          isTransitioning = true
+
+          cards.forEach((card, index) => {
+            card.classList.remove('active', 'prev', 'next', 'hidden')
+
+            if (index === currentIndex) {
+              card.classList.add('active')
+            } else if (
+              index ===
+              (currentIndex - 1 + cards.length) % cards.length
+            ) {
+              card.classList.add('prev')
+            } else if (index === (currentIndex + 1) % cards.length) {
+              card.classList.add('next')
+            } else {
+              card.classList.add('hidden')
+            }
+          })
+
+          // Update indicators
+          indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex)
+          })
+
+          setTimeout(() => {
+            isTransitioning = false
+          }, 800)
+        }
+
+        function nextSlide() {
+          if (isTransitioning) return
+          currentIndex = (currentIndex + 1) % cards.length
+          updateCarousel()
+        }
+
+        function prevSlide() {
+          if (isTransitioning) return
+          currentIndex = (currentIndex - 1 + cards.length) % cards.length
+          updateCarousel()
+        }
+
+        function goToSlide(index) {
+          if (isTransitioning || index === currentIndex) return
+          currentIndex = index
+          updateCarousel()
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', prevSlide)
+        nextBtn.addEventListener('click', nextSlide)
+        prevBtnBottom.addEventListener('click', prevSlide)
+        nextBtnBottom.addEventListener('click', nextSlide)
+
+        indicators.forEach((indicator, index) => {
+          indicator.addEventListener('click', () => goToSlide(index))
+        })
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          switch (e.key) {
+            case 'ArrowLeft':
+              prevSlide()
+              break
+            case 'ArrowRight':
+              nextSlide()
+              break
+          }
+        })
+
+        // Touch support for mobile
+        let startX = null
+        let startY = null
+        const minSwipeDistance = 50
+
+        cardsContainer.addEventListener(
+          'touchstart',
+          (e) => {
+            startX = e.touches[0].clientX
+            startY = e.touches[0].clientY
+          },
+          { passive: true }
+        )
+
+        cardsContainer.addEventListener(
+          'touchend',
+          (e) => {
+            if (!startX || !startY) return
+
+            const endX = e.changedTouches[0].clientX
+            const endY = e.changedTouches[0].clientY
+
+            const deltaX = startX - endX
+            const deltaY = startY - endY
+
+            // Check if it's a horizontal swipe
+            if (
+              Math.abs(deltaX) > Math.abs(deltaY) &&
+              Math.abs(deltaX) > minSwipeDistance
+            ) {
+              if (deltaX > 0) {
+                nextSlide() // Swipe left, go to next
+              } else {
+                prevSlide() // Swipe right, go to previous
+              }
+            }
+
+            startX = null
+            startY = null
+          },
+          { passive: true }
+        )
+
+        // Auto-play (optional, uncomment to enable)
+
+        // let autoPlayInterval
+
+        // function startAutoPlay() {
+        //   autoPlayInterval = setInterval(() => {
+        //     if (!isTransitioning) {
+        //       nextSlide()
+        //     }
+        //   }, 4000)
+        // }
+
+        // function stopAutoPlay() {
+        //   clearInterval(autoPlayInterval)
+        // }
+
+        // startAutoPlay()
+
+        // // Pause auto-play on hover
+        // cardsContainer.addEventListener('mouseenter', stopAutoPlay)
+        // cardsContainer.addEventListener('mouseleave', startAutoPlay)
+
+        // Initialize carousel
+        updateCarousel()
+      })
+    </script>
   </body>
 </html>
