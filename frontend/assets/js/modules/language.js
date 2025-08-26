@@ -1,7 +1,7 @@
 // Language Management Module
 export class LanguageManager {
-    static currentLanguage = 'th';
-    static supportedLanguages = ['th', 'en', 'zh', 'ja'];
+    static currentLanguage = 'en';
+    static supportedLanguages = ['th', 'en',];
 
     static getCurrentLanguage() {
         return this.currentLanguage || localStorage.getItem('language') || 'th';

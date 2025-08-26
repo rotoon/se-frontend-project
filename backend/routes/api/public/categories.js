@@ -44,7 +44,6 @@ router.get("/", async (req, res) => {
           order: category.order || 0
         };
       })
-      .filter(category => category.placesCount > 0) // เฉพาะหมวดหมู่ที่มีสถานที่
       .sort((a, b) => a.order - b.order); // เรียงตาม order
 
     res.json({

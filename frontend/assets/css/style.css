@@ -1,5 +1,5 @@
 body {
-  font-family: 'Poppins', serif;
+  font-family: "Poppins", serif;
   color: #333;
   line-height: 1.6;
   background-color: #f7f7f7;
@@ -25,8 +25,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 150%;
-  height: 150%;
+  width: 130%;
+  height: 130%;
   min-height: 100vh;
   min-width: 100vw;
   transform: translate(-50%, -50%);
@@ -360,6 +360,20 @@ body {
   background-color: var(--medium-blue) !important;
 }
 
+/* Navbar logo styling */
+.navbar-logo {
+  height: 45px;
+  width: auto;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.navbar-brand:hover .navbar-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(2px 2px 8px rgba(231, 196, 134, 0.6));
+}
+
 /* Navbar brand styling */
 .brand-text {
   font-weight: 700;
@@ -393,6 +407,19 @@ body {
 }
 
 /* Footer logo styling */
+.footer-brand-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.footer-logo {
+  height: 40px;
+  width: auto;
+  margin-right: 12px;
+  filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+}
+
 .footer-brand-text {
   font-weight: 700;
   font-size: 1.5rem;
@@ -402,14 +429,6 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
-}
-
-.footer-logo {
-  height: 30px;
-  width: auto;
-  object-fit: contain;
-  opacity: 0.9;
-  border-radius: 3px;
 }
 
 /* Apple Cards Carousel Styles */
@@ -644,7 +663,7 @@ body {
 }
 
 .bento-grid-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -687,12 +706,15 @@ body {
 }
 
 .bento-item .card-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 .bento-item::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -723,7 +745,7 @@ body {
   transform: translateY(-5px);
 }
 
-.bento-item:hover .card-content h3 {
+.bento-item:hover .card-content h4 {
   color: var(--golden-yellow);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
@@ -746,8 +768,9 @@ body {
   transform: translateY(0);
 }
 
-.bento-item .card-content h3 {
-  font-size: 1.8rem;
+.bento-item .card-content h4 {
+  line-height: inherit;
+  font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -755,8 +778,8 @@ body {
   position: relative;
 }
 
-.bento-item .card-content h3::after {
-  content: '';
+.bento-item .card-content h4::after {
+  content: "";
   position: absolute;
   bottom: -5px;
   left: 0;
@@ -766,7 +789,7 @@ body {
   transition: width 0.4s ease;
 }
 
-.bento-item:hover .card-content h3::after {
+.bento-item:hover .card-content h4::after {
   width: 100%;
 }
 
@@ -782,6 +805,107 @@ body {
 .bento-item:hover .card-content p {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Category icon styles */
+.bento-item .category-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-bottom: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.bento-item .category-icon i {
+  font-size: 18px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bento-item:hover .category-icon {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive adjustments for category icons */
+@media (max-width: 768px) {
+  .bento-item .category-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .bento-item .category-icon i {
+    font-size: 16px;
+  }
+}
+
+/* See More Button Styling */
+.see-more-btn {
+  background: linear-gradient(45deg, var(--primary-navy), var(--medium-blue));
+  border: 2px solid var(--golden-yellow);
+  color: white;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  margin-top: 20px;
+}
+
+.see-more-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.see-more-btn:hover::before {
+  left: 100%;
+}
+
+.see-more-btn:hover {
+  background: linear-gradient(45deg, var(--medium-blue), var(--primary-navy));
+  border-color: var(--golden-yellow);
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.see-more-btn:hover .fas.fa-arrow-right {
+  transform: translateX(5px);
+}
+
+.see-more-btn:active {
+  transform: translateY(-1px) scale(1.02);
+  transition: all 0.1s ease;
+}
+
+.see-more-btn .fas {
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 /* Animation for grid entrance */
@@ -868,9 +992,19 @@ body {
   }
 
   /* Mobile logo adjustments */
+  .navbar-logo {
+    height: 35px;
+    margin-right: 8px;
+  }
+
   .brand-text {
     font-size: 1.4rem;
     letter-spacing: 0.5px;
+  }
+
+  .footer-logo {
+    height: 30px;
+    margin-right: 8px;
   }
 
   .footer-brand-text {
@@ -878,12 +1012,16 @@ body {
     letter-spacing: 0.5px;
   }
 
-  .brand-logo {
-    height: 35px;
+  /* Mobile See More Button */
+  .see-more-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 40px;
+    margin-top: 15px;
   }
 
-  .footer-logo {
-    height: 25px;
+  .see-more-btn .fas {
+    font-size: 0.8rem;
   }
 
   /* Mobile Bento layout adjustments */

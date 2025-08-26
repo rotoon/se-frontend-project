@@ -14,19 +14,19 @@
     "status": "active"
   },
   {
-    "id": "accommodation",
+    "id": "77021e0c-0af3-4058-8701-9b9db6d42756",
     "name": {
-      "th": "ที่พัก",
-      "en": "Accommodation",
-      "zh": "住宿",
-      "ja": "宿泊施設"
+      "th": "คาเฟ่",
+      "en": "Cafe",
+      "zh": "咖啡厅",
+      "ja": "カフェ"
     },
-    "slug": "ที่พัก",
-    "icon": "bed",
-    "order": 5,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "status": "active",
-    "updatedAt": "2025-08-18T15:00:37.265Z"
+    "slug": "cafe",
+    "icon": "coffee",
+    "order": 2,
+    "createdAt": "2025-08-18T15:00:15.278Z",
+    "updatedAt": "2025-08-26T08:30:00.000Z",
+    "status": "active"
   },
   {
     "id": "attraction",
@@ -57,17 +57,32 @@
     "status": "active"
   },
   {
-    "id": "77021e0c-0af3-4058-8701-9b9db6d42756",
+    "id": "accommodation",
     "name": {
-      "th": "คาเฟ่",
-      "en": "Cafe",
-      "zh": "",
-      "ja": ""
+      "th": "ที่พัก",
+      "en": "Accommodation",
+      "zh": "住宿",
+      "ja": "宿泊施設"
     },
-    "slug": "คาเฟ่",
-    "icon": "coffee",
-    "order": 2,
-    "createdAt": "2025-08-18T15:00:15.278Z",
-    "updatedAt": "2025-08-18T15:00:23.323Z"
+    "slug": "accommodation",
+    "icon": "bed",
+    "order": 5,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "status": "active",
+    "updatedAt": "2025-08-26T08:30:00.000Z"
+  },
+  {
+    "id": "shopping",
+    "name": {
+      "th": "ช้อปปิ้ง",
+      "en": "Shopping",
+      "zh": "购物",
+      "ja": "ショッピング"
+    },
+    "slug": "shopping",
+    "icon": "shopping-bag",
+    "order": 6,
+    "createdAt": "2025-08-26T08:30:00.000Z",
+    "status": "active"
   }
 ]
