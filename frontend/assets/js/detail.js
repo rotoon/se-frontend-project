@@ -18,7 +18,7 @@ async function initDetailPage() {
     const placeId = Utils.getUrlParams().id
 
     if (!placeId) {
-      showError('ไม่พบรหัสสถานที่')
+      showError('Place ID not found')
       return
     }
 
@@ -34,7 +34,7 @@ async function initDetailPage() {
     initSocialShare()
   } catch (error) {
     console.error('Error initializing detail page:', error)
-    showError('ไม่สามารถโหลดรายละเอียดสถานที่ได้')
+    showError('Unable to load place details')
   }
 }
 
@@ -87,7 +87,7 @@ async function loadPlaceDetail(placeId) {
         loadRelatedPlaces(place.category, placeId)
       }
     } else {
-      showError('ไม่พบข้อมูลสถานที่นี้')
+      showError('Place data not found')
     }
   } catch (error) {
     console.error('Error loading place detail:', error)
@@ -144,7 +144,7 @@ async function loadPlaceDetail(placeId) {
       // Show content
       showContent()
     } else {
-      showError('ไม่สามารถโหลดข้อมูลสถานที่ได้')
+      showError('Unable to load place data')
     }
   }
 }
@@ -158,10 +158,10 @@ function updateBreadcrumbs(place) {
     if (categoryBreadcrumb) {
       // Set category name (you might want to fetch this from categories API)
       const categoryNames = {
-        attraction: 'สถานที่ท่องเที่ยว',
-        restaurant: 'ร้านอาหาร',
-        hotel: 'โรงแรม',
-        shopping: 'ช้อปปิ้ง',
+        attraction: 'Attractions',
+        restaurant: 'Restaurants',
+        hotel: 'Hotels',
+        shopping: 'Shopping',
       }
       categoryBreadcrumb.textContent =
         categoryNames[place.category] || place.category
@@ -219,7 +219,7 @@ function renderPlaceDetail(place) {
                 </div>
                 ${
                   place.featured
-                    ? '<div class="featured-badge"><i class="fas fa-star me-1"></i>แนะนำ</div>'
+                    ? '<div class="featured-badge"><i class="fas fa-star me-1"></i>Featured</div>'
                     : ''
                 }
             </div>
@@ -231,7 +231,7 @@ function renderPlaceDetail(place) {
                 <div class="col-lg-8">
                     <!-- Description -->
                     <div class="place-section">
-                        <h3><i class="fas fa-info-circle me-2 text-primary"></i>เกี่ยวกับสถานที่นี้</h3>
+                        <h3><i class="fas fa-info-circle me-2 text-primary"></i>About This Place</h3>
                         <div class="place-description">
                             ${description
                               .split('\n')
@@ -264,22 +264,22 @@ function renderPlaceDetail(place) {
                     <div class="place-sidebar">
                         <!-- Quick Info -->
                         <div class="sidebar-card">
-                            <h5><i class="fas fa-info me-2"></i>ข้อมูลเบื้องต้น</h5>
+                            <h5><i class="fas fa-info me-2"></i>Quick Info</h5>
                             <div class="quick-info">
                                 <div class="info-item">
                                     <i class="fas fa-star text-warning"></i>
-                                    <span>คะแนน: ${rating.toFixed(1)}/5</span>
+                                    <span>Rating: ${rating.toFixed(1)}/5</span>
                                 </div>
                                 <div class="info-item">
                                     <i class="fas fa-tag text-success"></i>
-                                    <span>ราคา: ${priceRange}</span>
+                                    <span>Price: ${priceRange}</span>
                                 </div>
                                 ${
                                   place.hours
                                     ? `
                                 <div class="info-item">
                                     <i class="fas fa-clock text-info"></i>
-                                    <span>เวลา: ${place.hours}</span>
+                                    <span>Hours: ${place.hours}</span>
                                 </div>
                                 `
                                     : ''
@@ -289,7 +289,7 @@ function renderPlaceDetail(place) {
                                     ? `
                                 <div class="info-item">
                                     <i class="fas fa-folder text-primary"></i>
-                                    <span>หมวด: ${getCategoryName(
+                                    <span>Category: ${getCategoryName(
                                       place.category
                                     )}</span>
                                 </div>
@@ -301,7 +301,7 @@ function renderPlaceDetail(place) {
 
                         <!-- Share -->
                         <div class="sidebar-card">
-                            <h5><i class="fas fa-share-alt me-2"></i>แชร์สถานที่นี้</h5>
+                            <h5><i class="fas fa-share-alt me-2"></i>Share This Place</h5>
                             <div class="share-buttons" id="shareButtons">
                                 <!-- Share buttons will be generated by JS -->
                             </div>
@@ -309,7 +309,7 @@ function renderPlaceDetail(place) {
 
                         <!-- Navigation -->
                         <div class="sidebar-card">
-                            <h5><i class="fas fa-map-marked-alt me-2"></i>การเดินทาง</h5>
+                            <h5><i class="fas fa-map-marked-alt me-2"></i>Navigation</h5>
                             <div class="d-grid gap-2">
                                 ${
                                   place.contact?.coordinates?.lat &&
@@ -324,7 +324,7 @@ function renderPlaceDetail(place) {
                                 }
                                 <button class="btn btn-outline-secondary" onclick="goBack()">
                                     <i class="fas fa-arrow-left me-2"></i>
-                                    กลับไปหน้าก่อน
+                                    Back to Previous
                                 </button>
                             </div>
                         </div>
@@ -337,7 +337,7 @@ function renderPlaceDetail(place) {
         <div class="container mb-5">
             <div class="row">
                 <div class="col-12">
-                    <h3><i class="fas fa-map-pin me-2 text-primary"></i>สถานที่ใกล้เคียง</h3>
+                    <h3><i class="fas fa-map-pin me-2 text-primary"></i>Nearby Places</h3>
                     <div id="relatedPlacesContainer" class="row">
                         <!-- Related places will be loaded here -->
                     </div>
@@ -361,7 +361,7 @@ function renderContactInformation(place) {
 
   return `
         <div class="place-section">
-            <h3><i class="fas fa-address-card me-2 text-primary"></i>ข้อมูลการติดต่อ</h3>
+            <h3><i class="fas fa-address-card me-2 text-primary"></i>Contact Information</h3>
             <div class="contact-info-card">
                 ${
                   contact.address
@@ -421,14 +421,14 @@ function renderContactInformation(place) {
 // Get category display name
 function getCategoryName(category) {
   const categoryNames = {
-    attraction: 'สถานที่ท่องเที่ยว',
-    restaurant: 'ร้านอาหาร',
-    hotel: 'โรงแรม',
-    shopping: 'ช้อปปิ้ง',
-    cafe: 'คาเฟ่',
-    spa: 'สปา',
-    temple: 'วัด',
-    market: 'ตลาด',
+    attraction: 'Attractions',
+    restaurant: 'Restaurants',
+    hotel: 'Hotels',
+    shopping: 'Shopping',
+    cafe: 'Cafes',
+    spa: 'Spas',
+    temple: 'Temples',
+    market: 'Markets',
   }
   return categoryNames[category] || category
 }
@@ -437,7 +437,7 @@ function getCategoryName(category) {
 function renderImageGallery(images) {
   return `
         <div class="place-section">
-            <h3>รูปภาพ</h3>
+            <h3>Images</h3>
             <div class="image-gallery" id="imageGallery">
                 <div class="row g-2">
                     ${images
@@ -447,7 +447,7 @@ function renderImageGallery(images) {
                             <div class="gallery-item" onclick="openLightbox(${index})">
                                 <img src="${Utils.getImageUrl(
                                   image
-                                )}" alt="รูปภาพที่ ${index + 1}" 
+                                )}" alt="Image ${index + 1}" 
                                      class="w-100" style="height: 200px; object-fit: cover; cursor: pointer;">
                             </div>
                         </div>
@@ -486,21 +486,31 @@ function renderMap(place) {
   const coords = place.contact?.coordinates
   if (!coords?.lat || !coords?.lng) return ''
 
+  const placeName = LanguageManager.translate(place.name)
+
   return `
         <div class="place-section">
-            <h3><i class="fas fa-map-marked-alt me-2 text-primary"></i>แผนที่</h3>
+            <h3><i class="fas fa-map-marked-alt me-2 text-primary"></i>Map</h3>
             <div class="map-container">
-                <div id="placeMap" style="height: 300px; background: #f8f9fa; border-radius: 8px;">
-                    <div class="d-flex align-items-center justify-content-center h-100">
-                        <div class="text-center">
-                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">แผนที่จะแสดงที่นี่</p>
-                            <button class="btn btn-primary" onclick="openGoogleMaps(${coords.lat}, ${coords.lng})">
-                                <i class="fas fa-external-link-alt me-2"></i>
-                                ดูใน Google Maps
-                            </button>
-                        </div>
-                    </div>
+                <iframe 
+                    src="https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=th&z=16&output=embed"
+                    width="100%" 
+                    height="300" 
+                    style="border: 0; border-radius: 8px;" 
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Map showing location of ${placeName}">
+                </iframe>
+                <div class="d-flex justify-content-center gap-2 p-3">
+                    <button class="btn btn-outline-primary" onclick="openGoogleMaps(${coords.lat}, ${coords.lng})">
+                        <i class="fas fa-external-link-alt me-2"></i>
+                        Open in Google Maps
+                    </button>
+                    <button class="btn btn-outline-success" onclick="getDirections(${coords.lat}, ${coords.lng})">
+                        <i class="fas fa-directions me-2"></i>
+                        Get Directions
+                    </button>
                 </div>
             </div>
         </div>
@@ -523,12 +533,12 @@ async function loadRelatedPlaces(categoryId, excludeId) {
         .join('')
     } else {
       container.innerHTML =
-        '<div class="col-12"><p class="text-muted">ไม่มีสถานที่ที่เกี่ยวข้อง</p></div>'
+        '<div class="col-12"><p class="text-muted">No related places found</p></div>'
     }
   } catch (error) {
     console.error('Error loading related places:', error)
     container.innerHTML =
-      '<div class="col-12"><p class="text-danger">ไม่สามารถโหลดสถานที่ที่เกี่ยวข้องได้</p></div>'
+      '<div class="col-12"><p class="text-danger">Unable to load related places</p></div>'
   }
 }
 
@@ -623,6 +633,13 @@ window.openGoogleMaps = function (lat, lng) {
   window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank')
 }
 
+window.getDirections = function (lat, lng) {
+  window.open(
+    `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+    '_blank'
+  )
+}
+
 window.goBack = function () {
   if (document.referrer && !document.referrer.includes('place-detail.html')) {
     window.history.back()
@@ -657,9 +674,9 @@ window.copyLink = function () {
   navigator.clipboard
     .writeText(window.location.href)
     .then(() => {
-      Utils.showToast('คัดลอกลิงก์เรียบร้อย', 'success')
+      Utils.showToast('Link copied successfully', 'success')
     })
     .catch(() => {
-      Utils.showToast('ไม่สามารถคัดลอกลิงก์ได้', 'error')
+      Utils.showToast('Unable to copy link', 'error')
     })
 }
