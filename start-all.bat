@@ -17,8 +17,8 @@ if not exist "frontend" (
     exit /b 1
 )
 
-if not exist "admin-frontend" (
-    echo ❌ Admin Frontend directory not found. Please run this script from the project root directory.
+if not exist "admin-shadcn" (
+    echo ❌ Admin Shadcn directory not found. Please run this script from the project root directory.
     pause
     exit /b 1
 )
@@ -62,20 +62,20 @@ if not exist "node_modules" (
 )
 cd ..
 
-REM Install admin-frontend dependencies
-echo 📦 Checking Admin Frontend dependencies...
-cd admin-frontend
+REM Install admin-shadcn dependencies
+echo 📦 Checking Admin Shadcn dependencies...
+cd admin-shadcn
 if not exist "node_modules" (
-    echo ⚠️  Installing Admin Frontend dependencies...
+    echo ⚠️  Installing Admin Shadcn dependencies...
     call npm install
     if errorlevel 1 (
-        echo ❌ Failed to install Admin Frontend dependencies
+        echo ❌ Failed to install Admin Shadcn dependencies
         pause
         exit /b 1
     )
-    echo ✅ Admin Frontend dependencies installed
+    echo ✅ Admin Shadcn dependencies installed
 ) else (
-    echo ✅ Admin Frontend dependencies already installed
+    echo ✅ Admin Shadcn dependencies already installed
 )
 cd ..
 
@@ -97,15 +97,15 @@ start "Frontend" cmd /k "cd frontend && npm run dev"
 REM Wait a moment for frontend to start
 timeout /t 3 /nobreak > nul
 
-REM Start Admin Frontend (Port 3002)
-echo ⚙️  Starting Admin Frontend on port 3002...
-start "Admin Frontend" cmd /k "cd admin-frontend && npx live-server --port=3002"
+REM Start Admin Shadcn Dashboard (Port 3002)
+echo ⚙️  Starting Admin Shadcn Dashboard on port 3002...
+start "Admin Shadcn Dashboard" cmd /k "cd admin-shadcn && npm run dev"
 
 echo.
 echo 🎉 All services started successfully!
 echo ==================================================
 echo 📱 Tourist Website:     http://localhost:3001
-echo 🔧 Admin Panel:         http://localhost:3002
+echo 🔧 Admin Dashboard:     http://localhost:3002
 echo 🚀 API Server:          http://localhost:3000
 echo 🏥 Health Check:        http://localhost:3000/api/health
 echo.

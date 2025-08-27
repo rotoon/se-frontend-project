@@ -397,7 +397,7 @@ window.goBack = function() {
     if (document.referrer) {
         window.history.back();
     } else {
-        window.location.href = '../places/';
+        window.location.href = '../places.html';
     }
 };
 

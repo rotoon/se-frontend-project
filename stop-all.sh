@@ -52,6 +52,7 @@ echo -e "${BLUE}🔍 Checking for remaining processes...${NC}"
 pkill -f "npm run dev" 2>/dev/null && echo -e "${GREEN}✅ Stopped npm dev processes${NC}"
 pkill -f "live-server" 2>/dev/null && echo -e "${GREEN}✅ Stopped live-server processes${NC}"
 pkill -f "webpack-dev-server" 2>/dev/null && echo -e "${GREEN}✅ Stopped webpack-dev-server processes${NC}"
+pkill -f "vite" 2>/dev/null && echo -e "${GREEN}✅ Stopped vite processes${NC}"
 pkill -f "nodemon" 2>/dev/null && echo -e "${GREEN}✅ Stopped nodemon processes${NC}"
 
 # Kill processes by port

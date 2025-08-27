@@ -241,7 +241,7 @@ class TravelStylePage {
 
 // Navigation functions
 function goToCategory(categorySlug) {
-  window.location.href = `places/index.html?category=${categorySlug}`;
+  window.location.href = `places.html?category=${categorySlug}`;
 }
 
 // Make goToCategory globally available

@@ -1,4 +1,4 @@
-// Places entry point for Webpack
+// Places entry point for Vite
 import './auth.js';
 import './api.js';
 import './components.js';

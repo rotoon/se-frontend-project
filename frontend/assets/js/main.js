@@ -1,4 +1,4 @@
-// Main entry point for homepage with Webpack
+// Main entry point for homepage with Vite
 import "../css/style.css";
 import "./api";
 import { CategoriesAPI } from "./modules/categories-api";
@@ -83,7 +83,7 @@ function updatePageLanguage(language) {
   document.querySelector('a[href="#attractions"]').textContent =
     t.navAttractions;
   document.querySelector('a[href="#categories"]').textContent = t.navCategories;
-  document.querySelector('a[href="places/"]').textContent = t.navViewAll;
+  document.querySelector('a[href="places.html"]').textContent = t.navViewAll;
 
   // Update hero section
   document.querySelector(".hero-title").innerHTML = t.heroTitle;
@@ -93,7 +93,7 @@ function updatePageLanguage(language) {
   const exploreBtn = document.querySelector(
     'a[href="#attractions"].btn-primary'
   );
-  const planBtn = document.querySelector('a[href="places/"].btn-outline-light');
+  const planBtn = document.querySelector('a[href="places.html"].btn-outline-light');
   if (exploreBtn) exploreBtn.innerHTML = t.btnExplore;
   if (planBtn) planBtn.innerHTML = t.btnPlan;
 }
@@ -182,7 +182,7 @@ async function loadCategories() {
           .slice(0, 5)
           .map(
             (category) =>
-              `<li><a href="places/?category=${
+              `<li><a href="places.html?category=${
                 category.id
               }">${LanguageManager.translate(category.name)}</a></li>`
           )
@@ -582,11 +582,11 @@ function createCategoryCard(category) {
 
 // Navigation functions
 function goToPlaceDetail(placeId) {
-  window.location.href = `places/detail.html?id=${placeId}`;
+  window.location.href = `detail.html?id=${placeId}`;
 }
 
 function goToCategory(categorySlug) {
-  window.location.href = `places/?category=${categorySlug}`;
+  window.location.href = `places.html?category=${categorySlug}`;
 }
 
 // Animation observer

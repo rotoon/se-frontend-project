@@ -1,4 +1,4 @@
-// Dashboard entry point for Webpack
+// Dashboard entry point for Vite
 import './auth.js';
 import './api.js';
 import './components.js';
