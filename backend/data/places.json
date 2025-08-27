@@ -13,8 +13,12 @@
       "zh": "清迈最著名的寺庙，位于素贴山顶，有美丽的金色佛塔",
       "ja": "チェンマイで最も有名な寺院で、ドイ・ステープ山の頂上にあり、美しい金色の仏塔があります"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "temple",
+    "images": [
+      "https://images.unsplash.com/photo-1552550049-db097c9480d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ดอยสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-295-002",
@@ -48,8 +52,11 @@
       "zh": "清迈历史悠久的市场，出售纪念品、当地食物和便宜商品",
       "ja": "チェンマイの歴史ある市場で、お土産、地元料理、手頃な商品を販売"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "market",
+    "images": [
+      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578916171728-46686eac8d58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "90 ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
       "phone": "",
@@ -140,8 +147,11 @@
       "zh": "古老寺庙，有一座大型破损佛塔，曾经供奉翡翠佛",
       "ja": "エメラルド仏が安置されていた大きな遺跡の仏塔がある古い寺院"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "temple",
+    "images": [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "103 ถนนพระปกเกล้า ตำบลศรีภูมิ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-276-140",
@@ -175,8 +185,11 @@
       "zh": "清迈古老而重要的寺庙，有美丽的兰纳建筑",
       "ja": "美しいランナー建築を持つチェンマイの古くて重要な寺院"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "temple",
+    "images": [
+      "https://images.unsplash.com/photo-1551717309-88444dbe54f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "2 ถนนสามล้าน ตำบลพระสิงห์ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-281-297",
@@ -210,8 +223,11 @@
       "zh": "有各种动物的动物园，包括著名的大熊猫",
       "ja": "有名なジャイアントパンダを含む様々な動物種がいる動物園"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "activity",
+    "images": [
+      "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1549366021-9f761d040a94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "100 ถนนห้วยแก้ว ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-221-179",
@@ -245,8 +261,12 @@
       "zh": "泰国最高峰，自然美景和众多瀑布",
       "ja": "タイの最高峰で美しい自然と多くの滝がある"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "nature",
+    "images": [
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "อุทยานแห่งชาติดอยอินทนนท์ อำเภอจอมทอง จังหวัดเชียงใหม่ 50160",
       "phone": "053-286-729",
@@ -280,8 +300,11 @@
       "zh": "夜间步行街，有商店、美食和当地艺术表演",
       "ja": "ショップ、料理、地元のアートパフォーマンスがあるナイト・ウォーキングストリート"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "shopping",
+    "images": [
+      "https://images.unsplash.com/photo-1551717309-88444dbe54f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
       "phone": "",
@@ -316,7 +339,10 @@
       "ja": "伝統的なレシピで作る有名なタイの伝統菓子店"
     },
     "category": "restaurant",
-    "images": [],
+    "images": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "14/1 ถนนราชดำเนิน ตำบลพระสิงห์ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-814-542",
@@ -350,8 +376,11 @@
       "zh": "有古老地下隧道的寺庙，宁静的氛围适合冥想",
       "ja": "古い地下トンネルがある寺院、瞑想に最適な静かな雰囲気"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "temple",
+    "images": [
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "135 ถนนสุเทพ ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-277-248",
@@ -385,8 +414,11 @@
       "zh": "展示清迈历史和文化的博物馆",
       "ja": "チェンマイの歴史と文化を展示する博物館"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "art-culture",
+    "images": [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ถนนพระปกเกล้า ตำบลศรีภูมิ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-217-793",
@@ -420,8 +452,12 @@
       "zh": "植物园，有各种植物、花卉和美丽景观",
       "ja": "多様な植物、花、美しい景観がある植物園"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "nature",
+    "images": [
+      "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "80 ถนนเชียงใหม่-หางดง ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
       "phone": "053-543-200",
@@ -455,8 +491,11 @@
       "zh": "有独特七塔的寺庙，按菩提伽耶风格建造",
       "ja": "ブッダガヤ様式で建てられた独特な七つの塔がある寺院"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "temple",
+    "images": [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ถนนซุปเปอร์ไฮเวย์ ตำบลช้างเผือก อำเภอเมือง จังหวัดเชียงใหม่ 50300",
       "phone": "053-221-846",
@@ -490,8 +529,11 @@
       "zh": "早市，有新鲜蔬菜、水果和各种当地食物",
       "ja": "新鮮な野菜、果物、多様な地元料理がある朝市"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "market",
+    "images": [
+      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578916171728-46686eac8d58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ถนนมหิดล ตำบลช้างเผือก อำเภอเมือง จังหวัดเชียงใหม่ 50300",
       "phone": "",
@@ -525,8 +567,12 @@
       "zh": "夜市，有纪念品、服装和当地手工艺品",
       "ja": "お土産、衣類、地元の手工芸品があるナイトマーケット"
     },
-    "category": "attraction",
-    "images": [],
+    "category": "shopping",
+    "images": [
+      "https://images.unsplash.com/photo-1551717309-88444dbe54f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     "contact": {
       "address": "ถนนช้างคลาน ตำบลช้างคลาน อำเภอเมือง จังหวัดเชียงใหม่ 50100",
       "phone": "",

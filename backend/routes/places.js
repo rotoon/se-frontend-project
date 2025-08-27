@@ -1153,4 +1153,49 @@ router.get("/places/:id/edit", requireAuth, async (req, res) => {
   }
 });
 
+// =================================
+// PUBLIC API ENDPOINTS (No authentication required)
+// =================================
+
+// GET /api/places - Get all published places for public frontend
+router.get("/", async (req, res) => {
+  try {
+    const places = await loadPlaces();
+    
+    // Filter only published places for public
+    const publishedPlaces = places.filter(place => place.status === 'published');
+    
+    // Apply category filter if provided
+    const { category } = req.query;
+    let filteredPlaces = publishedPlaces;
+    
+    if (category) {
+      filteredPlaces = publishedPlaces.filter(place => place.category === category);
+    }
+    
+    return createSuccessResponse(res, 200, "ข้อมูลสถานที่", filteredPlaces);
+  } catch (error) {
+    console.error("Error fetching public places:", error);
+    return createErrorResponse(res, 500, "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่");
+  }
+});
+
+// GET /api/places/public/:id - Get single published place by ID for public frontend
+router.get("/public/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const places = await loadPlaces();
+    const place = places.find(p => p.id === id && p.status === 'published');
+    
+    if (!place) {
+      return createErrorResponse(res, 404, "ไม่พบสถานที่ที่ต้องการ");
+    }
+    
+    return createSuccessResponse(res, 200, "ข้อมูลสถานที่", place);
+  } catch (error) {
+    console.error("Error fetching public place:", error);
+    return createErrorResponse(res, 500, "เกิดข้อผิดพลาดในการโหลดข้อมูลสถานที่");
+  }
+});
+
 module.exports = router;

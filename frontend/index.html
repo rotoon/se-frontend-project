@@ -106,34 +106,14 @@
     <!-- Quick Stats -->
     <section class="stats-section py-5">
       <div class="container">
-        <div class="row text-center">
-          <div class="col-md-3 col-6 mb-4">
-            <div class="stat-item">
-              <i class="fas fa-temple fa-3x mb-3"></i>
-              <h3 class="stat-number">300+</h3>
-              <p class="stat-label">Ancient Temples</p>
+        <!-- Dynamic content will be loaded here by JavaScript -->
+        <div class="row text-center" id="statsContainer">
+          <!-- Loading placeholder -->
+          <div class="col-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
-          <div class="col-md-3 col-6 mb-4">
-            <div class="stat-item">
-              <i class="fas fa-mountain fa-3x mb-3"></i>
-              <h3 class="stat-number">1,676m</h3>
-              <p class="stat-label">Doi Inthanon Peak</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-6 mb-4">
-            <div class="stat-item">
-              <i class="fas fa-utensils fa-3x mb-3"></i>
-              <h3 class="stat-number">1000+</h3>
-              <p class="stat-label">Local Dishes</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-6 mb-4">
-            <div class="stat-item">
-              <i class="fas fa-calendar fa-3x mb-3"></i>
-              <h3 class="stat-number">700+</h3>
-              <p class="stat-label">Years of History</p>
-            </div>
+            <p class="mt-2">Loading statistics...</p>
           </div>
         </div>
       </div>
@@ -438,156 +418,14 @@
             </p>
           </div>
         </div>
-        <div class="row g-4">
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1552550049-db097c9480d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80"
-                  alt="Wat Phra That Doi Suthep"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-primary">Sacred</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Wat Phra That Doi Suthep</h4>
-                <p>
-                  The most sacred temple in Northern Thailand, perched on a
-                  mountain with panoramic city views.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>2-3 hours</span>
-                  <span><i class="fas fa-star me-1"></i>4.9/5</span>
-                </div>
-              </div>
+        <!-- Dynamic content will be loaded here by JavaScript -->
+        <div class="row g-4" id="featuredPlacesContainer">
+          <!-- Loading placeholder -->
+          <div class="col-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1551717309-88444dbe54f5?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  alt="Night Bazaar Walking Street"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-warning">Popular</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Night Bazaar & Walking Street</h4>
-                <p>
-                  Vibrant markets filled with local crafts, street food, and
-                  authentic Northern Thai culture.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>Evening</span>
-                  <span><i class="fas fa-star me-1"></i>4.7/5</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2126&q=80"
-                  alt="Elephant Nature Park"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-success">Nature</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Elephant Nature Park</h4>
-                <p>
-                  Ethical elephant sanctuary where you can learn about and
-                  interact with rescued elephants.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>Full Day</span>
-                  <span><i class="fas fa-star me-1"></i>4.8/5</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  alt="Chiang Mai Old City"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-info">Historic</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Old City & Ancient Walls</h4>
-                <p>
-                  Explore the historic center with ancient city walls, gates,
-                  and traditional Lanna architecture.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>Half Day</span>
-                  <span><i class="fas fa-star me-1"></i>4.6/5</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  alt="Doi Inthanon National Park"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-success">Adventure</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Doi Inthanon National Park</h4>
-                <p>
-                  Thailand's highest peak with stunning waterfalls, hill tribe
-                  villages, and cool mountain air.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>Full Day</span>
-                  <span><i class="fas fa-star me-1"></i>4.9/5</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="attraction-card">
-              <div class="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  alt="Art and Cultural Centers"
-                  class="card-img-top"
-                />
-                <div class="card-overlay">
-                  <span class="badge bg-purple">Culture</span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h4>Art & Cultural Centers</h4>
-                <p>
-                  Discover local art, traditional crafts, and contemporary
-                  galleries showcasing Northern Thai culture.
-                </p>
-                <div class="card-features">
-                  <span><i class="fas fa-clock me-1"></i>2-4 hours</span>
-                  <span><i class="fas fa-star me-1"></i>4.5/5</span>
-                </div>
-              </div>
-            </div>
+            <p class="mt-2">Loading featured places...</p>
           </div>
         </div>
 

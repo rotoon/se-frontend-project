@@ -57,11 +57,11 @@ export default defineConfig({
   // Resolve configuration
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@css': resolve(__dirname, 'src/css'),
-      '@js': resolve(__dirname, 'src/js'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@utils': resolve(__dirname, 'src/utils'),
+      '@': resolve(__dirname, 'assets'),
+      '@css': resolve(__dirname, 'assets/css'),
+      '@js': resolve(__dirname, 'assets/js'),
+      '@components': resolve(__dirname, 'assets/components'),
+      '@utils': resolve(__dirname, 'assets/utils'),
     },
     extensions: ['.js', '.css', '.html'],
   },

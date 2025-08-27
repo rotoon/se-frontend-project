@@ -35,16 +35,18 @@ npm run dev                  # Development mode with nodemon
 ```bash
 cd frontend
 npm install                  # Install dependencies
-npm run dev                  # Development server with hot reloading
-npm run build                # Production build
+npm run dev                  # Development server with Vite hot reloading
+npm run build                # Production build with Vite
+npm run preview              # Preview production build
 ```
 
 #### Admin Shadcn Dashboard (Port 3002)
 ```bash
 cd admin-shadcn
 npm install                  # Install dependencies
-npm run dev                  # Development server with webpack
-npm run build                # Production build
+npm run dev                  # Development server with Vite hot reloading
+npm run build                # Production build with Vite
+npm run preview              # Preview production build
 ```
 
 ### Running All Services
@@ -76,7 +78,7 @@ se-frontend-project/
 │   │   └── uploadManager.js # File upload utilities
 │   └── public/              # Static assets (uploads)
 ├── frontend/                # Tourist Website (Port 3001)
-│   ├── webpack.config.js    # Webpack configuration
+│   ├── vite.config.js       # Vite configuration
 │   ├── package.json         # Frontend dependencies
 │   ├── index.html           # Main HTML template
 │   ├── assets/              # Source assets
@@ -93,7 +95,7 @@ se-frontend-project/
 │   │       └── style.css    # Main CSS file
 │   └── dist/                # Built assets (generated)
 ├── admin-shadcn/            # Admin Shadcn Dashboard (Port 3002)
-│   ├── webpack.config.js    # Webpack configuration
+│   ├── vite.config.js       # Vite configuration
 │   ├── package.json         # Admin dashboard dependencies
 │   ├── index.html           # Admin login page
 │   ├── dashboard.html       # Admin dashboard
@@ -119,14 +121,14 @@ se-frontend-project/
 #### Frontend (Tourist Website)  
 - **Port**: 3001
 - **Purpose**: Public tourist website
-- **Technology**: Webpack 5, ES6 Modules, Bootstrap 5
+- **Technology**: Vite, ES6 Modules, Bootstrap 5
 - **Features**: Hot Module Replacement, video background, responsive design
 - **API Communication**: Proxied to backend:3000
 
 #### Admin Shadcn Dashboard (Management Panel)
 - **Port**: 3002  
 - **Purpose**: Modern admin dashboard for content management
-- **Technology**: Webpack 5, Shadcn design system, Bootstrap 5
+- **Technology**: Vite, Shadcn design system, Bootstrap 5
 - **Features**: Hot Module Replacement, modern UI components
 - **Authentication**: Session-based with backend
 
@@ -150,11 +152,11 @@ se-frontend-project/
 - **Images routes** (`/api/images/*`): File upload and management
 
 ### Frontend Architecture
-- **Webpack 5**: Module bundling and development server
+- **Vite**: Fast build tool and development server
 - **ES6 Modules**: Modern JavaScript module system
-- **Hot Module Replacement**: Live reloading during development
+- **Hot Module Replacement**: Lightning-fast live reloading during development
 - **Code Splitting**: Separate bundles for different pages
-- **CSS Processing**: Style-loader and css-loader for development
+- **CSS Processing**: Native CSS support with sourcemaps
 - **API Proxy**: Automatic proxy to backend server for API calls
 
 ### Data Storage
@@ -202,7 +204,7 @@ se-frontend-project/
 - `backend/routes/categories.js`: Category management with place count tracking
 
 ### Frontend  
-- `frontend/webpack.config.js`: Webpack configuration with dev server and proxy
+- `frontend/vite.config.js`: Vite configuration with dev server and proxy
 - `frontend/assets/js/main.js`: Main entry point with ES6 imports
 - `frontend/assets/js/modules/language.js`: Multi-language manager
 - `frontend/assets/js/modules/places-api.js`: API client for places
@@ -210,7 +212,7 @@ se-frontend-project/
 - `frontend/index.html`: Main HTML template with video hero section
 
 ### Admin Shadcn Dashboard
-- `admin-shadcn/webpack.config.js`: Webpack configuration for admin dashboard
+- `admin-shadcn/vite.config.js`: Vite configuration for admin dashboard
 - `admin-shadcn/assets/js/`: Modern JavaScript modules for admin functionality
 - `admin-shadcn/assets/css/shadcn-admin.css`: Shadcn-based admin styles
 
@@ -220,8 +222,8 @@ se-frontend-project/
 **Architecture Migration Complete:**
 - ✅ Separated monolithic app into backend/frontend/admin-shadcn
 - ✅ Backend converted to API-only server with CORS
-- ✅ Frontend built with Webpack 5 and modern development workflow
-- ✅ Admin dashboard built with Shadcn design system and Webpack 5
+- ✅ Frontend built with Vite and modern development workflow
+- ✅ Admin dashboard built with Shadcn design system and Vite
 
 **Features Complete:**
 - ✅ Authentication system with brute force protection
@@ -230,7 +232,7 @@ se-frontend-project/
 - ✅ JSON data management with backup/recovery
 - ✅ Search and filtering capabilities
 - ✅ Complete CRUD operations for places and categories
-- ✅ Webpack development server with hot reloading
+- ✅ Vite development server with hot reloading
 - ✅ ES6 module system with code splitting
 - ✅ Modern responsive frontend with video background
 - ✅ Frontend logo integration with assets/logo.png

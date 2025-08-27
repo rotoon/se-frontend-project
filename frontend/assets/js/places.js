@@ -192,7 +192,7 @@ class PlacesPage {
 
       html += `
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm rounded-4">
                         <div class="position-relative">
                             <img 
                                 src="${imageUrl}" 

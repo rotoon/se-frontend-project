@@ -510,43 +510,64 @@ async function loadStats() {
 // Create place card HTML
 function createPlaceCard(place) {
   const currentLang = LanguageManager.getCurrentLanguage()
-  const name = LanguageManager.translate(place.name)
+  const name = LanguageManager.translate(place.name) || place.name || 'ไม่ระบุชื่อ'
   const description = Utils.truncateText(
-    LanguageManager.translate(place.description),
+    LanguageManager.translate(place.description) || place.description || '',
     120
   )
-  const imageUrl =
-    place.images && place.images.length > 0
-      ? Utils.getImageUrl(place.images[0])
-      : 'https://placeholder.co/400x250?text=No+Image'
+  
+  // Handle different image structures
+  let imageUrl = 'https://placeholder.co/400x250?text=No+Image'
+  if (place.images && place.images.length > 0) {
+    if (typeof place.images[0] === 'string') {
+      imageUrl = Utils.getImageUrl(place.images[0])
+    } else if (place.images[0] && place.images[0].url) {
+      imageUrl = Utils.getImageUrl(place.images[0].url)
+    }
+  } else if (place.image) {
+    imageUrl = Utils.getImageUrl(place.image)
+  }
 
   const rating = place.rating || 0
-  const priceRange = place.priceRange || 'ไม่ระบุ'
+  const priceRange = place.priceRange || place.price_range || 'ไม่ระบุ'
+  
+  // Category-based badge mapping
+  const categoryBadges = {
+    'temple': { class: 'bg-primary', text: 'Sacred' },
+    'restaurant': { class: 'bg-success', text: 'Food' },
+    'cafe': { class: 'bg-info', text: 'Cafe' },
+    'attraction': { class: 'bg-warning', text: 'Popular' },
+    'nature': { class: 'bg-success', text: 'Nature' },
+    'culture': { class: 'bg-purple', text: 'Culture' }
+  }
+  
+  const categorySlug = place.category?.slug || place.categorySlug
+  const badge = categoryBadges[categorySlug] || { class: 'bg-secondary', text: 'Place' }
 
   return `
         <div class="col-lg-4 col-md-6">
-            <div class="attraction-card place-card" onclick="goToPlaceDetail('${
-              place.id
-            }')">
+            <div class="attraction-card place-card" onclick="goToPlaceDetail('${place.id}')">
                 <div class="card-image">
                     <img src="${imageUrl}" alt="${name}" class="card-img-top" loading="lazy"
                          onerror="this.src='https://placeholder.co/400x250?text=No+Image'">
-                    ${
-                      place.featured
-                        ? '<div class="card-overlay"><span class="badge bg-warning">แนะนำ</span></div>'
-                        : ''
-                    }
+                    <div class="card-overlay">
+                        ${place.featured 
+                          ? '<span class="badge bg-warning">แนะนำ</span>' 
+                          : `<span class="badge ${badge.class}">${badge.text}</span>`
+                        }
+                    </div>
                 </div>
                 <div class="card-content">
                     <h4>${name}</h4>
-                    <p>${description}</p>
+                    <p>${description || 'สถานที่น่าสนใจในเชียงใหม่'}</p>
                     <div class="card-features">
-                        <span class="place-rating">
-                            <span class="rating-stars">${Utils.generateStars(
-                              rating
-                            )}</span>
-                            <span class="ms-1">${rating.toFixed(1)}</span>
-                        </span>
+                        ${rating > 0 
+                          ? `<span class="place-rating">
+                               <span class="rating-stars">${Utils.generateStars(rating)}</span>
+                               <span class="ms-1">${rating.toFixed(1)}</span>
+                             </span>`
+                          : '<span><i class="fas fa-star me-1"></i>ยังไม่มีคะแนน</span>'
+                        }
                         <span>${priceRange}</span>
                     </div>
                 </div>
@@ -584,7 +605,7 @@ function createCategoryCard(category) {
 
 // Navigation functions
 function goToPlaceDetail(placeId) {
-  window.location.href = `detail.html?id=${placeId}`
+  window.location.href = `place-detail.html?id=${placeId}`
 }
 
 function goToCategory(categorySlug) {

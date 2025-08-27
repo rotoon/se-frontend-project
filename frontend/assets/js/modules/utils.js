@@ -77,8 +77,18 @@ export class Utils {
   // Get image URL with fallback
   static getImageUrl(imagePath) {
     if (!imagePath) return 'https://placehold.co/400x250?text=No+Image'
+    
+    // If it's already a full URL, return as is
     if (imagePath.startsWith('http')) return imagePath
-    return 'https://placehold.co/400x250?text=No+Image'
+    
+    // If it's a relative path, construct the full URL to the backend
+    if (imagePath.startsWith('/') || imagePath.startsWith('uploads/')) {
+      const baseUrl = window.location.protocol + '//' + window.location.hostname + ':3000'
+      return `${baseUrl}/${imagePath.replace(/^\//, '')}`
+    }
+    
+    // Fallback for any other case
+    return imagePath || 'https://placehold.co/400x250?text=No+Image'
   }
 
   // Format date
