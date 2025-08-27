@@ -16,6 +16,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         places: resolve(__dirname, 'places.html'),
         'travel-style': resolve(__dirname, 'travel-style.html'),
+        'place-detail': resolve(__dirname, 'place-detail.html'),
       },
     },
   },

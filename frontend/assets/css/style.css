@@ -360,6 +360,228 @@ body {
   background-color: var(--medium-blue) !important;
 }
 
+/* Place Detail Page Styles */
+.place-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.place-hero-image {
+  position: relative;
+  height: 400px;
+  background: var(--primary-navy);
+}
+
+.place-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.place-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  display: flex;
+  align-items: end;
+  padding: 2rem 0;
+}
+
+.place-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.place-meta {
+  font-size: 1.1rem;
+}
+
+.place-section {
+  margin-bottom: 3rem;
+}
+
+.place-section h3 {
+  color: var(--primary-navy);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--golden-yellow);
+  padding-bottom: 0.5rem;
+}
+
+.place-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+.place-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+}
+
+.sidebar-card h5 {
+  color: var(--primary-navy);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--light-blue);
+  padding-bottom: 0.5rem;
+}
+
+.quick-info .info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.quick-info .info-item i {
+  width: 20px;
+  margin-right: 0.75rem;
+}
+
+.detail-item {
+  margin-bottom: 1.5rem;
+}
+
+.detail-item strong {
+  color: var(--primary-navy);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.image-gallery .gallery-item {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.image-gallery .gallery-item:hover {
+  transform: scale(1.05);
+}
+
+.map-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.opening-hours .hours-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.opening-hours .day {
+  font-weight: 500;
+  color: var(--primary-navy);
+}
+
+.opening-hours .hours {
+  color: #666;
+}
+
+.share-buttons .btn {
+  border-radius: 8px;
+  border-width: 1px;
+  font-size: 0.9rem;
+}
+
+.share-buttons .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.related-place-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.related-place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.contact-info-card {
+  background: linear-gradient(135deg, var(--light-blue), #f8f9fa);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: var(--primary-navy);
+}
+
+.contact-item i {
+  width: 24px;
+  margin-right: 1rem;
+  color: var(--golden-yellow);
+}
+
+.contact-item a {
+  color: var(--primary-navy);
+  text-decoration: none;
+}
+
+.contact-item a:hover {
+  color: var(--accent-blue);
+  text-decoration: underline;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--golden-yellow);
+  color: var(--primary-navy);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 10;
+}
+
+/* Responsive styles for place detail */
+@media (max-width: 768px) {
+  .place-title {
+    font-size: 2rem;
+  }
+  
+  .place-hero-image {
+    height: 300px;
+  }
+  
+  .place-sidebar {
+    position: relative;
+    top: auto;
+    margin-top: 2rem;
+  }
+  
+  .sidebar-card {
+    margin-bottom: 1rem;
+  }
+}
+
 /* Navbar logo styling */
 .navbar-logo {
   height: 45px;
@@ -429,6 +651,31 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
+}
+
+/* Footer divider and additional footer styles */
+.footer-divider {
+  border-color: rgba(255, 255, 255, 0.2);
+  margin: 2rem 0 1rem;
+}
+
+.copyright {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.made-with {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.contact-info {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 /* Apple Cards Carousel Styles */
