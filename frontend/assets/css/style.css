@@ -160,13 +160,18 @@ body {
 .attraction-card .btn::before,
 .food-card .btn::before,
 .tip-card .btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s;
 }
 
@@ -1487,10 +1492,8 @@ body {
 
   /* Mobile video adjustments */
   .video-background iframe {
-    width: 180%;
-    height: 180%;
-    min-height: 120vh;
-    min-width: 120vw;
+    width: 600%;
+    height: 200%;
   }
 
   .hero-section {
