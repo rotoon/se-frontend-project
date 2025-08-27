@@ -466,8 +466,7 @@ class PlacesPage {
 
 // Navigation functions
 function goToPlaceDetail(placeId) {
-  // TODO: Implement place detail page
-  alert("Place detail page coming soon!");
+  window.location.href = `place-detail.html?id=${placeId}`;
 }
 
 // Make functions globally available
