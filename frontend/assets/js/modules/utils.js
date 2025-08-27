@@ -7,16 +7,16 @@ export class Utils {
       container.innerHTML = `
                 <div class="text-center py-5">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">กำลังโหลด...</span>
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                    <div class="mt-2 text-muted">กำลังโหลด...</div>
+                    <div class="mt-2 text-muted">Loading...</div>
                 </div>
             `
     }
   }
 
   // Show empty state
-  static showEmpty(containerId, message = 'ไม่มีข้อมูล') {
+  static showEmpty(containerId, message = 'No data available') {
     const container = document.getElementById(containerId)
     if (container) {
       container.innerHTML = `
@@ -29,7 +29,7 @@ export class Utils {
   }
 
   // Show error state
-  static showError(containerId, message = 'เกิดข้อผิดพลาด') {
+  static showError(containerId, message = 'An error occurred') {
     const container = document.getElementById(containerId)
     if (container) {
       container.innerHTML = `

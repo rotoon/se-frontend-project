@@ -2,6 +2,7 @@
 import { CategoriesAPI } from "./modules/categories-api.js";
 import { LanguageManager } from "./modules/language.js";
 import { PlacesAPI } from "./modules/places-api.js";
+import { Utils } from "./modules/utils.js";
 
 class PlacesPage {
   constructor() {
@@ -184,103 +185,13 @@ class PlacesPage {
     let html = "";
 
     currentPlaces.forEach((place) => {
-      const placeName = this.getPlaceName(place);
-      const placeDescription = this.getPlaceDescription(place);
-      const imageUrl = this.getPlaceImage(place);
-      const rating = place.rating || 0;
-      const priceRange = place.priceRange || "";
-
-      html += `
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 shadow-sm rounded-4">
-                        <div class="position-relative">
-                            <img 
-                                src="${imageUrl}" 
-                                class="card-img-top" 
-                                alt="${placeName}"
-                                style="height: 200px; object-fit: cover;"
-                                onerror="this.src='https://images.unsplash.com/photo-1552550049-db097c9480d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80'"
-                            />
-                            ${
-                              place.status === "featured"
-                                ? '<span class="position-absolute top-0 end-0 badge bg-warning m-2"><i class="fas fa-star"></i> Featured</span>'
-                                : ""
-                            }
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${placeName}</h5>
-                            <p class="card-text text-muted flex-grow-1">
-                                ${placeDescription.substring(0, 100)}${
-        placeDescription.length > 100 ? "..." : ""
-      }
-                            </p>
-                            
-                            <div class="mb-3">
-                                ${
-                                  rating > 0
-                                    ? `
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="me-2">
-                                            ${this.renderStars(rating)}
-                                        </div>
-                                        <small class="text-muted">(${rating}/5)</small>
-                                    </div>
-                                `
-                                    : ""
-                                }
-                                
-                                ${
-                                  priceRange
-                                    ? `
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-dollar-sign text-success me-1"></i>
-                                        <small class="text-muted">${priceRange}</small>
-                                    </div>
-                                `
-                                    : ""
-                                }
-                            </div>
-                            
-                            <div class="mt-auto">
-                                <button 
-                                    class="btn btn-primary w-100" 
-                                    onclick="goToPlaceDetail('${place.id}')"
-                                >
-                                    <i class="fas fa-eye me-2"></i>
-                                    View Details
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+      html += this.createPlaceCard(place);
     });
 
     grid.innerHTML = html;
 
     // Render pagination
     this.renderPagination();
-  }
-
-  renderStars(rating) {
-    let stars = "";
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 0; i < fullStars; i++) {
-      stars += '<i class="fas fa-star text-warning"></i>';
-    }
-
-    if (hasHalfStar) {
-      stars += '<i class="fas fa-star-half-alt text-warning"></i>';
-    }
-
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-      stars += '<i class="far fa-star text-warning"></i>';
-    }
-
-    return stars;
   }
 
   renderPagination() {
@@ -461,6 +372,104 @@ class PlacesPage {
     if (errorSection) {
       errorSection.style.display = "block";
     }
+  }
+
+  // Create place card HTML using same format as main.js
+  createPlaceCard(place) {
+    const name = this.getPlaceName(place);
+    const description = Utils.truncateText(
+      this.getPlaceDescription(place),
+      120
+    );
+
+    // Handle different image structures
+    let imageUrl = "https://placeholder.co/400x250?text=No+Image";
+    if (place.images && place.images.length > 0) {
+      if (typeof place.images[0] === "string") {
+        imageUrl = Utils.getImageUrl(place.images[0]);
+      } else if (place.images[0] && place.images[0].url) {
+        imageUrl = Utils.getImageUrl(place.images[0].url);
+      }
+    } else if (place.image) {
+      imageUrl = Utils.getImageUrl(place.image);
+    }
+
+    const rating = place.rating || 0;
+    const priceRange =
+      place.priceRange || place.price_range || "Price not specified";
+
+    // Category-based badge mapping
+    const categoryBadges = {
+      temple: { class: "bg-primary", text: "Sacred" },
+      restaurant: { class: "bg-success", text: "Food" },
+      cafe: { class: "bg-info", text: "Cafe" },
+      attraction: { class: "bg-warning", text: "Popular" },
+      nature: { class: "bg-success", text: "Nature" },
+      culture: { class: "bg-purple", text: "Culture" },
+      activity: { class: "bg-danger", text: "Activity" },
+      accommodation: { class: "bg-dark", text: "Stay" },
+      shopping: { class: "bg-info", text: "Shop" },
+      spa: { class: "bg-success", text: "Wellness" },
+      nightlife: { class: "bg-dark", text: "Night" },
+      "art-culture": { class: "bg-purple", text: "Art" },
+      market: { class: "bg-warning", text: "Market" },
+    };
+
+    const categorySlug =
+      place.category?.slug || place.categorySlug || this.currentCategory;
+    const badge = categoryBadges[categorySlug] || {
+      class: "bg-secondary",
+      text: "Place",
+    };
+
+    return `
+        <div class="col-lg-4 col-md-6">
+            <div class="attraction-card place-card" onclick="goToPlaceDetail('${
+              place.id
+            }')">
+                <div class="card-image">
+                    <img src="${imageUrl}" alt="${name}" class="card-img-top" loading="lazy"
+                         onerror="this.src='https://placeholder.co/400x250?text=No+Image'">
+                    <div class="card-overlay">
+                        ${
+                          place.status === "featured" || place.featured
+                            ? '<span class="badge bg-warning"><i class="fas fa-star"></i> Featured</span>'
+                            : `<span class="badge ${badge.class}">${badge.text}</span>`
+                        }
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h4>${name}</h4>
+                    <p>${description || "Interesting place in Chiang Mai"}</p>
+                    <div class="card-features">
+                        ${
+                          rating > 0
+                            ? `<span class="place-rating">
+                               <span class="rating-stars">${Utils.generateStars(
+                                 rating
+                               )}</span>
+                               <span class="ms-1">${rating.toFixed(1)}</span>
+                             </span>`
+                            : '<span><i class="fas fa-star me-1"></i>No rating yet</span>'
+                        }
+                        <span>${priceRange}</span>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button 
+                            class="btn btn-primary w-100" 
+                            onclick="goToPlaceDetail('${
+                              place.id
+                            }'); event.stopPropagation();"
+                        >
+                            <i class="fas fa-eye me-2"></i>
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
   }
 }
 

@@ -1,150 +1,149 @@
 // Detail page entry point for Webpack
-import '../css/style.css'
-import './api'
-import { LanguageManager } from './modules/language'
-import { Utils } from './modules/utils'
-import { PlacesAPI } from './modules/places-api'
-import { CategoriesAPI } from './modules/categories-api'
+import "../css/style.css";
+import "./api";
+import { LanguageManager } from "./modules/language";
+import { PlacesAPI } from "./modules/places-api";
+import { Utils } from "./modules/utils";
 
 // Detail page functionality
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   // Initialize detail page
-  initDetailPage()
-})
+  initDetailPage();
+});
 
 async function initDetailPage() {
   try {
     // Get place ID from URL
-    const placeId = Utils.getUrlParams().id
+    const placeId = Utils.getUrlParams().id;
 
     if (!placeId) {
-      showError('Place ID not found')
-      return
+      showError("Place ID not found");
+      return;
     }
 
     // Show loading state
-    showLoading()
+    showLoading();
 
     // Load place details
-    await loadPlaceDetail(placeId)
+    await loadPlaceDetail(placeId);
 
     // Initialize components
-    initImageGallery()
-    initMap()
-    initSocialShare()
+    initImageGallery();
+    initMap();
+    initSocialShare();
   } catch (error) {
-    console.error('Error initializing detail page:', error)
-    showError('Unable to load place details')
+    console.error("Error initializing detail page:", error);
+    showError("Unable to load place details");
   }
 }
 
 // Show loading state
 function showLoading() {
-  document.getElementById('loadingState').style.display = 'block'
-  document.getElementById('errorState').style.display = 'none'
-  document.getElementById('placeContent').style.display = 'none'
+  document.getElementById("loadingState").style.display = "block";
+  document.getElementById("errorState").style.display = "none";
+  document.getElementById("placeContent").style.display = "none";
 }
 
 // Show error state
 function showError(message) {
-  document.getElementById('errorMessage').textContent = message
-  document.getElementById('loadingState').style.display = 'none'
-  document.getElementById('errorState').style.display = 'block'
-  document.getElementById('placeContent').style.display = 'none'
+  document.getElementById("errorMessage").textContent = message;
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("errorState").style.display = "block";
+  document.getElementById("placeContent").style.display = "none";
 }
 
 // Show content state
 function showContent() {
-  document.getElementById('loadingState').style.display = 'none'
-  document.getElementById('errorState').style.display = 'none'
-  document.getElementById('placeContent').style.display = 'block'
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("errorState").style.display = "none";
+  document.getElementById("placeContent").style.display = "block";
 }
 
 // Load place detail data
 async function loadPlaceDetail(placeId) {
   try {
-    const response = await PlacesAPI.getPlace(placeId)
+    const response = await PlacesAPI.getPlace(placeId);
 
     if (response.success && response.data) {
-      const place = response.data
+      const place = response.data;
 
       // Update page title
-      const name = LanguageManager.translate(place.name)
-      document.title = `${name} - Go Chiang Mai`
+      const name = LanguageManager.translate(place.name);
+      document.title = `${name} - Go Chiang Mai`;
 
       // Update breadcrumbs
-      updateBreadcrumbs(place)
+      updateBreadcrumbs(place);
 
       // Render place details
-      const placeContent = document.getElementById('placeContent')
-      placeContent.innerHTML = renderPlaceDetail(place)
+      const placeContent = document.getElementById("placeContent");
+      placeContent.innerHTML = renderPlaceDetail(place);
 
       // Show content
-      showContent()
+      showContent();
 
       // Load related places
       if (place.category) {
-        loadRelatedPlaces(place.category, placeId)
+        loadRelatedPlaces(place.category, placeId);
       }
     } else {
-      showError('Place data not found')
+      showError("Place data not found");
     }
   } catch (error) {
-    console.error('Error loading place detail:', error)
+    console.error("Error loading place detail:", error);
 
     // If API fails, use example data for demonstration
-    if (placeId === 'place-001') {
+    if (placeId === "place-001") {
       const examplePlace = {
-        id: 'place-001',
+        id: "place-001",
         name: {
-          th: 'วัดพระธาตุดอยสุเทพ',
-          en: 'Wat Phra That Doi Suthep',
-          zh: '素贴山双龙寺',
-          ja: 'ワット・プラタート・ドイ・ステープ',
+          th: "วัดพระธาตุดอยสุเทพ",
+          en: "Wat Phra That Doi Suthep",
+          zh: "素贴山双龙寺",
+          ja: "ワット・プラタート・ドイ・ステープ",
         },
         description: {
-          th: 'วัดที่มีชื่อเสียงที่สุดของเชียงใหม่ ตั้งอยู่บนยอดดอยสุเทพ มีพระธาตุเจดีย์ทองคำที่งดงาม',
-          en: 'The most famous temple in Chiang Mai, located on top of Doi Suthep mountain with a beautiful golden pagoda',
-          zh: '清迈最著名的寺庙，位于素贴山顶，有美丽的金色佛塔',
-          ja: 'チェンマイで最も有名な寺院で、ドイ・ステープ山の頂上にあり、美しい金色の仏塔があります',
+          th: "วัดที่มีชื่อเสียงที่สุดของเชียงใหม่ ตั้งอยู่บนยอดดอยสุเทพ มีพระธาตุเจดีย์ทองคำที่งดงาม",
+          en: "The most famous temple in Chiang Mai, located on top of Doi Suthep mountain with a beautiful golden pagoda",
+          zh: "清迈最著名的寺庙，位于素贴山顶，有美丽的金色佛塔",
+          ja: "チェンマイで最も有名な寺院で、ドイ・ステープ山の頂上にあり、美しい金色の仏塔があります",
         },
-        category: 'attraction',
+        category: "attraction",
         images: [],
         contact: {
-          address: 'ดอยสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200',
-          phone: '053-295-002',
-          website: '',
-          facebook: '',
-          instagram: '',
+          address: "ดอยสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
+          phone: "053-295-002",
+          website: "",
+          facebook: "",
+          instagram: "",
           coordinates: {
             lat: 18.8048,
             lng: 98.9216,
           },
         },
-        hours: '06:00 - 18:00',
-        priceRange: 'ฟรี',
-        status: 'published',
+        hours: "06:00 - 18:00",
+        priceRange: "ฟรี",
+        status: "published",
         featured: true,
-        createdAt: '2024-01-15T08:00:00.000Z',
-        updatedAt: '2024-01-15T08:00:00.000Z',
-        createdBy: 'admin',
-      }
+        createdAt: "2024-01-15T08:00:00.000Z",
+        updatedAt: "2024-01-15T08:00:00.000Z",
+        createdBy: "admin",
+      };
 
       // Update page title
-      const name = LanguageManager.translate(examplePlace.name)
-      document.title = `${name} - Go Chiang Mai`
+      const name = LanguageManager.translate(examplePlace.name);
+      document.title = `${name} - Go Chiang Mai`;
 
       // Update breadcrumbs
-      updateBreadcrumbs(examplePlace)
+      updateBreadcrumbs(examplePlace);
 
       // Render place details
-      const placeContent = document.getElementById('placeContent')
-      placeContent.innerHTML = renderPlaceDetail(examplePlace)
+      const placeContent = document.getElementById("placeContent");
+      placeContent.innerHTML = renderPlaceDetail(examplePlace);
 
       // Show content
-      showContent()
+      showContent();
     } else {
-      showError('Unable to load place data')
+      showError("Unable to load place data");
     }
   }
 }
@@ -152,43 +151,43 @@ async function loadPlaceDetail(placeId) {
 // Update breadcrumbs based on place data
 function updateBreadcrumbs(place) {
   try {
-    const categoryBreadcrumb = document.getElementById('categoryBreadcrumb')
-    const placeBreadcrumb = document.getElementById('placeBreadcrumb')
+    const categoryBreadcrumb = document.getElementById("categoryBreadcrumb");
+    const placeBreadcrumb = document.getElementById("placeBreadcrumb");
 
     if (categoryBreadcrumb) {
       // Set category name (you might want to fetch this from categories API)
       const categoryNames = {
-        attraction: 'Attractions',
-        restaurant: 'Restaurants',
-        hotel: 'Hotels',
-        shopping: 'Shopping',
-      }
+        attraction: "Attractions",
+        restaurant: "Restaurants",
+        hotel: "Hotels",
+        shopping: "Shopping",
+      };
       categoryBreadcrumb.textContent =
-        categoryNames[place.category] || place.category
+        categoryNames[place.category] || place.category;
     }
 
     if (placeBreadcrumb) {
-      const name = LanguageManager.translate(place.name)
-      placeBreadcrumb.textContent = name
+      const name = LanguageManager.translate(place.name);
+      placeBreadcrumb.textContent = name;
     }
   } catch (error) {
-    console.error('Error updating breadcrumbs:', error)
+    console.error("Error updating breadcrumbs:", error);
   }
 }
 
 // Render place detail HTML
 function renderPlaceDetail(place) {
-  const name = LanguageManager.translate(place.name)
-  const description = LanguageManager.translate(place.description)
-  const address = place.contact?.address || 'ไม่ระบุที่อยู่'
+  const name = LanguageManager.translate(place.name);
+  const description = LanguageManager.translate(place.description);
+  const address = place.contact?.address || "ไม่ระบุที่อยู่";
 
   const mainImage =
     place.images && place.images.length > 0
       ? Utils.getImageUrl(place.images[0])
-      : 'https://placehold.co/800x400/152f56/ffffff?text=No+Image'
+      : "https://placehold.co/800x400/152f56/ffffff?text=No+Image";
 
-  const rating = place.rating || 4.5
-  const priceRange = place.priceRange || 'ไม่ระบุ'
+  const rating = place.rating || 4.5;
+  const priceRange = place.priceRange || "ไม่ระบุ";
 
   return `
         <!-- Hero Section -->
@@ -220,7 +219,7 @@ function renderPlaceDetail(place) {
                 ${
                   place.featured
                     ? '<div class="featured-badge"><i class="fas fa-star me-1"></i>Featured</div>'
-                    : ''
+                    : ""
                 }
             </div>
         </div>
@@ -234,9 +233,9 @@ function renderPlaceDetail(place) {
                         <h3><i class="fas fa-info-circle me-2 text-primary"></i>About This Place</h3>
                         <div class="place-description">
                             ${description
-                              .split('\n')
+                              .split("\n")
                               .map((para) => `<p>${para}</p>`)
-                              .join('')}
+                              .join("")}
                         </div>
                     </div>
 
@@ -247,7 +246,7 @@ function renderPlaceDetail(place) {
                     ${
                       place.images && place.images.length > 1
                         ? renderImageGallery(place.images)
-                        : ''
+                        : ""
                     }
 
                     <!-- Map -->
@@ -255,7 +254,7 @@ function renderPlaceDetail(place) {
                       place.contact?.coordinates?.lat &&
                       place.contact?.coordinates?.lng
                         ? renderMap(place)
-                        : ''
+                        : ""
                     }
                 </div>
 
@@ -282,7 +281,7 @@ function renderPlaceDetail(place) {
                                     <span>Hours: ${place.hours}</span>
                                 </div>
                                 `
-                                    : ''
+                                    : ""
                                 }
                                 ${
                                   place.category
@@ -294,7 +293,7 @@ function renderPlaceDetail(place) {
                                     )}</span>
                                 </div>
                                 `
-                                    : ''
+                                    : ""
                                 }
                             </div>
                         </div>
@@ -320,7 +319,7 @@ function renderPlaceDetail(place) {
                                     Google Maps
                                 </button>
                                 `
-                                    : ''
+                                    : ""
                                 }
                                 <button class="btn btn-outline-secondary" onclick="goBack()">
                                     <i class="fas fa-arrow-left me-2"></i>
@@ -337,27 +336,27 @@ function renderPlaceDetail(place) {
         <div class="container mb-5">
             <div class="row">
                 <div class="col-12">
-                    <h3><i class="fas fa-map-pin me-2 text-primary"></i>Nearby Places</h3>
+                    <h3><i class="fas fa-map-pin me-2 text-primary"></i>Related Places</h3>
                     <div id="relatedPlacesContainer" class="row">
                         <!-- Related places will be loaded here -->
                     </div>
                 </div>
             </div>
         </div>
-    `
+    `;
 }
 
 // Render contact information
 function renderContactInformation(place) {
-  const contact = place.contact || {}
+  const contact = place.contact || {};
   const hasContact =
     contact.address ||
     contact.phone ||
     contact.website ||
     contact.facebook ||
-    contact.instagram
+    contact.instagram;
 
-  if (!hasContact) return ''
+  if (!hasContact) return "";
 
   return `
         <div class="place-section">
@@ -371,7 +370,7 @@ function renderContactInformation(place) {
                     <span>${contact.address}</span>
                 </div>
                 `
-                    : ''
+                    : ""
                 }
                 ${
                   contact.phone
@@ -381,7 +380,7 @@ function renderContactInformation(place) {
                     <a href="tel:${contact.phone}">${contact.phone}</a>
                 </div>
                 `
-                    : ''
+                    : ""
                 }
                 ${
                   contact.website
@@ -391,7 +390,7 @@ function renderContactInformation(place) {
                     <a href="${contact.website}" target="_blank" rel="noopener">${contact.website}</a>
                 </div>
                 `
-                    : ''
+                    : ""
                 }
                 ${
                   contact.facebook
@@ -401,7 +400,7 @@ function renderContactInformation(place) {
                     <a href="${contact.facebook}" target="_blank" rel="noopener">Facebook</a>
                 </div>
                 `
-                    : ''
+                    : ""
                 }
                 ${
                   contact.instagram
@@ -411,26 +410,26 @@ function renderContactInformation(place) {
                     <a href="${contact.instagram}" target="_blank" rel="noopener">Instagram</a>
                 </div>
                 `
-                    : ''
+                    : ""
                 }
             </div>
         </div>
-    `
+    `;
 }
 
 // Get category display name
 function getCategoryName(category) {
   const categoryNames = {
-    attraction: 'Attractions',
-    restaurant: 'Restaurants',
-    hotel: 'Hotels',
-    shopping: 'Shopping',
-    cafe: 'Cafes',
-    spa: 'Spas',
-    temple: 'Temples',
-    market: 'Markets',
-  }
-  return categoryNames[category] || category
+    attraction: "Attractions",
+    restaurant: "Restaurants",
+    hotel: "Hotels",
+    shopping: "Shopping",
+    cafe: "Cafes",
+    spa: "Spas",
+    temple: "Temples",
+    market: "Markets",
+  };
+  return categoryNames[category] || category;
 }
 
 // Render image gallery
@@ -453,11 +452,11 @@ function renderImageGallery(images) {
                         </div>
                     `
                       )
-                      .join('')}
+                      .join("")}
                 </div>
             </div>
         </div>
-    `
+    `;
 }
 
 // Render opening hours
@@ -471,22 +470,22 @@ function renderOpeningHours(openingHours) {
                     ([day, hours]) => `
                     <div class="hours-item">
                         <span class="day">${translateDay(day)}:</span>
-                        <span class="hours">${hours || 'ปิด'}</span>
+                        <span class="hours">${hours || "ปิด"}</span>
                     </div>
                 `
                   )
-                  .join('')}
+                  .join("")}
             </div>
         </div>
-    `
+    `;
 }
 
 // Render map
 function renderMap(place) {
-  const coords = place.contact?.coordinates
-  if (!coords?.lat || !coords?.lng) return ''
+  const coords = place.contact?.coordinates;
+  if (!coords?.lat || !coords?.lng) return "";
 
-  const placeName = LanguageManager.translate(place.name)
+  const placeName = LanguageManager.translate(place.name);
 
   return `
         <div class="place-section">
@@ -514,41 +513,41 @@ function renderMap(place) {
                 </div>
             </div>
         </div>
-    `
+    `;
 }
 
 // Load related places
 async function loadRelatedPlaces(categoryId, excludeId) {
-  const container = document.getElementById('relatedPlacesContainer')
+  const container = document.getElementById("relatedPlacesContainer");
 
   try {
     const response = await PlacesAPI.getPlacesByCategory(categoryId, {
       limit: 6,
       exclude: excludeId,
-    })
+    });
 
     if (response.success && response.data.length > 0) {
       container.innerHTML = response.data
         .map((place) => createRelatedPlaceCard(place))
-        .join('')
+        .join("");
     } else {
       container.innerHTML =
-        '<div class="col-12"><p class="text-muted">No related places found</p></div>'
+        '<div class="col-12"><p class="text-muted">No related places found</p></div>';
     }
   } catch (error) {
-    console.error('Error loading related places:', error)
+    console.error("Error loading related places:", error);
     container.innerHTML =
-      '<div class="col-12"><p class="text-danger">Unable to load related places</p></div>'
+      '<div class="col-12"><p class="text-danger">Unable to load related places</p></div>';
   }
 }
 
 // Create related place card
 function createRelatedPlaceCard(place) {
-  const name = LanguageManager.translate(place.name)
+  const name = LanguageManager.translate(place.name);
   const imageUrl =
     place.images && place.images.length > 0
       ? Utils.getImageUrl(place.images[0])
-      : 'https://placehold.co/300x200/152f56/ffffff?text=No+Image'
+      : "https://placehold.co/300x200/152f56/ffffff?text=No+Image";
 
   return `
         <div class="col-md-4 mb-3">
@@ -565,18 +564,31 @@ function createRelatedPlaceCard(place) {
                         ${(place.rating || 4.5).toFixed(1)}
                         <span class="ms-2">
                             <i class="fas fa-tag me-1"></i>
-                            ${place.priceRange || 'ไม่ระบุ'}
+                            ${place.priceRange || "ไม่ระบุ"}
                         </span>
                     </div>
                 </div>
             </div>
         </div>
-    `
+    `;
 }
 
 // Initialize image gallery
 function initImageGallery() {
-  // Gallery functionality will be initialized here
+  // Initialize lightbox navigation
+  const prevBtn = document.getElementById("lightboxPrev");
+  const nextBtn = document.getElementById("lightboxNext");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => navigateLightbox(-1));
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => navigateLightbox(1));
+  }
+
+  // Keyboard navigation
+  document.addEventListener("keydown", handleLightboxKeyboard);
 }
 
 // Initialize map
@@ -586,11 +598,11 @@ function initMap() {
 
 // Initialize social share
 function initSocialShare() {
-  const shareContainer = document.getElementById('shareButtons')
-  if (!shareContainer) return
+  const shareContainer = document.getElementById("shareButtons");
+  if (!shareContainer) return;
 
-  const url = encodeURIComponent(window.location.href)
-  const title = encodeURIComponent(document.title)
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(document.title);
 
   shareContainer.innerHTML = `
         <div class="d-flex gap-2">
@@ -607,76 +619,160 @@ function initSocialShare() {
                 <i class="fas fa-copy"></i>
             </button>
         </div>
-    `
+    `;
 }
 
 // Helper function to translate day names
 function translateDay(day) {
   const days = {
-    monday: 'จันทร์',
-    tuesday: 'อังคาร',
-    wednesday: 'พุธ',
-    thursday: 'พฤหัสฯ',
-    friday: 'ศุกร์',
-    saturday: 'เสาร์',
-    sunday: 'อาทิตย์',
-  }
-  return days[day.toLowerCase()] || day
+    monday: "จันทร์",
+    tuesday: "อังคาร",
+    wednesday: "พุธ",
+    thursday: "พฤหัสฯ",
+    friday: "ศุกร์",
+    saturday: "เสาร์",
+    sunday: "อาทิตย์",
+  };
+  return days[day.toLowerCase()] || day;
 }
+
+// Lightbox variables
+let currentLightboxImages = [];
+let currentImageIndex = 0;
 
 // Global functions for interactions
 window.openLightbox = function (index) {
-  // Implement lightbox functionality
+  // Get all gallery images
+  const galleryImages = document.querySelectorAll(".gallery-item img");
+  currentLightboxImages = Array.from(galleryImages).map((img) => img.src);
+  currentImageIndex = index;
+
+  // Show lightbox modal
+  const lightboxModal = new bootstrap.Modal(
+    document.getElementById("imageLightbox")
+  );
+  lightboxModal.show();
+
+  // Update lightbox content
+  updateLightboxContent();
+};
+
+// Update lightbox content
+function updateLightboxContent() {
+  const lightboxImage = document.getElementById("lightboxImage");
+  const currentIndexSpan = document.getElementById("currentImageIndex");
+  const totalImagesSpan = document.getElementById("totalImages");
+  const prevBtn = document.getElementById("lightboxPrev");
+  const nextBtn = document.getElementById("lightboxNext");
+
+  if (lightboxImage && currentLightboxImages.length > 0) {
+    lightboxImage.src = currentLightboxImages[currentImageIndex];
+    lightboxImage.alt = `Image ${currentImageIndex + 1}`;
+  }
+
+  if (currentIndexSpan) {
+    currentIndexSpan.textContent = currentImageIndex + 1;
+  }
+
+  if (totalImagesSpan) {
+    totalImagesSpan.textContent = currentLightboxImages.length;
+  }
+
+  // Show/hide navigation buttons
+  if (prevBtn) {
+    prevBtn.style.display = currentLightboxImages.length > 1 ? "flex" : "none";
+  }
+
+  if (nextBtn) {
+    nextBtn.style.display = currentLightboxImages.length > 1 ? "flex" : "none";
+  }
+}
+
+// Navigate lightbox
+function navigateLightbox(direction) {
+  if (currentLightboxImages.length === 0) return;
+
+  currentImageIndex += direction;
+
+  // Loop around
+  if (currentImageIndex < 0) {
+    currentImageIndex = currentLightboxImages.length - 1;
+  } else if (currentImageIndex >= currentLightboxImages.length) {
+    currentImageIndex = 0;
+  }
+
+  updateLightboxContent();
+}
+
+// Handle keyboard navigation
+function handleLightboxKeyboard(event) {
+  const lightboxModal = document.getElementById("imageLightbox");
+  if (!lightboxModal.classList.contains("show")) return;
+
+  switch (event.key) {
+    case "ArrowLeft":
+      event.preventDefault();
+      navigateLightbox(-1);
+      break;
+    case "ArrowRight":
+      event.preventDefault();
+      navigateLightbox(1);
+      break;
+    case "Escape":
+      event.preventDefault();
+      bootstrap.Modal.getInstance(lightboxModal).hide();
+      break;
+  }
 }
 
 window.openGoogleMaps = function (lat, lng) {
-  window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank')
-}
+  window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
+};
 
 window.getDirections = function (lat, lng) {
   window.open(
     `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
-    '_blank'
-  )
-}
+    "_blank"
+  );
+};
 
 window.goBack = function () {
-  if (document.referrer && !document.referrer.includes('place-detail.html')) {
-    window.history.back()
+  if (document.referrer && !document.referrer.includes("place-detail.html")) {
+    window.history.back();
   } else {
-    window.location.href = 'travel-style.html'
+    window.location.href = "travel-style.html";
   }
-}
+};
 
 window.goToPlace = function (placeId) {
-  window.location.href = `place-detail.html?id=${placeId}`
-}
+  window.location.href = `place-detail.html?id=${placeId}`;
+};
 
 window.shareOnFacebook = function (url) {
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank')
-}
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+};
 
 window.shareOnTwitter = function (url, title) {
   window.open(
     `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
-    '_blank'
-  )
-}
+    "_blank"
+  );
+};
 
 window.shareOnLine = function (url) {
   window.open(
     `https://social-plugins.line.me/lineit/share?url=${url}`,
-    '_blank'
-  )
-}
+    "_blank"
+  );
+};
 
 window.copyLink = function () {
   navigator.clipboard
     .writeText(window.location.href)
     .then(() => {
-      Utils.showToast('Link copied successfully', 'success')
+      Utils.showToast("Link copied successfully", "success");
     })
     .catch(() => {
-      Utils.showToast('Unable to copy link', 'error')
-    })
-}
+      Utils.showToast("Unable to copy link", "error");
+    });
+};
