@@ -168,7 +168,7 @@ async function loadCategoriesData() {
       return;
     }
 
-    const response = await fetch("/api/admin/categories", {
+    const response = await fetch(window.appConfig.getAPIURL("/api/admin/categories"), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -207,7 +207,7 @@ async function loadCategoriesStats() {
 
     if (!token) return;
 
-    const response = await fetch("/api/admin/categories/stats", {
+    const response = await fetch(window.appConfig.getAPIURL("/api/admin/categories/stats"), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -570,7 +570,7 @@ async function handleCategoryFormSubmit(event) {
       : "/api/admin/categories";
     const method = currentCategory ? "PUT" : "POST";
 
-    const response = await fetch(url, {
+    const response = await fetch(window.appConfig.getAPIURL(url), {
       method: method,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -645,7 +645,7 @@ async function handleDeleteCategory() {
     }
 
     const response = await fetch(
-      `/api/admin/categories/${currentCategory.id}`,
+      window.appConfig.getAPIURL(`/api/admin/categories/${currentCategory.id}`),
       {
         method: "DELETE",
         headers: {

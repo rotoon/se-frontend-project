@@ -92,7 +92,7 @@ function initDashboard() {
     async function loadDashboardData() {
         try {
             // Load stats
-            const response = await fetch('/api/admin/dashboard/stats', {
+            const response = await fetch(window.appConfig.getAPIURL('/api/admin/dashboard/stats'), {
                 headers: {
                     'Authorization': `Bearer ${getAuthToken()}`
                 }

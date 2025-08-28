@@ -14,20 +14,12 @@ class Config {
     }
 
     getAPIConfig() {
-        // In production, use same origin (relative URLs)
-        if (this.isProduction) {
-            return {
-                baseURL: '', // Same origin
-                timeout: 30000,
-                withCredentials: true
-            };
-        }
-
-        // In development, use environment variable or default to localhost:3000
-        const devBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        // Use environment variable for API base URL
+        const apiBaseURL = import.meta.env.VITE_API_BASE_URL || 
+                          (this.isProduction ? 'https://go-chiangmai-api-production.up.railway.app' : 'http://localhost:3000');
         
         return {
-            baseURL: devBaseURL,
+            baseURL: apiBaseURL,
             timeout: 30000,
             withCredentials: true
         };

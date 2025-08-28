@@ -213,7 +213,7 @@ function updateUserInfo() {
  */
 async function loadCategories() {
   try {
-    const response = await fetch('/api/admin/categories', {
+    const response = await fetch(window.appConfig.getAPIURL('/api/admin/categories'), {
       headers: getAuthHeaders()
     });
     const data = await response.json();
@@ -250,7 +250,7 @@ function populateCategoryDropdowns() {
  */
 async function loadPlacesStats() {
   try {
-    const response = await fetch('/api/admin/places/stats', {
+    const response = await fetch(window.appConfig.getAPIURL('/api/admin/places/stats'), {
       headers: getAuthHeaders()
     });
     const data = await response.json();
@@ -321,7 +321,7 @@ async function loadPlaces() {
   try {
     showLoadingState();
     
-    const response = await fetch('/api/admin/places', {
+    const response = await fetch(window.appConfig.getAPIURL('/api/admin/places'), {
       headers: getAuthHeaders()
     });
     const data = await response.json();
@@ -512,7 +512,7 @@ function openAddPlaceModal() {
  */
 window.editPlace = async function(placeId) {
   try {
-    const response = await fetch(`/api/admin/places/${placeId}`, {
+    const response = await fetch(window.appConfig.getAPIURL(`/api/admin/places/${placeId}`), {
       headers: getAuthHeaders()
     });
     const data = await response.json();
@@ -559,7 +559,7 @@ async function handleDeletePlace() {
   
   
   try {
-    const response = await fetch(`/api/admin/places/${currentPlaceId}`, {
+    const response = await fetch(window.appConfig.getAPIURL(`/api/admin/places/${currentPlaceId}`), {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
@@ -718,7 +718,7 @@ async function handlePlaceFormSubmit(e) {
     
     const method = currentPlaceId ? 'PUT' : 'POST';
     
-    const response = await fetch(url, {
+    const response = await fetch(window.appConfig.getAPIURL(url), {
       method: method,
       headers: getAuthHeaders(true), // true = skip content-type for FormData
       body: formData
