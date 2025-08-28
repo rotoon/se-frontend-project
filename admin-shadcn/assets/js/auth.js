@@ -5,7 +5,7 @@
 
 class AuthManager {
     constructor() {
-        this.baseURL = window.location.origin;
+        this.baseURL = window.appConfig ? window.appConfig.getAPIBaseURL() : window.location.origin;
         this.accessTokenKey = 'auth_access_token';
         this.refreshTokenKey = 'auth_refresh_token';
         this.userKey = 'auth_user';

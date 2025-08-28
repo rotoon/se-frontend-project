@@ -3,9 +3,12 @@
  * Centralized API management with authentication and error handling
  */
 
+import config from './config.js';
+
 class APIClient {
     constructor() {
-        this.baseURL = window.location.origin;
+        this.config = config;
+        this.baseURL = config.getAPIBaseURL();
         this.defaultHeaders = {
             'Content-Type': 'application/json',
         };
@@ -18,7 +21,7 @@ class APIClient {
      * @returns {Promise<Object>}
      */
     async request(endpoint, options = {}) {
-        const url = `${this.baseURL}${endpoint}`;
+        const url = this.config.getAPIURL(endpoint);
         
         const config = {
             ...options,
@@ -146,7 +149,7 @@ class APIClient {
         }
 
         try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, config);
+            const response = await fetch(this.config.getAPIURL(endpoint), config);
             const data = await response.json();
 
             if (!response.ok) {
@@ -333,7 +336,7 @@ const imagesAPI = {
 
     // Get image URL
     getUrl(filename) {
-        return `${this.baseURL}/api/images/${filename}`;
+        return this.config.getImageURL(filename);
     }
 };
 

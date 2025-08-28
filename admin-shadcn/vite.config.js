@@ -1,7 +1,23 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { resolve } from 'path'
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  const env = loadEnv(mode, process.cwd(), '')
+  
+  // Determine API target based on environment
+  const getAPITarget = () => {
+    if (mode === 'production') {
+      // In production, use same origin (no proxy needed)
+      return null
+    }
+    // In development, use local backend or override with env var
+    return env.VITE_API_BASE_URL || 'http://localhost:3000'
+  }
+  
+  const apiTarget = getAPITarget()
+  
+  return {
   // Root directory
   root: '.',
   
@@ -23,25 +39,34 @@ export default defineConfig({
 
   // Development server
   server: {
-    port: 3002,
+    port: parseInt(env.VITE_DEV_SERVER_PORT) || 3002,
     open: true,
-    proxy: {
+    proxy: apiTarget ? {
       '/api': {
-        target: 'http://localhost:3000',
+        target: apiTarget,
         changeOrigin: true,
-        secure: false,
+        secure: apiTarget.startsWith('https'),
+        rewrite: (path) => path
       },
       '/auth': {
-        target: 'http://localhost:3000',
+        target: apiTarget,
         changeOrigin: true,
-        secure: false,
+        secure: apiTarget.startsWith('https'),
+        rewrite: (path) => path
       },
       '/admin': {
-        target: 'http://localhost:3000',
+        target: apiTarget,
         changeOrigin: true,
-        secure: false,
+        secure: apiTarget.startsWith('https'),
+        rewrite: (path) => path
       },
-    },
+      '/uploads': {
+        target: apiTarget,
+        changeOrigin: true,
+        secure: apiTarget.startsWith('https'),
+        rewrite: (path) => path
+      }
+    } : undefined,
   },
 
   // Preview server (for production builds)
@@ -68,4 +93,10 @@ export default defineConfig({
 
   // Assets handling
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg', '**/*.ico', '**/*.woff', '**/*.woff2', '**/*.ttf', '**/*.eot'],
-})
+  
+  // Define global constants
+  define: {
+    __API_BASE_URL__: JSON.stringify(env.VITE_API_BASE_URL || ''),
+  },
+}})
+}

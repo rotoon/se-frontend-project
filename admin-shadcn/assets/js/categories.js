@@ -3,6 +3,13 @@
  * จัดการระบบหมวดหมู่สถานที่ท่องเที่ยว
  */
 
+// Import config first
+import './config.js';
+import './auth.js';
+import './api.js';
+import './components.js';
+import './utils.js';
+
 // Import CSS
 import '../css/shadcn-admin.css';
 

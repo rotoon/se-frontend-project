@@ -18,9 +18,9 @@
     "bootstrap",
     "webpack",
     "tourism",
-    "chiang-mai"
+    "go-chiangmai"
   ],
-  "author": "CM Travel Admin",
+  "author": "Go Chiangmai Admin",
   "license": "MIT",
   "devDependencies": {
     "vite": "^5.0.0"

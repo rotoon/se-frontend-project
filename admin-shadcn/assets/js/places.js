@@ -1,4 +1,5 @@
 // Places entry point for Vite
+import './config.js';  // Load config first
 import './auth.js';
 import './api.js';
 import './components.js';

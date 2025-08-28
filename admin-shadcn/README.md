@@ -1,6 +1,6 @@
 # Shadcn Admin Dashboard
 
-Modern admin dashboard สำหรับระบบจัดการเชียงใหม่ท่องเที่ยว ที่ใช้ Shadcn design system ร่วมกับ Bootstrap
+Modern admin dashboard สำหรับระบบ Go Chiangmai Admin ที่ใช้ Shadcn design system ร่วมกับ Bootstrap
 
 ## 🎨 Design System
 

@@ -1,4 +1,5 @@
 // Login entry point for Vite
+import './config.js';  // Load config first
 import './auth.js';
 import './api.js';
 import './components.js';
@@ -101,31 +102,47 @@ function initLoginPage() {
                         showError(result.message || 'การเข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง');
                     }
                 } else {
-                    // Fallback to direct API call
-                    const response = await fetch('/api/admin/auth/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            username,
-                            password,
-                            remember: !!remember
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok && data.success) {
-                        // Store auth token if provided
-                        if (data.token) {
-                            localStorage.setItem('auth_token', data.token);
+                    // Use API client if available
+                    if (window.api && window.api.auth) {
+                        const result = await window.api.auth.login({ username, password });
+                        if (result.success) {
+                            // Store auth token if provided
+                            if (result.data.accessToken) {
+                                localStorage.setItem('auth_token', result.data.accessToken);
+                            }
+                            
+                            // Redirect to dashboard
+                            window.location.href = 'dashboard.html';
+                        } else {
+                            showError(result.error || 'การเข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง');
                         }
-                        
-                        // Redirect to dashboard
-                        window.location.href = 'dashboard.html';
                     } else {
-                        showError(data.message || 'การเข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง');
+                        // Fallback to direct API call to correct endpoint
+                        const response = await fetch(window.appConfig.getAPIURL('/api/admin/auth/login'), {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username,
+                                password,
+                                remember: !!remember
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Store auth token if provided
+                            if (data.accessToken) {
+                                localStorage.setItem('auth_token', data.accessToken);
+                            }
+                            
+                            // Redirect to dashboard
+                            window.location.href = 'dashboard.html';
+                        } else {
+                            showError(data.message || 'การเข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง');
+                        }
                     }
                 }
             } catch (error) {
