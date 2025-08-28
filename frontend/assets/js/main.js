@@ -446,24 +446,24 @@ async function loadStats() {
         number: placesResponse.success
           ? placesResponse.pagination?.total || placesResponse.data.length
           : "100+",
-        label: "สถานที่ท่องเที่ยว",
+        label: "Tourist Attractions",
       },
       {
         icon: "fas fa-layer-group",
         number: categoriesResponse.success
           ? categoriesResponse.data.length
           : "10+",
-        label: "หมวดหมู่",
+        label: "Categories",
       },
       {
-        icon: "fas fa-temple",
+        icon: "fas fa-place-of-worship",
         number: "300+",
-        label: "วัดโบราณ",
+        label: "Ancient Temples",
       },
       {
         icon: "fas fa-mountain",
         number: "1,676m",
-        label: "ยอดดอยอินทนนท์",
+        label: "Doi Inthanon Peak",
       },
     ];
 
