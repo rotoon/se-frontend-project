@@ -11,7 +11,8 @@ const corsOptions = {
       "http://127.0.0.1:3001",
       "http://127.0.0.1:3002",
       "http://127.0.0.1:8080",
-      "https://go-chiangmai-production.up.railway.app",
+      "https://go-chiangmai-production.up.railway.app", // frontend
+      "https://go-chiangmai-admin-production.up.railway.app", // admin frontend
     ];
 
     // อนุญาต requests ที่ไม่มี origin (เช่น mobile apps, postman)

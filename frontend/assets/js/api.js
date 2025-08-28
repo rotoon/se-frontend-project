@@ -1,5 +1,5 @@
 // API Configuration and Client Module
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://go-chiangmai-api-production.up.railway.app';
 
 // API Client class สำหรับจัดการ HTTP requests
 export class ApiClient {
