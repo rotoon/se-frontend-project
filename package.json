@@ -7,15 +7,15 @@
     "stop": "./stop-all.sh",
     "start:backend": "cd backend && npm run dev",
     "start:frontend": "cd frontend && npm run dev",
-    "start:admin": "cd admin-frontend && npx live-server --port=3002",
+    "start:admin": "cd admin-shadcn && npm run dev",
     "install:all": "npm run install:backend && npm run install:frontend && npm run install:admin",
     "install:backend": "cd backend && npm install",
     "install:frontend": "cd frontend && npm install",
-    "install:admin": "cd admin-frontend && npm install",
+    "install:admin": "cd admin-shadcn && npm install",
     "build:frontend": "cd frontend && npm run build",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\"",
     "logs": "tail -f logs/*.log",
-    "clean": "rm -rf backend/node_modules frontend/node_modules admin-frontend/node_modules && rm -rf logs && rm -rf frontend/dist",
+    "clean": "rm -rf backend/node_modules frontend/node_modules admin-shadcn/node_modules && rm -rf logs && rm -rf frontend/dist",
     "health": "curl http://localhost:3000/api/health"
   },
   "devDependencies": {

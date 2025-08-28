@@ -245,7 +245,6 @@ function showPage() {
 
 // Initialize dashboard when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Dashboard loaded with Webpack');
     
     // Show page immediately if CSS is likely loaded
     if (document.readyState === 'complete') {
@@ -262,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         // Auto-protect this route
         if (window.auth && !window.auth.isAuthenticated()) {
-            console.log('Not authenticated, redirecting to login');
             window.location.href = 'index.html';
             return;
         }

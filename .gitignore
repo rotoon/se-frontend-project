@@ -120,3 +120,6 @@ data/backups/
 # Temporary files
 temp/
 tmp/
+
+frontend/dist
+admin-shadcn/dist

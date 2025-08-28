@@ -488,7 +488,6 @@ function selectIcon(iconName, iconText) {
     elements.categoryIcon.dispatchEvent(event);
     
     // Debug log
-    console.log('Icon selected:', iconName, 'Input value:', elements.categoryIcon.value);
   }
   
   // Update preview
@@ -529,8 +528,6 @@ async function handleCategoryFormSubmit(event) {
     const formData = new FormData(elements.categoryForm);
     
     // Debug: Log icon value before submission
-    console.log('Icon input value before submission:', elements.categoryIcon.value);
-    console.log('FormData icon value:', formData.get("icon"));
     
     const categoryData = {
       name: {

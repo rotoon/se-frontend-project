@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ['nodejs', 'npm']
+
+[phases.install]
+cmds = [
+    'npm ci --prefix backend',
+    'npm ci --prefix frontend'
+]
+
+[phases.build]
+cmds = [
+    'cd frontend && npm run build',
+    'mkdir -p backend/public/static',
+    'cp -r frontend/dist/* backend/public/static/ || echo "Frontend build not found, skipping copy"'
+]
+
+[start]
+cmd = 'cd backend && npm start'

@@ -1,22 +1,24 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { resolve } from "path";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   // Root directory
-  root: '.',
-  
+  root: ".",
+
   // Public directory
-  publicDir: false,
-  
+  publicDir: "public",
+
   // Build configuration
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        places: resolve(__dirname, 'places.html'),
-        'travel-style': resolve(__dirname, 'travel-style.html'),
-        'place-detail': resolve(__dirname, 'place-detail.html'),
+        main: resolve(__dirname, "index.html"),
+        about: resolve(__dirname, "about.html"),
+        contact: resolve(__dirname, "contact.html"),
+        places: resolve(__dirname, "places.html"),
+        "travel-style": resolve(__dirname, "travel-style.html"),
+        "place-detail": resolve(__dirname, "place-detail.html"),
       },
     },
   },
@@ -26,8 +28,8 @@ export default defineConfig({
     port: 3001,
     open: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: "http://localhost:3000",
         changeOrigin: true,
         secure: false,
       },
@@ -45,5 +47,12 @@ export default defineConfig({
   },
 
   // Assets handling
-  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg', '**/*.webp'],
-})
+  assetsInclude: [
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.gif",
+    "**/*.svg",
+    "**/*.webp",
+  ],
+});

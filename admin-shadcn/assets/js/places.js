@@ -67,7 +67,6 @@ const elements = {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Places page loaded with Webpack');
   
   // Show page immediately if CSS is likely loaded
   if (document.readyState === 'complete') {
@@ -84,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     // Auto-protect this route
     if (window.auth && !window.auth.isAuthenticated()) {
-      console.log('Not authenticated, redirecting to login');
       window.location.href = 'index.html';
       return;
     }
@@ -558,7 +556,6 @@ async function handleDeletePlace() {
     return;
   }
   
-  console.log(`Attempting to delete place with ID: ${currentPlaceId}`);
   
   try {
     const response = await fetch(`/api/admin/places/${currentPlaceId}`, {
@@ -566,7 +563,6 @@ async function handleDeletePlace() {
       headers: getAuthHeaders()
     });
     
-    console.log(`Delete response status: ${response.status}`);
     
     if (!response.ok) {
       // Try to get error message from response
@@ -582,7 +578,6 @@ async function handleDeletePlace() {
     }
     
     const data = await response.json();
-    console.log('Delete response data:', data);
     
     if (data.success) {
       showNotification('ลบสถานที่เรียบร้อยแล้ว', 'success');
@@ -798,7 +793,6 @@ window.removeNewImage = function(index) {
  */
 window.removeImage = function(index) {
   // TODO: Implement remove existing image
-  console.log('Remove image at index:', index);
 };
 
 /**
@@ -935,9 +929,7 @@ function getAuthHeaders(skipContentType = false) {
   const token = getAuthToken();
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-    console.log('Using auth token for request (truncated):', token.substring(0, 20) + '...');
   } else {
-    console.warn('No auth token found!');
   }
   
   if (!skipContentType) {
@@ -984,9 +976,7 @@ function showNotification(message, type = 'info') {
   if (type === 'error') {
     console.error('Notification Error:', message);
   } else if (type === 'success') {
-    console.log('Notification Success:', message);
   } else {
-    console.info('Notification Info:', message);
   }
   
   alert(fullMessage);
