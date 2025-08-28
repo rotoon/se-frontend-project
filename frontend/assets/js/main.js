@@ -577,14 +577,12 @@ function createPlaceCard(place) {
                     <p>${description || "Interesting place in Chiang Mai"}</p>
                     <div class="card-features">
                         ${
-                          rating > 0
-                            ? `<span class="place-rating">
-                               <span class="rating-stars">${Utils.generateStars(
-                                 rating
-                               )}</span>
-                               <span class="ms-1">${rating.toFixed(1)}</span>
+                          place.hours
+                            ? `<span class="place-hours">
+                               <i class="fas fa-clock me-1"></i>
+                               <span>${place.hours}</span>
                              </span>`
-                            : '<span><i class="fas fa-star me-1"></i>No rating yet</span>'
+                            : '<span><i class="fas fa-clock me-1"></i>Hours not specified</span>'
                         }
                         <span>${priceRange}</span>
                     </div>

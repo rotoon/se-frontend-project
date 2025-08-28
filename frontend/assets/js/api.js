@@ -1,5 +1,10 @@
 // API Configuration and Client Module
-const API_BASE_URL = 'https://go-chiangmai-api-production.up.railway.app';
+// Use local backend for development, remote for production
+const API_BASE_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://go-chiangmai-api-production.up.railway.app";
 
 // API Client class สำหรับจัดการ HTTP requests
 export class ApiClient {
@@ -10,21 +15,23 @@ export class ApiClient {
   // Generic request method
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
+        "Content-Type": "application/json",
+        ...options.headers,
       },
-      ...options
+      ...options,
     };
 
     try {
       const response = await fetch(url, config);
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          data.message || `HTTP error! status: ${response.status}`
+        );
       }
       return data;
     } catch (error) {
@@ -35,14 +42,14 @@ export class ApiClient {
 
   // GET request
   async get(endpoint) {
-    return this.request(endpoint, { method: 'GET' });
+    return this.request(endpoint, { method: "GET" });
   }
 
   // POST request
   async post(endpoint, data) {
     return this.request(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data)
+      method: "POST",
+      body: JSON.stringify(data),
     });
   }
 }

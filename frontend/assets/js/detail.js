@@ -230,7 +230,7 @@ function renderPlaceDetail(place) {
                 <div class="col-lg-8">
                     <!-- Description -->
                     <div class="place-section">
-                        <h3><i class="fas fa-info-circle me-2 text-primary"></i>About This Place</h3>
+                        <h3><i class="fas fa-info-circle me-2 "></i>About This Place</h3>
                         <div class="place-description">
                             ${description
                               .split("\n")
@@ -287,7 +287,7 @@ function renderPlaceDetail(place) {
                                   place.category
                                     ? `
                                 <div class="info-item">
-                                    <i class="fas fa-folder text-primary"></i>
+                                    <i class="fas fa-folder "></i>
                                     <span>Category: ${getCategoryName(
                                       place.category
                                     )}</span>
@@ -314,14 +314,14 @@ function renderPlaceDetail(place) {
                                   place.contact?.coordinates?.lat &&
                                   place.contact?.coordinates?.lng
                                     ? `
-                                <button class="btn btn-outline-primary" onclick="openGoogleMaps(${place.contact.coordinates.lat}, ${place.contact.coordinates.lng})">
+                                <button class="btn btn-outline-primary btn-md" onclick="openGoogleMaps(${place.contact.coordinates.lat}, ${place.contact.coordinates.lng})">
                                     <i class="fas fa-directions me-2"></i>
                                     Google Maps
                                 </button>
                                 `
                                     : ""
                                 }
-                                <button class="btn btn-outline-secondary" onclick="goBack()">
+                                <button class="btn btn-outline-primary btn-md" onclick="goBack()">
                                     <i class="fas fa-arrow-left me-2"></i>
                                     Back to Previous
                                 </button>
@@ -336,7 +336,7 @@ function renderPlaceDetail(place) {
         <div class="container mb-5">
             <div class="row">
                 <div class="col-12">
-                    <h3><i class="fas fa-map-pin me-2 text-primary"></i>Related Places</h3>
+                    <h3><i class="fas fa-map-pin me-2 "></i>Related Places</h3>
                     <div id="relatedPlacesContainer" class="row">
                         <!-- Related places will be loaded here -->
                     </div>
@@ -360,7 +360,7 @@ function renderContactInformation(place) {
 
   return `
         <div class="place-section">
-            <h3><i class="fas fa-address-card me-2 text-primary"></i>Contact Information</h3>
+            <h3><i class="fas fa-address-card me-2 "></i>Contact Information</h3>
             <div class="contact-info-card">
                 ${
                   contact.address
@@ -489,7 +489,7 @@ function renderMap(place) {
 
   return `
         <div class="place-section">
-            <h3><i class="fas fa-map-marked-alt me-2 text-primary"></i>Map</h3>
+            <h3><i class="fas fa-map-marked-alt me-2 "></i>Map</h3>
             <div class="map-container">
                 <iframe 
                     src="https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=th&z=16&output=embed"

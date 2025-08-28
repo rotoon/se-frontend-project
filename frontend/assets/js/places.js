@@ -17,11 +17,22 @@ class PlacesPage {
 
   async init() {
     try {
+      console.log("🚀 Initializing Places Page...");
+      console.log(
+        "🌐 API Base URL:",
+        window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1"
+          ? "http://localhost:3000"
+          : "https://go-chiangmai-api-production.up.railway.app"
+      );
+
       // Initialize language
       this.currentLanguage = LanguageManager.getCurrentLanguage();
+      console.log("🌍 Current language:", this.currentLanguage);
 
       // Get category from URL
       this.currentCategory = this.getCategoryFromURL();
+      console.log("📂 Current category:", this.currentCategory || "all");
 
       // Load category data
       if (this.currentCategory) {
@@ -39,8 +50,13 @@ class PlacesPage {
 
       // Hide loading and show content
       this.hideLoading();
+      console.log("✅ Places page initialized successfully!");
     } catch (error) {
-      console.error("Error initializing places page:", error);
+      console.error("❌ Error initializing places page:", error);
+      console.error("📝 Please check:");
+      console.error("1. Is the backend server running on port 3000?");
+      console.error("2. Is CORS properly configured?");
+      console.error("3. Are the API endpoints accessible?");
       this.showError();
     }
   }
@@ -52,23 +68,33 @@ class PlacesPage {
 
   async loadCategoryData() {
     if (!this.currentCategory) {
-      throw new Error("No category specified");
+      console.log("ℹ️ No category specified, showing all places");
+      return;
     }
 
-    const response = await CategoriesAPI.getCategories();
-    if (response.success) {
-      const category = response.data.find(
-        (cat) =>
-          cat.slug === this.currentCategory || cat.id === this.currentCategory
-      );
+    try {
+      console.log(`🔍 Loading category data for: ${this.currentCategory}`);
+      const response = await CategoriesAPI.getCategories();
+      if (response.success) {
+        const category = response.data.find(
+          (cat) =>
+            cat.slug === this.currentCategory || cat.id === this.currentCategory
+        );
 
-      if (category) {
-        this.updatePageHeader(category);
+        if (category) {
+          console.log(`✅ Found category:`, category);
+          this.updatePageHeader(category);
+        } else {
+          console.warn(`⚠️ Category not found: ${this.currentCategory}`);
+          // Don't throw error, just continue with default header
+        }
       } else {
-        throw new Error("Category not found");
+        console.error("❌ Failed to load category data:", response);
+        throw new Error("Failed to load category data");
       }
-    } else {
-      throw new Error("Failed to load category data");
+    } catch (error) {
+      console.error("❌ Error in loadCategoryData:", error);
+      throw error;
     }
   }
 
@@ -94,14 +120,24 @@ class PlacesPage {
   }
 
   async loadPlaces() {
-    const response = await PlacesAPI.getPlaces({
-      category: this.currentCategory ?? "",
-    });
-    if (response.success) {
-      this.places = response.data;
-      this.filteredPlaces = [...this.places];
-    } else {
-      throw new Error("Failed to load places");
+    try {
+      console.log(
+        `🔍 Loading places for category: ${this.currentCategory || "all"}`
+      );
+      const response = await PlacesAPI.getPlaces({
+        category: this.currentCategory || "",
+      });
+      if (response.success) {
+        console.log(`✅ Loaded ${response.data.length} places`);
+        this.places = response.data;
+        this.filteredPlaces = [...this.places];
+      } else {
+        console.error("❌ Failed to load places:", response);
+        throw new Error("Failed to load places");
+      }
+    } catch (error) {
+      console.error("❌ Error in loadPlaces:", error);
+      throw error;
     }
   }
 
@@ -443,14 +479,12 @@ class PlacesPage {
                     <p>${description || "Interesting place in Chiang Mai"}</p>
                     <div class="card-features">
                         ${
-                          rating > 0
-                            ? `<span class="place-rating">
-                               <span class="rating-stars">${Utils.generateStars(
-                                 rating
-                               )}</span>
-                               <span class="ms-1">${rating.toFixed(1)}</span>
+                          place.hours
+                            ? `<span class="place-hours">
+                               <i class="fas fa-clock me-1"></i>
+                               <span>${place.hours}</span>
                              </span>`
-                            : '<span><i class="fas fa-star me-1"></i>No rating yet</span>'
+                            : '<span><i class="fas fa-clock me-1"></i>Hours not specified</span>'
                         }
                         <span>${priceRange}</span>
                     </div>
@@ -485,9 +519,8 @@ window.goToPlaceDetail = goToPlaceDetail;
 let placesPage;
 document.addEventListener("DOMContentLoaded", () => {
   placesPage = new PlacesPage();
+  // Make placesPage globally available for pagination
+  window.placesPage = placesPage;
 });
-
-// Make placesPage globally available for pagination
-window.placesPage = placesPage;
 
 export default PlacesPage;
