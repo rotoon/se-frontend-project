@@ -571,18 +571,10 @@
       "zh": "世界著名咖啡厅，以精美拿铁艺术和特色咖啡而闻名",
       "ja": "ラテアートとスペシャルティコーヒーで有名な世界的に有名なカフェ"
     },
-    "category": "77021e0c-0af3-4058-8701-9b9db6d42756",
+    "category": "cafe",
     "images": [
-      {
-        "filename": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        "url": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        "type": "url"
-      },
-      {
-        "filename": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        "url": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        "type": "url"
-      }
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     ],
     "contact": {
       "address": "15/3 ถนนนิมมานเหมินทร์ ตำบลสุเทพ อำเภอเมือง จังหวัดเชียงใหม่ 50200",
@@ -600,7 +592,7 @@
     "status": "published",
     "featured": true,
     "createdAt": "2024-02-02T08:00:00.000Z",
-    "updatedAt": "2025-08-28T06:23:58.940Z",
+    "updatedAt": "2024-02-02T08:00:00.000Z",
     "createdBy": "admin"
   },
   {

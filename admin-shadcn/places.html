@@ -641,6 +641,152 @@
         font-size: 0.75rem;
       }
 
+      /* Form Switch Styles */
+      .form-switch-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-check-input {
+        width: 2.5rem;
+        height: 1.25rem;
+        background-color: hsl(var(--border));
+        border: 1px solid hsl(var(--border));
+        border-radius: 0.625rem;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        appearance: none;
+        position: relative;
+        margin: 0;
+      }
+
+      .form-check-input:before {
+        content: '';
+        position: absolute;
+        width: 0.875rem;
+        height: 0.875rem;
+        border-radius: 50%;
+        background-color: white;
+        top: 50%;
+        left: 0.125rem;
+        transform: translateY(-50%);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .form-check-input:checked {
+        background-color: hsl(var(--primary));
+        border-color: hsl(var(--primary));
+      }
+
+      .form-check-input:checked:before {
+        left: 1.375rem;
+      }
+
+      .form-check-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+      }
+
+      .form-check-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: hsl(var(--foreground));
+        cursor: pointer;
+      }
+
+      /* Image URL Container Styles */
+      .image-urls-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .image-url-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+      }
+
+      .image-url-input {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        background: hsl(var(--background));
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        color: hsl(var(--foreground));
+        font-size: 0.875rem;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .image-url-input:focus {
+        outline: none;
+        border-color: hsl(var(--ring));
+        box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+      }
+
+      .image-url-input.error {
+        border-color: hsl(var(--destructive));
+      }
+
+      .image-url-input.success {
+        border-color: hsl(142 76% 36%);
+      }
+
+      .image-url-remove-btn {
+        padding: 0.5rem;
+        background: hsl(var(--destructive));
+        color: hsl(var(--destructive-foreground));
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .image-url-remove-btn:hover {
+        background: hsl(var(--destructive) / 0.9);
+      }
+
+      .image-url-status {
+        position: absolute;
+        right: 3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-weight: 500;
+      }
+
+      .image-url-status.loading {
+        background: hsl(var(--muted));
+        color: hsl(var(--muted-foreground));
+      }
+
+      .image-url-status.success {
+        background: hsl(142 76% 36% / 0.1);
+        color: hsl(142 76% 36%);
+      }
+
+      .image-url-status.error {
+        background: hsl(var(--destructive) / 0.1);
+        color: hsl(var(--destructive));
+      }
+
+      .mt-2 {
+        margin-top: 0.5rem;
+      }
+
+      .d-block {
+        display: block;
+      }
+
       .mb-3 {
         margin-bottom: 1rem;
       }
@@ -999,55 +1145,27 @@
 
               <!-- Language Tabs -->
               <div class="form-tabs">
-                <button type="button" class="form-tab active" data-lang="th">
-                  ภาษาไทย
-                </button>
-                <button type="button" class="form-tab" data-lang="en">
+                <button type="button" class="form-tab active" data-lang="en">
                   English
                 </button>
-                <button type="button" class="form-tab" data-lang="zh">
-                  中文
-                </button>
-                <button type="button" class="form-tab" data-lang="ja">
-                  日本語
+                <button type="button" class="form-tab" data-lang="th">
+                  ภาษาไทย
                 </button>
               </div>
 
-              <!-- Thai Tab -->
-              <div class="tab-content active" id="tab-th">
+              <!-- English Tab -->
+              <div class="tab-content active" id="tab-en">
                 <div class="form-group">
                   <label class="form-label"
-                    >ชื่อสถานที่ (ภาษาไทย)
+                    >Place Name (English)
                     <span class="text-danger">*</span></label
                   >
                   <input
                     type="text"
                     class="form-control-shadcn"
-                    id="name_th"
-                    name="name_th"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">คำอธิบาย (ภาษาไทย)</label>
-                  <textarea
-                    class="form-control-shadcn"
-                    id="description_th"
-                    name="description_th"
-                    rows="4"
-                  ></textarea>
-                </div>
-              </div>
-
-              <!-- English Tab -->
-              <div class="tab-content" id="tab-en">
-                <div class="form-group">
-                  <label class="form-label">Place Name (English)</label>
-                  <input
-                    type="text"
-                    class="form-control-shadcn"
                     id="name_en"
                     name="name_en"
+                    required
                   />
                 </div>
                 <div class="form-group">
@@ -1061,45 +1179,23 @@
                 </div>
               </div>
 
-              <!-- Chinese Tab -->
-              <div class="tab-content" id="tab-zh">
+              <!-- Thai Tab -->
+              <div class="tab-content" id="tab-th">
                 <div class="form-group">
-                  <label class="form-label">地点名称 (中文)</label>
+                  <label class="form-label">ชื่อสถานที่ (ภาษาไทย)</label>
                   <input
                     type="text"
                     class="form-control-shadcn"
-                    id="name_zh"
-                    name="name_zh"
+                    id="name_th"
+                    name="name_th"
                   />
                 </div>
                 <div class="form-group">
-                  <label class="form-label">描述 (中文)</label>
+                  <label class="form-label">คำอธิบาย (ภาษาไทย)</label>
                   <textarea
                     class="form-control-shadcn"
-                    id="description_zh"
-                    name="description_zh"
-                    rows="4"
-                  ></textarea>
-                </div>
-              </div>
-
-              <!-- Japanese Tab -->
-              <div class="tab-content" id="tab-ja">
-                <div class="form-group">
-                  <label class="form-label">場所名 (日本語)</label>
-                  <input
-                    type="text"
-                    class="form-control-shadcn"
-                    id="name_ja"
-                    name="name_ja"
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">説明 (日本語)</label>
-                  <textarea
-                    class="form-control-shadcn"
-                    id="description_ja"
-                    name="description_ja"
+                    id="description_th"
+                    name="description_th"
                     rows="4"
                   ></textarea>
                 </div>
@@ -1135,9 +1231,32 @@
                     >
                       <option value="draft">แบบร่าง</option>
                       <option value="published">เผยแพร่</option>
-                      <option value="featured">แนะนำ</option>
                       <option value="inactive">ไม่ใช้งาน</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Featured Toggle -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">สถานที่แนะนำ</label>
+                    <div class="form-switch-wrapper">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="featured"
+                        name="featured"
+                        style="margin-right: 0.5rem"
+                      />
+                      <label class="form-check-label" for="featured">
+                        แสดงเป็นสถานที่แนะนำ
+                      </label>
+                    </div>
+                    <small class="text-muted">
+                      สถานที่ที่เปิดใช้งานนี้จะแสดงในหมวด "สถานที่แนะนำ"
+                    </small>
                   </div>
                 </div>
               </div>
@@ -1244,17 +1363,20 @@
               <h6 class="mb-3">รูปภาพ</h6>
 
               <div class="form-group">
-                <label class="form-label">อัปโหลดรูปภาพ</label>
-                <input
-                  type="file"
-                  class="form-control-shadcn"
-                  id="imageUpload"
-                  name="images"
-                  accept="image/*"
-                  multiple
-                />
-                <small class="text-muted"
-                  >รองรับไฟล์ JPG, PNG, WebP ขนาดไม่เกิน 5MB</small
+                <label class="form-label">URL รูปภาพ</label>
+                <div class="image-urls-container" id="imageUrlContainer">
+                  <!-- Image URL inputs will be added here dynamically -->
+                </div>
+                <button
+                  type="button"
+                  class="btn-shadcn ghost sm mt-2"
+                  id="addImageUrlBtn"
+                >
+                  <i data-lucide="plus" style="width: 0.875rem; height: 0.875rem"></i>
+                  เพิ่ม URL รูปภาพ
+                </button>
+                <small class="text-muted d-block mt-2"
+                  >ใส่ URL ของรูปภาพ เช่น https://example.com/image.jpg</small
                 >
               </div>
 

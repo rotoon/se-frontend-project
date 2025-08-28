@@ -45,16 +45,13 @@ const elements = {
   
   // Form fields
   placeId: document.getElementById('placeId'),
-  name_th: document.getElementById('name_th'),
   name_en: document.getElementById('name_en'),
-  name_zh: document.getElementById('name_zh'),
-  name_ja: document.getElementById('name_ja'),
-  description_th: document.getElementById('description_th'),
+  name_th: document.getElementById('name_th'),
   description_en: document.getElementById('description_en'),
-  description_zh: document.getElementById('description_zh'),
-  description_ja: document.getElementById('description_ja'),
+  description_th: document.getElementById('description_th'),
   categoryId: document.getElementById('categoryId'),
   status: document.getElementById('status'),
+  featured: document.getElementById('featured'),
   priceRange: document.getElementById('priceRange'),
   hours: document.getElementById('hours'),
   address: document.getElementById('address'),
@@ -62,7 +59,8 @@ const elements = {
   website: document.getElementById('website'),
   latitude: document.getElementById('latitude'),
   longitude: document.getElementById('longitude'),
-  imageUpload: document.getElementById('imageUpload'),
+  imageUrlContainer: document.getElementById('imageUrlContainer'),
+  addImageUrlBtn: document.getElementById('addImageUrlBtn'),
   imagePreview: document.getElementById('imagePreview')
 };
 
@@ -184,8 +182,11 @@ function setupEventListeners() {
     });
   });
   
-  // Image upload
-  elements.imageUpload?.addEventListener('change', handleImageUpload);
+  // Image URL management
+  elements.addImageUrlBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    addImageUrl();
+  });
   
   // Modal reset on hide
   elements.placeModal?.addEventListener('hidden.bs.modal', () => {
@@ -238,8 +239,9 @@ function populateCategoryDropdowns() {
   elements.categoryId.innerHTML = '<option value="">เลือกหมวดหมู่</option>';
   
   categories.forEach(category => {
-    const option1 = new Option(category.name.th, category.id);
-    const option2 = new Option(category.name.th, category.id);
+    const displayName = category.name.en || category.name.th;
+    const option1 = new Option(displayName, category.id);
+    const option2 = new Option(displayName, category.id);
     elements.categoryFilter.add(option1);
     elements.categoryId.add(option2);
   });
@@ -277,7 +279,7 @@ function calculateStatsFromPlaces() {
       total: places.length,
       published: places.filter(p => p.status === 'published').length,
       draft: places.filter(p => p.status === 'draft').length,
-      featured: places.filter(p => p.status === 'featured' || p.featured === true).length
+      featured: places.filter(p => p.featured === true).length
     };
     updateStats(stats);
   } else {
@@ -377,8 +379,9 @@ function filterPlaces() {
   if (searchTerm) {
     filtered = filtered.filter(place => {
       return (
-        place.name.th.toLowerCase().includes(searchTerm) ||
         place.name.en?.toLowerCase().includes(searchTerm) ||
+        place.name.th?.toLowerCase().includes(searchTerm) ||
+        place.description.en?.toLowerCase().includes(searchTerm) ||
         place.description.th?.toLowerCase().includes(searchTerm) ||
         place.address?.toLowerCase().includes(searchTerm)
       );
@@ -395,8 +398,8 @@ function filterPlaces() {
   const status = elements.statusFilter.value;
   if (status) {
     if (status === 'featured') {
-      // Filter for featured places (either featured flag or status)
-      filtered = filtered.filter(place => place.featured === true || place.status === 'featured');
+      // Filter for featured places
+      filtered = filtered.filter(place => place.featured === true);
     } else {
       filtered = filtered.filter(place => place.status === status);
     }
@@ -411,11 +414,17 @@ function filterPlaces() {
 function renderGridView(places) {
   elements.placesGrid.innerHTML = places.map(place => {
     const category = categories.find(c => c.id === place.category || c.id === place.categoryId);
-    const mainImage = place.images?.[0] || '';
+    
+    // Get main image URL - handle both old format (string) and new format (object)
+    let mainImage = '';
+    if (place.images && place.images.length > 0) {
+      const firstImage = place.images[0];
+      mainImage = typeof firstImage === 'string' ? firstImage : (firstImage.url || firstImage.filename || '');
+    }
     
     return `
       <div class="place-card">
-        ${place.featured || place.status === 'featured' ? `
+        ${place.featured === true ? `
           <div class="featured-badge">
             <i data-lucide="star" style="width: 0.875rem; height: 0.875rem;"></i>
             แนะนำ
@@ -430,17 +439,17 @@ function renderGridView(places) {
         `}
         <div class="place-content">
           <div class="place-header">
-            <h3 class="place-title">${place.name.th}</h3>
+            <h3 class="place-title">${place.name.en || place.name.th}</h3>
             <span class="place-status ${place.status}">${getStatusText(place.status)}</span>
           </div>
           ${category ? `
             <div class="place-category">
               <i data-lucide="tag" style="width: 0.875rem; height: 0.875rem;"></i>
-              <span>${category.name.th}</span>
+              <span>${category.name.en || category.name.th}</span>
             </div>
           ` : ''}
-          ${place.description.th ? `
-            <p class="place-description">${place.description.th}</p>
+          ${(place.description.en || place.description.th) ? `
+            <p class="place-description">${place.description.en || place.description.th}</p>
           ` : ''}
           <div class="place-meta">
             ${place.priceRange ? `
@@ -599,16 +608,13 @@ async function handleDeletePlace() {
  */
 function populatePlaceForm(place) {
   elements.placeId.value = place.id;
-  elements.name_th.value = place.name.th || '';
   elements.name_en.value = place.name.en || '';
-  elements.name_zh.value = place.name.zh || '';
-  elements.name_ja.value = place.name.ja || '';
-  elements.description_th.value = place.description.th || '';
+  elements.name_th.value = place.name.th || '';
   elements.description_en.value = place.description.en || '';
-  elements.description_zh.value = place.description.zh || '';
-  elements.description_ja.value = place.description.ja || '';
+  elements.description_th.value = place.description.th || '';
   elements.categoryId.value = place.categoryId || place.category || '';
   elements.status.value = place.status || 'draft';
+  elements.featured.checked = place.featured === true || place.status === 'featured' || false;
   elements.priceRange.value = place.priceRange || '';
   elements.hours.value = place.hours || '';
   
@@ -620,21 +626,12 @@ function populatePlaceForm(place) {
   elements.latitude.value = place.coordinates?.lat || contact.coordinates?.lat || '';
   elements.longitude.value = place.coordinates?.lng || contact.coordinates?.lng || '';
   
-  // Show existing images
+  // Populate image URLs
   if (place.images && place.images.length > 0) {
-    elements.imagePreview.innerHTML = place.images.map((image, index) => `
-      <div class="image-preview-item">
-        <img src="${image}" alt="Image ${index + 1}" />
-        <button type="button" onclick="removeImage(${index})">
-          <i data-lucide="x" style="width: 1rem; height: 1rem;"></i>
-        </button>
-      </div>
-    `).join('');
-    
-    // Re-initialize icons
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
+    populateImageUrls(place.images);
+  } else {
+    // Add one empty URL field by default
+    addImageUrl();
   }
 }
 
@@ -644,8 +641,11 @@ function populatePlaceForm(place) {
 function resetPlaceForm() {
   elements.placeForm.reset();
   elements.placeId.value = '';
+  elements.featured.checked = false;
+  elements.imageUrlContainer.innerHTML = '';
   elements.imagePreview.innerHTML = '';
-  switchLanguageTab('th');
+  addImageUrl(); // Add one empty URL field
+  switchLanguageTab('en');
 }
 
 /**
@@ -669,24 +669,22 @@ function switchLanguageTab(lang) {
 async function handlePlaceFormSubmit(e) {
   e.preventDefault();
   
-  const formData = new FormData();
+  // Collect image URLs
+  const imageUrls = getImageUrls();
   
   // Collect form data
   const placeData = {
     name: {
-      th: elements.name_th.value,
-      en: elements.name_en.value || undefined,
-      zh: elements.name_zh.value || undefined,
-      ja: elements.name_ja.value || undefined
+      en: elements.name_en.value,
+      th: elements.name_th.value || undefined
     },
     description: {
-      th: elements.description_th.value || undefined,
       en: elements.description_en.value || undefined,
-      zh: elements.description_zh.value || undefined,
-      ja: elements.description_ja.value || undefined
+      th: elements.description_th.value || undefined
     },
     categoryId: elements.categoryId.value,
     status: elements.status.value,
+    featured: elements.featured.checked,
     priceRange: elements.priceRange.value || undefined,
     hours: elements.hours.value || undefined,
     address: elements.address.value || undefined,
@@ -695,20 +693,13 @@ async function handlePlaceFormSubmit(e) {
     coordinates: {
       lat: parseFloat(elements.latitude.value) || undefined,
       lng: parseFloat(elements.longitude.value) || undefined
-    }
+    },
+    images: imageUrls
   };
   
   // Remove undefined coordinates if both are missing
   if (!placeData.coordinates.lat && !placeData.coordinates.lng) {
     delete placeData.coordinates;
-  }
-  
-  formData.append('data', JSON.stringify(placeData));
-  
-  // Add images if any
-  const files = elements.imageUpload.files;
-  for (let i = 0; i < files.length; i++) {
-    formData.append('images', files[i]);
   }
   
   try {
@@ -720,8 +711,8 @@ async function handlePlaceFormSubmit(e) {
     
     const response = await fetch(window.appConfig.getAPIURL(url), {
       method: method,
-      headers: getAuthHeaders(true), // true = skip content-type for FormData
-      body: formData
+      headers: getAuthHeaders(),
+      body: JSON.stringify(placeData)
     });
     
     const data = await response.json();
@@ -743,58 +734,231 @@ async function handlePlaceFormSubmit(e) {
 }
 
 /**
- * Handle image upload preview
+ * Add image URL input field
  */
-function handleImageUpload(e) {
-  const files = e.target.files;
-  const preview = elements.imagePreview;
+function addImageUrl(url = '') {
+  const container = elements.imageUrlContainer;
+  const index = container.children.length;
   
-  // Clear existing preview
-  preview.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'image-url-item';
+  div.innerHTML = `
+    <input
+      type="url"
+      class="image-url-input"
+      placeholder="https://example.com/image.jpg"
+      value="${url}"
+      data-index="${index}"
+    />
+    <span class="image-url-status loading" style="display: none;">กำลังโหลด...</span>
+    <button type="button" class="image-url-remove-btn">
+      <i data-lucide="x" style="width: 0.875rem; height: 0.875rem;"></i>
+    </button>
+  `;
   
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      const div = document.createElement('div');
-      div.className = 'image-preview-item';
-      div.innerHTML = `
-        <img src="${e.target.result}" alt="${file.name}" />
-        <button type="button" onclick="removeNewImage(${i})">
-          <i data-lucide="x" style="width: 1rem; height: 1rem;"></i>
-        </button>
-      `;
-      preview.appendChild(div);
-      
-      // Re-initialize icons
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-    };
-    
-    reader.readAsDataURL(file);
+  container.appendChild(div);
+  
+  // Add event listener for URL validation
+  const input = div.querySelector('.image-url-input');
+  input.addEventListener('input', debounce((e) => validateImageUrl(e.target), 500));
+  input.addEventListener('blur', (e) => validateImageUrl(e.target));
+  
+  // Add event listener for remove button
+  const removeBtn = div.querySelector('.image-url-remove-btn');
+  removeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    removeImageUrlByElement(div);
+  });
+  
+  // Re-initialize icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  
+  // If URL is provided, validate it
+  if (url) {
+    validateImageUrl(input);
   }
 }
 
 /**
- * Remove new image from upload
+ * Remove image URL input field by element
  */
-window.removeNewImage = function(index) {
-  // This is a simplified version - in production, you'd need to properly manage the FileList
-  const preview = elements.imagePreview;
-  const items = preview.querySelectorAll('.image-preview-item');
+function removeImageUrlByElement(element) {
+  element.remove();
+  updateImagePreview();
+  
+  // Update data-index for remaining items
+  const container = elements.imageUrlContainer;
+  const remainingItems = container.querySelectorAll('.image-url-item');
+  remainingItems.forEach((item, newIndex) => {
+    const input = item.querySelector('.image-url-input');
+    input.setAttribute('data-index', newIndex);
+  });
+}
+
+/**
+ * Remove image URL input field (legacy function for backward compatibility)
+ */
+window.removeImageUrl = function(index) {
+  const container = elements.imageUrlContainer;
+  const items = container.querySelectorAll('.image-url-item');
+  
   if (items[index]) {
-    items[index].remove();
+    removeImageUrlByElement(items[index]);
   }
 };
 
 /**
- * Remove existing image
+ * Get all image URLs from inputs
  */
-window.removeImage = function(index) {
-  // TODO: Implement remove existing image
-};
+function getImageUrls() {
+  const inputs = elements.imageUrlContainer.querySelectorAll('.image-url-input');
+  const images = [];
+  
+  inputs.forEach(input => {
+    const url = input.value.trim();
+    if (url && isValidUrl(url)) {
+      // Convert URL to format expected by backend
+      images.push({
+        filename: url, // Use URL as filename for URL-based images
+        url: url,      // Keep original URL
+        type: 'url'    // Mark as URL-based image
+      });
+    }
+  });
+  
+  return images;
+}
+
+/**
+ * Populate image URL inputs
+ */
+function populateImageUrls(images) {
+  elements.imageUrlContainer.innerHTML = '';
+  
+  if (images && images.length > 0) {
+    images.forEach(image => {
+      // Handle both old format (strings) and new format (objects)
+      const url = typeof image === 'string' ? image : (image.url || image.filename || image);
+      addImageUrl(url);
+    });
+  } else {
+    addImageUrl(); // Add one empty field
+  }
+  
+  updateImagePreview();
+}
+
+/**
+ * Validate image URL
+ */
+async function validateImageUrl(input) {
+  const url = input.value.trim();
+  const statusElement = input.parentNode.querySelector('.image-url-status');
+  
+  if (!url) {
+    statusElement.style.display = 'none';
+    input.classList.remove('success', 'error');
+    updateImagePreview();
+    return;
+  }
+  
+  if (!isValidUrl(url)) {
+    statusElement.textContent = 'URL ไม่ถูกต้อง';
+    statusElement.className = 'image-url-status error';
+    statusElement.style.display = 'block';
+    input.classList.remove('success');
+    input.classList.add('error');
+    updateImagePreview();
+    return;
+  }
+  
+  // Show loading
+  statusElement.textContent = 'กำลังตรวจสอบ...';
+  statusElement.className = 'image-url-status loading';
+  statusElement.style.display = 'block';
+  input.classList.remove('success', 'error');
+  
+  try {
+    // Test if image can be loaded
+    const img = new Image();
+    
+    img.onload = function() {
+      statusElement.textContent = 'ถูกต้อง';
+      statusElement.className = 'image-url-status success';
+      input.classList.remove('error');
+      input.classList.add('success');
+      updateImagePreview();
+    };
+    
+    img.onerror = function() {
+      statusElement.textContent = 'ไม่สามารถโหลดรูปได้';
+      statusElement.className = 'image-url-status error';
+      input.classList.remove('success');
+      input.classList.add('error');
+      updateImagePreview();
+    };
+    
+    img.src = url;
+    
+  } catch (error) {
+    statusElement.textContent = 'เกิดข้อผิดพลาด';
+    statusElement.className = 'image-url-status error';
+    input.classList.remove('success');
+    input.classList.add('error');
+    updateImagePreview();
+  }
+}
+
+/**
+ * Update image preview
+ */
+function updateImagePreview() {
+  const images = getImageUrls();
+  const preview = elements.imagePreview;
+  
+  if (images.length === 0) {
+    preview.innerHTML = '';
+    return;
+  }
+  
+  preview.innerHTML = images.map((image, index) => {
+    const url = image.url || image.filename || image;
+    return `
+      <div class="image-preview-item">
+        <img src="${url}" alt="รูปภาพ ${index + 1}" onerror="this.parentNode.style.display='none';" />
+      </div>
+    `;
+  }).join('');
+}
+
+/**
+ * Check if URL is valid
+ */
+function isValidUrl(string) {
+  try {
+    const url = new URL(string);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
+}
+
+/**
+ * Debounce function to limit function calls
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 /**
  * Handle search

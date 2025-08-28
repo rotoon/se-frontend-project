@@ -278,11 +278,11 @@ function createCategoryRowHTML(category) {
                     <i data-lucide="${iconName}" style="width: 1rem; height: 1rem;"></i>
                 </div>
                 <div class="category-details">
-                    <h4>${escapeHtml(category.name.th)}</h4>
+                    <h4>${escapeHtml(category.name.en || category.name.th)}</h4>
                     <p>${
-                      category.name.en
-                        ? escapeHtml(category.name.en)
-                        : "ไม่มีชื่อภาษาอังกฤษ"
+                      category.name.th && category.name.en !== category.name.th
+                        ? escapeHtml(category.name.th)
+                        : category.name.en ? "English name only" : "ไม่มีข้อมูล"
                     }</p>
                 </div>
             </div>
@@ -366,10 +366,8 @@ function handleCategorySearch(event) {
 
   const filteredCategories = categories.filter((category) => {
     return (
-      category.name.th.toLowerCase().includes(searchTerm) ||
-      category.name.en.toLowerCase().includes(searchTerm) ||
-      category.name.zh.toLowerCase().includes(searchTerm) ||
-      category.name.ja.toLowerCase().includes(searchTerm)
+      category.name.en?.toLowerCase().includes(searchTerm) ||
+      category.name.th?.toLowerCase().includes(searchTerm)
     );
   });
 
@@ -620,7 +618,7 @@ window.openDeleteCategoryModal = function(categoryId) {
   }
 
   currentCategory = category;
-  elements.deleteCategoryName.textContent = category.name.th;
+  elements.deleteCategoryName.textContent = category.name.en || category.name.th;
   elements.deleteCategoryPlacesCount.textContent = category.placesCount || 0;
 
   deleteCategoryModalInstance.show();

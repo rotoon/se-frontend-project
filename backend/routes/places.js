@@ -915,17 +915,17 @@ function validateCoordinates(lat, lng) {
 function validatePlaceData(data) {
   const errors = [];
 
-  // Check required fields - Thai language is mandatory
-  if (!data.name || !data.name.th || !data.name.th.trim()) {
-    errors.push("กรุณากรอกชื่อสถานที่ภาษาไทย");
+  // Check required fields - English language is mandatory
+  if (!data.name || !data.name.en || !data.name.en.trim()) {
+    errors.push("Please enter place name in English");
   }
 
   if (
     !data.description ||
-    !data.description.th ||
-    !data.description.th.trim()
+    !data.description.en ||
+    !data.description.en.trim()
   ) {
-    errors.push("กรุณากรอกคำอธิบายภาษาไทย");
+    errors.push("Please enter description in English");
   }
 
   // Check for category (support both category and categoryId fields)
@@ -936,22 +936,22 @@ function validatePlaceData(data) {
 
   // Validate multilingual content structure
   if (data.name) {
-    const requiredLanguages = ["th", "en", "zh", "ja"];
-    requiredLanguages.forEach((lang) => {
+    const supportedLanguages = ["en", "th"];
+    supportedLanguages.forEach((lang) => {
       if (data.name[lang] && typeof data.name[lang] !== "string") {
-        errors.push(`ชื่อสถานที่ภาษา ${lang} ต้องเป็นข้อความ`);
+        errors.push(`Place name in ${lang === 'en' ? 'English' : 'Thai'} must be text`);
       }
     });
   }
 
   if (data.description) {
-    const requiredLanguages = ["th", "en", "zh", "ja"];
-    requiredLanguages.forEach((lang) => {
+    const supportedLanguages = ["en", "th"];
+    supportedLanguages.forEach((lang) => {
       if (
         data.description[lang] &&
         typeof data.description[lang] !== "string"
       ) {
-        errors.push(`คำอธิบายภาษา ${lang} ต้องเป็นข้อความ`);
+        errors.push(`Description in ${lang === 'en' ? 'English' : 'Thai'} must be text`);
       }
     });
   }
