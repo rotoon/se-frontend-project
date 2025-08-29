@@ -51,7 +51,6 @@ npm run preview
 - `/api/admin/auth/login` - Admin login
 - `/api/admin/places/*` - Places management
 - `/api/admin/categories/*` - Categories management
-- `/api/admin/images/*` - Image upload/management
 - `/uploads/*` - Static images
 
 ### ตัวอย่าง URL Structure

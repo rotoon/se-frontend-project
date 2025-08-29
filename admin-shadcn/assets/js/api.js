@@ -179,18 +179,6 @@ const api = new APIClient();
  * Places API
  */
 const placesAPI = {
-    // Get all places
-    async getAll(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        const endpoint = queryString ? `/api/places?${queryString}` : '/api/places';
-        return api.get(endpoint);
-    },
-
-    // Get single place
-    async getById(id) {
-        return api.get(`/api/places/${id}`);
-    },
-
     // Create new place
     async create(placeData) {
         return api.post('/api/admin/places', placeData);
@@ -206,34 +194,9 @@ const placesAPI = {
         return api.delete(`/api/admin/places/${id}`);
     },
 
-    // Search places
-    async search(query, filters = {}) {
-        const params = { search: query, ...filters };
-        return this.getAll(params);
-    },
-
-    // Get places by category
-    async getByCategory(categoryId) {
-        return this.getAll({ category: categoryId });
-    },
-
-    // Get featured places
-    async getFeatured() {
-        return this.getAll({ featured: true });
-    },
-
     // Update place status
     async updateStatus(id, status) {
         return api.put(`/api/admin/places/${id}/status`, { status });
-    },
-
-    // Upload place images
-    async uploadImages(id, files) {
-        const formData = new FormData();
-        files.forEach((file, index) => {
-            formData.append(`images`, file);
-        });
-        return api.upload(`/api/admin/places/${id}/images`, formData);
     }
 };
 
@@ -241,14 +204,14 @@ const placesAPI = {
  * Categories API
  */
 const categoriesAPI = {
-    // Get all categories
+    // Get all categories (admin)
     async getAll() {
-        return api.get('/api/categories');
+        return api.get('/api/admin/categories');
     },
 
-    // Get single category
+    // Get single category (admin)
     async getById(id) {
-        return api.get(`/api/categories/${id}`);
+        return api.get(`/api/admin/categories/${id}`);
     },
 
     // Create new category
@@ -286,10 +249,7 @@ const authAPI = {
         return api.post('/api/admin/auth/logout');
     },
 
-    // Get current user
-    async getCurrentUser() {
-        return api.get('/api/admin/user/info');
-    },
+    // getCurrentUser removed (use AuthManager local state)
 
     // Refresh token
     async refreshToken() {
@@ -304,41 +264,13 @@ const dashboardAPI = {
     // Get dashboard stats
     async getStats() {
         return api.get('/api/admin/dashboard/stats');
-    },
-
-    // Get recent activities
-    async getRecentActivities() {
-        return api.get('/api/admin/dashboard/activities');
-    },
-
-    // Get system info
-    async getSystemInfo() {
-        return api.get('/api/admin/dashboard/system');
     }
 };
 
 /**
  * Images API
  */
-const imagesAPI = {
-    // Upload image
-    async upload(file, type = 'place') {
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('type', type);
-        return api.upload('/api/admin/images/upload', formData);
-    },
-
-    // Delete image
-    async delete(filename) {
-        return api.delete(`/api/admin/images/${filename}`);
-    },
-
-    // Get image URL
-    getUrl(filename) {
-        return this.config.getImageURL(filename);
-    }
-};
+// imagesAPI removed (no direct image endpoints in use)
 
 /**
  * Utility functions for API responses
@@ -408,7 +340,6 @@ window.api = {
     categories: categoriesAPI,
     auth: authAPI,
     dashboard: dashboardAPI,
-    images: imagesAPI,
     utils: apiUtils
 };
 
@@ -419,8 +350,7 @@ if (typeof module !== 'undefined' && module.exports) {
         placesAPI,
         categoriesAPI,
         authAPI,
-        dashboardAPI,
-        imagesAPI,
-        apiUtils
+    dashboardAPI,
+    apiUtils
     };
 }

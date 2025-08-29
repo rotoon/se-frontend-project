@@ -14,7 +14,6 @@ const corsMiddleware = require("./middleware/cors");
 const authRouter = require("./routes/auth");
 const categoriesRouter = require("./routes/categories");
 const placesRouter = require("./routes/places");
-const imagesRouter = require("./routes/images");
 
 // Import Public API routes
 const publicPlacesRouter = require("./routes/api/public/places");
@@ -45,7 +44,6 @@ app.use("/api/public/categories", publicCategoriesRouter);
 app.use("/api/admin/auth", authRouter.router);
 app.use("/api/admin/categories", categoriesRouter);
 app.use("/api/admin/places", placesRouter);
-app.use("/api/admin/images", imagesRouter);
 
 // API Route สำหรับ dashboard stats
 app.get("/api/admin/dashboard/stats", authRouter.requireAuth, async (req, res) => {
@@ -120,27 +118,6 @@ app.get("/api/admin/dashboard/stats", authRouter.requireAuth, async (req, res) =
 });
 
 // API Route สำหรับ user info - JWT based
-app.get("/api/admin/user/info", authRouter.requireAuth, (req, res) => {
-  try {
-    const user = req.user; // From JWT token
-    res.json({
-      success: true,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        lastLogin: user.lastLogin,
-      },
-    });
-  } catch (error) {
-    console.error("Error loading user info:", error);
-    res.status(500).json({
-      success: false,
-      message: "เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้",
-    });
-  }
-});
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
