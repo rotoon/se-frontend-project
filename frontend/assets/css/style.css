@@ -71,8 +71,8 @@ body {
   bottom: 50px;
   width: 30px;
   height: 30px;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
+  border-right: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
   transform: rotate(45deg);
   margin-left: auto;
   margin-right: auto;
@@ -83,9 +83,8 @@ body {
 
 /* New styles for cards */
 .attraction-card,
-.food-card,
 .tip-card {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -98,39 +97,33 @@ body {
 }
 
 .attraction-card:hover,
-.food-card:hover,
 .tip-card:hover {
   transform: translateY(-12px) scale(1.02);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 .attraction-card:hover .card-image img,
-.food-card:hover .card-image img,
 .tip-card:hover .card-image img {
   transform: scale(1.08);
 }
 
 .attraction-card .card-image img,
-.food-card .card-image img,
 .tip-card .card-image img {
   transition: transform 0.4s ease;
 }
 
 .attraction-card:hover .card-content h4,
-.food-card:hover .card-content h4,
 .tip-card:hover .card-content h4 {
   color: var(--primary-navy);
   transform: translateX(5px);
 }
 
 .attraction-card .card-content h4,
-.food-card .card-content h4,
 .tip-card .card-content h4 {
   transition: all 0.3s ease;
 }
 
 .attraction-card:hover .place-rating .stars,
-.food-card:hover .place-rating .stars,
 .tip-card:hover .place-rating .stars {
   transform: scale(1.1);
   filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.4));
@@ -141,7 +134,6 @@ body {
 }
 
 .attraction-card .btn,
-.food-card .btn,
 .tip-card .btn {
   transition: all 0.3s ease;
   border-radius: 25px;
@@ -151,14 +143,12 @@ body {
 }
 
 .attraction-card:hover .btn,
-.food-card:hover .btn,
 .tip-card:hover .btn {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .attraction-card .btn::before,
-.food-card .btn::before,
 .tip-card .btn::before {
   content: "";
   position: absolute;
@@ -176,7 +166,6 @@ body {
 }
 
 .attraction-card:hover .btn::before,
-.food-card:hover .btn::before,
 .tip-card:hover .btn::before {
   left: 100%;
 }
@@ -187,14 +176,6 @@ body {
   height: 200px;
   object-fit: cover;
   display: block;
-}
-
-.food-image img,
-.food-card .card-img-top {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
 }
 
 .card-content {
@@ -232,7 +213,7 @@ body {
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: white;
+  color: var(--white);
 }
 
 .hero-subtitle {
@@ -251,7 +232,7 @@ body {
 
 .stats-section {
   background: linear-gradient(135deg, var(--medium-blue), var(--primary-navy));
-  color: white;
+  color: var(--white);
 }
 
 .stat-item {
@@ -361,7 +342,7 @@ body {
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.2);
   border: none;
-  color: white;
+  color: var(--white);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -376,7 +357,7 @@ body {
 
 .lightbox-nav:hover {
   background: rgba(255, 255, 255, 0.3);
-  color: white;
+  color: var(--white);
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -389,7 +370,7 @@ body {
 }
 
 .lightbox-close {
-  background-color: #fff;
+  background-color: var(--white);
   position: absolute;
   top: 15px;
   right: 15px;
@@ -402,7 +383,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.7);
-  color: white;
+  color: var(--white);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
@@ -439,7 +420,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: var(--white);
   font-size: 2rem;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -465,18 +446,6 @@ body {
   opacity: 1;
 }
 
-.temple-bg {
-  background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
-}
-.market-bg {
-  background: linear-gradient(135deg, var(--golden-yellow), #d4a574);
-}
-.nature-bg {
-  background: linear-gradient(135deg, var(--medium-blue), var(--light-blue));
-}
-.art-bg {
-  background: linear-gradient(135deg, var(--light-blue), var(--golden-yellow));
-}
 
 .culture-section {
   background: linear-gradient(135deg, var(--light-blue), #f8f9fa);
@@ -487,10 +456,6 @@ body {
   padding: 2rem;
 }
 
-.food-section {
-  background-color: #fff;
-  padding: 5rem 0;
-}
 
 .tip-card {
   display: flex;
@@ -500,38 +465,13 @@ body {
 
 .footer-section {
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
-  color: white;
+  color: var(--white);
   padding: 3rem 0 1rem;
 }
 
-/* Placeholder image styles */
-.placeholder-image {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-}
 
-.placeholder-image i {
-  margin-bottom: 1rem;
-  opacity: 0.8;
-}
-
-.oldcity-bg {
-  background: linear-gradient(135deg, var(--medium-blue), var(--primary-navy));
-}
 .mountain-bg {
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
-}
-.food-bg {
-  background: linear-gradient(135deg, var(--golden-yellow), #d4a574);
-}
-.culture-placeholder {
-  background: linear-gradient(135deg, var(--light-blue), var(--medium-blue));
 }
 
 /* Animation classes */
@@ -594,13 +534,13 @@ body {
 }
 
 .tip-icon i {
-  color: white;
+  color: var(--white);
   font-size: 1.5rem;
 }
 
 /* Social links styling */
 .social-links a {
-  color: white;
+  color: var(--white);
   font-size: 1.5rem;
   margin-right: 1rem;
   transition: color 0.3s;
@@ -700,7 +640,7 @@ body {
 }
 
 .sidebar-card {
-  background: white;
+  background: var(--white);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -877,8 +817,8 @@ body {
 .brand-text {
   font-weight: 700;
   font-size: 1.8rem;
-  color: white;
-  background: linear-gradient(45deg, var(--golden-yellow), #fff);
+  color: var(--white);
+  background: linear-gradient(45deg, var(--golden-yellow), var(--white));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -922,8 +862,8 @@ body {
 .footer-brand-text {
   font-weight: 700;
   font-size: 1.5rem;
-  color: white;
-  background: linear-gradient(45deg, var(--golden-yellow), #fff);
+  color: var(--white);
+  background: linear-gradient(45deg, var(--golden-yellow), var(--white));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1033,7 +973,7 @@ body {
   right: 0;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   padding: 2rem 1.5rem 1.5rem;
-  color: white;
+  color: var(--white);
 }
 
 .apple-cards-carousel .card-category {
@@ -1087,7 +1027,7 @@ body {
 }
 
 .nav-btn:hover {
-  background: white;
+  background: var(--white);
   transform: scale(1.1);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
 }
@@ -1218,7 +1158,7 @@ body {
   align-items: flex-end;
   justify-content: flex-start;
   font-weight: bold;
-  color: white;
+  color: var(--white);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   background-size: cover;
   background-position: center;
@@ -1287,7 +1227,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 20px;
-  color: white;
+  color: var(--white);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform: translateY(0);
 }
@@ -1348,7 +1288,7 @@ body {
 
 .bento-item .category-icon i {
   font-size: 18px;
-  color: white;
+  color: var(--white);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -1435,31 +1375,6 @@ body {
 }
 
 /* Animation for grid entrance */
-.category-grid .row > div {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: slideInUp 0.8s ease forwards;
-}
-
-.category-grid .row > div:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.category-grid .row > div:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.category-grid .row > div:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.category-grid .row > div:nth-child(4) {
-  animation-delay: 0.4s;
-}
-
-.category-grid .row > div:nth-child(5) {
-  animation-delay: 0.5s;
-}
 
 @keyframes slideInUp {
   to {
@@ -1569,7 +1484,7 @@ body {
 .about-hero-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--white);
   margin-bottom: 1rem;
 }
 
@@ -1581,7 +1496,7 @@ body {
 
 .about-hero-description {
   font-size: 1.1rem;
-  color: white;
+  color: var(--white);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto;
@@ -1618,7 +1533,7 @@ body {
 }
 
 .mission-card {
-  background: white;
+  background: var(--white);
   padding: 2.5rem 2rem;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1641,7 +1556,7 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  color: white;
+  color: var(--white);
   font-size: 2rem;
 }
 
@@ -1659,12 +1574,12 @@ body {
 .about-stats-section {
   padding: 80px 0;
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
-  color: white;
+  color: var(--white);
 }
 
 .about-stats-section .section-title,
 .about-stats-section .section-subtitle {
-  color: white;
+  color: var(--white);
 }
 
 .stat-card {
@@ -1691,7 +1606,7 @@ body {
 }
 
 .value-card {
-  background: white;
+  background: var(--white);
   padding: 2rem 1.5rem;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -1714,7 +1629,7 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  color: white;
+  color: var(--white);
   font-size: 1.5rem;
 }
 
@@ -1740,14 +1655,14 @@ body {
     url("https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80");
   background-size: cover;
   background-position: center;
-  color: white;
+  color: var(--white);
 }
 
 .cta-title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: white;
+  color: var(--white);
 }
 
 .cta-description {
@@ -1860,7 +1775,7 @@ body {
 .contact-hero-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--white);
   margin-bottom: 1rem;
 }
 
@@ -1872,7 +1787,7 @@ body {
 
 .contact-hero-description {
   font-size: 1.1rem;
-  color: white;
+  color: var(--white);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto;
@@ -1883,7 +1798,7 @@ body {
 }
 
 .contact-info-card {
-  background: white;
+  background: var(--white);
   padding: 2.5rem 2rem;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1906,7 +1821,7 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  color: white;
+  color: var(--white);
   font-size: 2rem;
 }
 
@@ -1944,7 +1859,7 @@ body {
 }
 
 .contact-form-card {
-  background: white;
+  background: var(--white);
   padding: 3rem;
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -2000,7 +1915,7 @@ body {
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
   border: none;
-  color: white;
+  color: var(--white);
   font-weight: 600;
   border-radius: 25px;
   padding: 0.75rem 1.5rem;
@@ -2012,20 +1927,20 @@ body {
   background: linear-gradient(135deg, var(--medium-blue), var(--primary-navy));
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(21, 47, 86, 0.3);
-  color: white;
+  color: var(--white);
 }
 
 .btn-primary:focus {
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
   box-shadow: 0 0 0 0.2rem rgba(21, 47, 86, 0.25);
-  color: white;
+  color: var(--white);
 }
 
 .btn-primary:active {
   background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(21, 47, 86, 0.3);
-  color: white;
+  color: var(--white);
 }
 
 .btn-primary.disabled,
@@ -2036,50 +1951,6 @@ body {
   box-shadow: none;
 }
 
-/* Bootstrap btn-secondary customization */
-.btn-secondary {
-  background: linear-gradient(135deg, var(--medium-blue), var(--medium-blue));
-  border: 2px solid var(--primary-navy);
-  color: white;
-  font-weight: 600;
-  border-radius: 25px;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(199, 217, 228, 0.2);
-}
-
-.btn-secondary:hover {
-  background: linear-gradient(135deg, var(--primary-navy), var(--medium-blue));
-  border-color: var(--primary-navy);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(21, 47, 86, 0.3);
-}
-
-.btn-secondary:focus {
-  background: linear-gradient(135deg, var(--medium-blue), var(--medium-blue));
-  border-color: var(--primary-navy);
-  color: var(--primary-navy);
-  box-shadow: 0 0 0 0.2rem rgba(21, 47, 86, 0.25);
-}
-
-.btn-secondary:active {
-  background: linear-gradient(135deg, var(--medium-blue), var(--primary-navy));
-  border-color: var(--primary-navy);
-  color: white;
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(21, 47, 86, 0.3);
-}
-
-.btn-secondary.disabled,
-.btn-secondary:disabled {
-  background: #e9ecef;
-  border-color: #6c757d;
-  color: #6c757d;
-  opacity: 0.65;
-  transform: none;
-  box-shadow: none;
-}
 
 /* Custom Golden Button class */
 .btn-golden {
@@ -2139,7 +2010,7 @@ body {
 .btn-outline-primary:hover {
   background: var(--primary-navy);
   border-color: var(--primary-navy);
-  color: white;
+  color: var(--white);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(21, 47, 86, 0.3);
 }
@@ -2154,7 +2025,7 @@ body {
 .btn-outline-primary:active {
   background: var(--primary-navy);
   border-color: var(--primary-navy);
-  color: white;
+  color: var(--white);
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(21, 47, 86, 0.3);
 }
@@ -2174,14 +2045,14 @@ body {
   --bs-pagination-color: var(--primary-navy);
   --bs-pagination-bg: transparent;
   --bs-pagination-border-color: var(--border-color, #dee2e6);
-  --bs-pagination-hover-color: white;
+  --bs-pagination-hover-color: var(--white);
   --bs-pagination-hover-bg: var(--primary-navy);
   --bs-pagination-hover-border-color: var(--primary-navy);
   --bs-pagination-focus-color: var(--primary-navy);
   --bs-pagination-focus-bg: var(--light-blue);
   --bs-pagination-focus-border-color: var(--primary-navy);
   --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(21, 47, 86, 0.25);
-  --bs-pagination-active-color: white;
+  --bs-pagination-active-color: var(--white);
   --bs-pagination-active-bg: var(--primary-navy);
   --bs-pagination-active-border-color: var(--primary-navy);
   --bs-pagination-disabled-color: #6c757d;
@@ -2201,7 +2072,7 @@ body {
 .pagination .page-link:hover {
   background: var(--primary-navy);
   border-color: var(--primary-navy);
-  color: white;
+  color: var(--white);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(21, 47, 86, 0.2);
 }
@@ -2209,7 +2080,7 @@ body {
 .pagination .page-item.active .page-link {
   background: var(--primary-navy);
   border-color: var(--primary-navy);
-  color: white;
+  color: var(--white);
   font-weight: 600;
 }
 
@@ -2245,7 +2116,7 @@ body {
 }
 
 .accordion-button {
-  background: white;
+  background: var(--white);
   color: var(--primary-navy);
   font-weight: 600;
   padding: 1.5rem;
@@ -2256,7 +2127,7 @@ body {
 
 .accordion-button:not(.collapsed) {
   background: var(--primary-navy);
-  color: white;
+  color: var(--white);
   box-shadow: none;
 }
 
@@ -2295,7 +2166,7 @@ body {
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
-  color: white;
+  color: var(--white);
   min-width: 150px;
 }
 
@@ -2318,7 +2189,7 @@ body {
 .social-link:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  color: white;
+  color: var(--white);
 }
 
 .social-link i {
@@ -2426,9 +2297,6 @@ body {
   }
 
   /* Reduce animation intensity on mobile */
-  .category-grid .row > div {
-    transform: translateY(20px);
-  }
 
   .bento-item:nth-child(odd) {
     animation: none;
